@@ -1,3 +1,7 @@
 class Vinyl < ApplicationRecord
-  has_many :vinyls_genres, :vinyl_songs, :artists_vinyls, :whishlists, :collections
+  has_many :vinyls_genres
+  has_many :vinyl_songs
+  has_many :artists_vinyls
+  has_many :whishlists
+  has_many :collections
 end
