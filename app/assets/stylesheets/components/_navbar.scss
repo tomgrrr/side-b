@@ -1,12 +1,73 @@
-.navbar-lewagon {
-  justify-content: space-between;
-  background: white;
+.logo-box {
+  background-color: #393E41;
+  border-radius: 12px 0 0 12px;
+  padding: 20px 30px;
 }
 
-.navbar-lewagon .navbar-collapse {
-  flex-grow: 0;
+.avatar-box {
+  background-color: #393E41;
+  border-radius: 50%;
+  // padding: 20px 30px;
+
 }
 
-.navbar-lewagon .navbar-brand img {
-  width: 40px;
+.logo-img {
+  height: 50px;
+  width: auto;
+}
+
+.avatar-img {
+  height: 50px;
+  width: auto;
+  border-radius: 50%;
+}
+
+.custom-navbar {
+  background-color: #800E13;
+  border-radius: 12px;
+  padding: 20px 30px;
+
+  a {
+    color: #E2C044;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: 500;
+    white-space: nowrap;
+
+    &:hover {
+      color: #f0d060;
+    }
+  }
+}
+
+.search-input {
+  background-color: #939598;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  color: white;
+  width: 450px;
+
+  &::placeholder {
+    color: #333;
+  }
+
+  &:focus {
+    outline: none;
+    background-color: #a5a6a8;
+  }
+}
+
+.search-button {
+  background-color: #E2C044;
+  color: black;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 24px;
+  font-weight: 500;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #f0d060;
+  }
 }
