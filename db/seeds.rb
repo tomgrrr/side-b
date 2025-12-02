@@ -12,39 +12,39 @@ artists = ["15885", "81015"]
 Vinyl.destroy_all
 puts "Nettoyage de la base de données"
 
-artists.each do |artist|
-  url = "https://api.discogs.com/artists/#{artist}/releases?type=master&per_page=50&key=#{KEY}&secret=#{SECRET}"
-  user_serialized = URI.parse(url).read
-  user = JSON.parse(user_serialized)
-  puts user
-  # Artist.create(name: user["name"])
-  # puts Artist.last
 
-  # Vinyl.create({
-  #   name: user["title"],
-  #   release_date: user["year"],
-  # })
+artists.each do |artist|
+  url = "#{BASE}/artists/#{artist}/releases?type=master&per_page=100&key=#{KEY}&secret=#{SECRET}"
+  puts url
+  data = JSON.parse(URI.parse(url).read)
+
+    albums_count = 0
+
+  data["releases"].each do |release|
+    break if albums_count >= 15
+
+    if release["type"] == "master"
+      vinyl = Vinyl.create({
+        name: release["title"],
+        release_date: release["year"],
+        songs: release["ressource_url"]["tracklist"]["title"],
+        notes: release["ressource_url"]["notes"],
+        image: release["thumb"]
+        price: release["ressource_url"]["lowest_price"]
+      })
+
+      genre = Genre.create({
+        name: release["ressource_url"]["genres"]
+      })
+
+      Vinyls_genre.create({
+        genre: genre
+        vinyl: vinyl
+      })
+      albums_count += 1
+      puts "✓ Album #{albums_count}: #{release['artist']} - #{release['title']} (#{release['year']})"
+    end
+  end
 end
 
-
-
-  #begin
-    #url="#{BASE}/artists/#{i+5000}/releases?key=#{KEY}&secret=#{SECRET}"
-
-    #user_serialized = URI.parse(url).read
-    #user = JSON.parse(user_serialized)
-    #Artist.create(name: user["name"])
-    #puts user
-  #rescue
-    #puts "error with id:#{i}"
-  #end
-#end
-
-
-#url= "https://api.discogs.com/database/search?q=nirvana?key=#{KEY}&secret=#{SECRET}"
-
-
-
-    # This file should ensure the existence of records required to run the application in every environment (production,
-# development, test). The code here should be idempotent so that it can be executed at any point in every environment.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
+puts "\n✅ Seed terminé !"
