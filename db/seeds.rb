@@ -5,34 +5,46 @@ BASE = "https://api.discogs.com"
 KEY    = ENV["DISCOGS_KEY"]
 SECRET = ENV["DISCOGS_SECRET"]
 
-#50.times do |i|
 
-  #begin
-    #url="#{BASE}/artists/#{i+5000}/releases?key=#{KEY}&secret=#{SECRET}"
-
-    #user_serialized = URI.parse(url).read
-    #user = JSON.parse(user_serialized)
-    #Artist.create(name: user["name"])
-    #puts user
-  #rescue
-    #puts "error with id:#{i}"
-  #end
-#end
+artists = ["15885", "81015"]
 
 
-url="#{BASE}/artists/15885/releases?key=#{KEY}&secret=#{SECRET}"
-
-#url= "https://api.discogs.com/database/search?q=nirvana?key=#{KEY}&secret=#{SECRET}"
-
+Vinyl.destroy_all
+puts "Nettoyage de la base de données"
 
 
-    user_serialized = URI.parse(url).read
-    user = JSON.parse(user_serialized)
-    Artist.create(name: user["name"])
-    puts Artist.last
+artists.each do |artist|
+  url = "#{BASE}/artists/#{artist}/releases?type=master&per_page=100&key=#{KEY}&secret=#{SECRET}"
+  puts url
+  data = JSON.parse(URI.parse(url).read)
 
-    Vinyl.create({
-      name: user["title"],
-      release_date: user["year"],
+    albums_count = 0
 
-    })
+  data["releases"].each do |release|
+    break if albums_count >= 15
+
+    if release["type"] == "master"
+      vinyl = Vinyl.create({
+        name: release["title"],
+        release_date: release["year"],
+        songs: release["ressource_url"]["tracklist"]["title"],
+        notes: release["ressource_url"]["notes"],
+        image: release["thumb"]
+        price: release["ressource_url"]["lowest_price"]
+      })
+
+      genre = Genre.create({
+        name: release["ressource_url"]["genres"]
+      })
+
+      Vinyls_genre.create({
+        genre: genre
+        vinyl: vinyl
+      })
+      albums_count += 1
+      puts "✓ Album #{albums_count}: #{release['artist']} - #{release['title']} (#{release['year']})"
+    end
+  end
+end
+
+puts "\n✅ Seed terminé !"
