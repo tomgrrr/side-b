@@ -1,14 +1,14 @@
 Rails.application.routes.draw do
   devise_for :users
   root to: "pages#home"
-  resources :vinyl, only:[:show, :index]
-  resources :artist, only:[:show]
-  resources :wishlist, only:[:show, :update]
-  resources :collection, only:[:show, :update] do
-    resources :playlist, only:[:show, :update, :destroy, :create, :new]
+  resources :vinyls, only:[:show, :index]
+  resources :artists, only:[:show]
+  resources :wishlists, only:[:show, :update]
+  resources :collections, only:[:show, :update] do
+    resources :playlists, only:[:show, :update, :destroy, :create, :new]
   end
-  resources :chat, only:[:show, :destroy, :create] do
-    resources :message, only:[:create]
+  resources :chats, only:[:show, :destroy, :create] do
+    resources :messages, only:[:create]
   end
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
