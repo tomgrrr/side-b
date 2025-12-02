@@ -4,4 +4,7 @@ class Vinyl < ApplicationRecord
   has_many :artists_vinyls
   has_many :whishlists
   has_many :collections
+
+
+
 end
