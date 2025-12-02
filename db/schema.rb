@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_12_01_160346) do
+ActiveRecord::Schema[7.1].define(version: 2025_12_02_132508) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -74,19 +74,22 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_01_160346) do
     t.index ["user_id"], name: "index_chats_on_user_id"
   end
 
-  create_table "collections", force: :cascade do |t|
-    t.bigint "vinyl_id", null: false
-    t.bigint "user_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_collections_on_user_id"
-    t.index ["vinyl_id"], name: "index_collections_on_vinyl_id"
-  end
-
   create_table "genres", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "matches", force: :cascade do |t|
+    t.bigint "vinyl_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "type"
+    t.bigint "playlist_id", null: false
+    t.index ["playlist_id"], name: "index_matches_on_playlist_id"
+    t.index ["user_id"], name: "index_matches_on_user_id"
+    t.index ["vinyl_id"], name: "index_matches_on_vinyl_id"
   end
 
   create_table "messages", force: :cascade do |t|
@@ -100,10 +103,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_01_160346) do
 
   create_table "playlists", force: :cascade do |t|
     t.string "name"
-    t.bigint "collection_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["collection_id"], name: "index_playlists_on_collection_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -147,15 +148,6 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_01_160346) do
     t.index ["vinyl_id"], name: "index_vinyls_genres_on_vinyl_id"
   end
 
-  create_table "wishlists", force: :cascade do |t|
-    t.bigint "vinyl_id", null: false
-    t.bigint "user_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_wishlists_on_user_id"
-    t.index ["vinyl_id"], name: "index_wishlists_on_vinyl_id"
-  end
-
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "artist_genres", "artists"
@@ -163,13 +155,11 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_01_160346) do
   add_foreign_key "artists_vinyls", "artists"
   add_foreign_key "artists_vinyls", "vinyls"
   add_foreign_key "chats", "users"
-  add_foreign_key "collections", "users"
-  add_foreign_key "collections", "vinyls"
+  add_foreign_key "matches", "playlists"
+  add_foreign_key "matches", "users"
+  add_foreign_key "matches", "vinyls"
   add_foreign_key "messages", "chats"
-  add_foreign_key "playlists", "collections"
   add_foreign_key "vinyl_songs", "vinyls"
   add_foreign_key "vinyls_genres", "genres"
   add_foreign_key "vinyls_genres", "vinyls"
-  add_foreign_key "wishlists", "users"
-  add_foreign_key "wishlists", "vinyls"
 end

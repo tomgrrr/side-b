@@ -3,12 +3,19 @@ Rails.application.routes.draw do
   root to: "pages#home"
   resources :vinyls, only:[:show, :index]
   resources :artists, only:[:show]
-  resources :wishlists, only:[:show, :update]
-  resources :collections, only:[:show, :update] do
-    resources :playlists, only:[:show, :update, :destroy, :create, :new]
-  end
+  # resources :wishlists, only:[:show, :update]
+  # resources :collections, only:[:show,  :update] do
+  #   resources :playlists, only:[:show, :update, :destroy, :create, :new]
+  # end
   resources :chats, only:[:show, :destroy, :create] do
     resources :messages, only:[:create]
+  end
+
+  resources :users do
+    collection do
+      get :collection
+      get :wishlist
+    end
   end
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
