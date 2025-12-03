@@ -1,3 +1,86 @@
 .container {
   margin-top: 30px;
 }
+
+.cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: flex-start;
+}
+
+.vinyl-card {
+  flex: 0 0 calc(20% - 16px); /* 5 cards par ligne */
+  box-sizing: border-box;
+  margin-bottom: 20px;
+  border: 1px solid #ccc; /* optionnel : bordure */
+  border-radius: 8px;      /* optionnel : coins arrondis */
+  overflow: hidden;        /* pour que l'image ne dépasse pas */
+  background-color: #fff;  /* fond blanc */
+}
+
+.vinyl-image {
+  width: 100%;
+  padding-top: 100%; /* ratio carré, tu peux ajuster pour rectangulaire */
+  background-size: cover;
+  background-position: center;
+}
+
+.card-body {
+  padding: 10px;
+  text-align: center;
+  background-color: #800E13;
+  color: #F0D060;
+  height: 100%;
+}
+
+.vinyl-link {
+  text-decoration: none; /* supprime le soulignement */
+  color: inherit;         /* conserve la couleur du texte */
+}
+
+.artist-link {
+  text-decoration: none; /* supprime le soulignement */
+  color: #F0D060;           /* couleur personnalisée */
+  font-weight: normal;   /* optionnel, pour que ce ne soit pas gras */
+}
+
+.artist-link:hover {
+  /* ajoute un effet au survol si tu veux */
+  color: #F0D060;               /* optionnel */
+}
+
+
+
+
+.text-slider-container {
+  display: flex;
+  align-items: center;
+  width: 400px; /* largeur totale du slider */
+  overflow: hidden;
+  border: 1px solid #ccc;
+  padding: 10px;
+  background: #f9f9f9;
+}
+
+.text-slider {
+  display: flex;
+  transition: transform 0.5s ease;
+}
+
+.slider-link {
+  flex: 0 0 50%; /* 2 liens visibles à la fois */
+  text-align: center;
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+  padding: 5px;
+}
+
+.slide-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  user-select: none;
+}
