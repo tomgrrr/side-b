@@ -2,25 +2,39 @@
 
   <h1>Your collection</h1>
 
-    <% @collections.each_with_index do |collection| %>
+<div class="cards-container">
+  <% @collections.each_with_index do |collection| %>
+    <div class="vinyl-card">
+      <%= link_to vinyl_path(collection.vinyl), class: "vinyl-link" do %>
+        <div class="vinyl-image" style="background-image: url('<%= collection.vinyl.image %>');"></div>
+        <div class="card-body">
+          <h4><b><%= collection.vinyl.name %></b></h4>
+          <% collection.vinyl.artists.each do |artist| %>
+            <p>
+              by:
+              <%= link_to artist.name, artist_path(artist), class: "artist-link" %>
+            </p>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>
 
-      <div class="card">
 
-        <%= link_to vinyls_path, class: "vinyl-link" do %>
+<div data-controller="collection" class="text-slider-container">
+  <button data-action="collection#prevSlide" class="slide-btn left">&#8592;</button>
 
-          <div class="vinyl"
-                style="background-image: url('<%= collection.vinyl.image %>');">
-
-          <div class="card-body">
-            <h4><b><%= collection.vinyl.name%></b></h4>
-              <% collection.vinyl.artists.each do |artist| %>
-                <p> <%=  artist.name %> </p>
-              <% end %>
-          </div>
-
-            </div>
-          </div>
-        <% end %>
+  <div class="text-slider" data-collection-target="slider">
+    <% @playlists.each do |playlis| %>
+      <%= link_to playlis.playlist.name, class: "slider-link" %>
     <% end %>
+  </div>
 
+  <button data-action="collection#nextSlide" class="slide-btn right">&#8594;</button>
+</div>
+
+
+
+</div>
 </div>
