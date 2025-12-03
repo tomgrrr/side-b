@@ -6,10 +6,12 @@ KEY    = ENV["DISCOGS_KEY"]
 SECRET = ENV["DISCOGS_SECRET"]
 
 
-artists = ["15885", "81015"]
+artists = ["10584", "251517", "81013", "822730", "31617", "20991", "45", "7987", "45467", "205", "1489", "151223", "19731", "1289", "1778977", "2742944", "30552", "176766", "41441V"]
 
-
+VinylsGenre.destroy_all
 Vinyl.destroy_all
+Artist.destroy_all
+Genre.destroy_all
 puts "Nettoyage de la base de données"
 
 
@@ -23,26 +25,46 @@ artists.each do |artist|
   data["releases"].each do |release|
     break if albums_count >= 15
 
+
+
     if release["type"] == "master"
+      url_album = release["resource_url"]
+      data_album = JSON.parse(URI.parse(url_album).read)
+
+      track = []
+
+      data_album["tracklist"].each do |t|
+        track << t["title"]
+      end
+
       vinyl = Vinyl.create({
         name: release["title"],
         release_date: release["year"],
-        songs: release["ressource_url"]["tracklist"]["title"],
-        notes: release["ressource_url"]["notes"],
-        image: release["thumb"]
-        price: release["ressource_url"]["lowest_price"]
+        image: release["thumb"],
+
+        songs: track,
+        notes: data_album["notes"],
+        price: data_album["lowest_price"]
       })
 
       genre = Genre.create({
-        name: release["ressource_url"]["genres"]
+        name: data_album["genres"]
       })
 
-      Vinyls_genre.create({
-        genre: genre
+      VinylsGenre.create({
+        genre: genre,
         vinyl: vinyl
       })
+
+      Artist.create(
+        name: release['artist']
+      )
+
       albums_count += 1
-      puts "✓ Album #{albums_count}: #{release['artist']} - #{release['title']} (#{release['year']})"
+      puts "✓ Album #{albums_count}: #{release['artist']} - #{release['title']} (#{release['year']} - (#{release['thumb']}))"
+
+
+
     end
   end
 end
