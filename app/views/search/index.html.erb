@@ -1,0 +1,38 @@
+<div class="search-results">
+  <% if @query.present? %>
+    <h2>Vinyles (<%= @vinyls.count %>)</h2>
+    <% if @vinyls.any? %>
+      <div class="vinyls-list">
+        <% @vinyls.each do |vinyl| %>
+          <div class="card-body">
+            <% if vinyl.image.present? %>
+              <%= image_tag vinyl.image, alt: vinyl.name %>
+            <% end %>
+            <h3><%= vinyl.name %></h3>
+            <% vinyl.artists.each do |artist| %>
+              <h3><%= artist%></h3>
+            <% end %>
+            <%= link_to "Voir le vinyle", vinyl_path(vinyl), class: "search-button" %>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <p>Aucun vinyle trouvé.</p>
+    <% end %>
+
+    <h2>Artistes (<%= @artists.count %>)</h2>
+    <% if @artists.any? %>
+      <div class="artists-list">
+        <% @artists.each do |artist| %>
+          <div class="card-body">
+            <h3><%= artist.name %></h3>
+            <%= link_to "Voir l'artiste", artist_path(artist), class: "search-button" %>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <p>Aucun artiste trouvé.</p>
+    <% end %>
+
+  <% end %>
+</div>

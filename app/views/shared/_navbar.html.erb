@@ -15,9 +15,15 @@
 
     <!-- Search à droite -->
     <div class="d-flex gap-2">
-      <input type="text" class="search-input" placeholder="Artist, Albums ...">
-      <button class="search-button">search</button>
-    </div>
+      <%= form_with url: search_index_path, method: :get, class: "search-input d-flex" do %>
+      <%= label_tag :query, "Search", class: "visually-hidden" %>
+      <%= text_field_tag :query,
+            params[:query],
+            class: "search-input",
+            placeholder: "Artist, Albums ..."
+      %>
+      <%= submit_tag "Search", name: "", class: "search-button" %>
+    <% end %>
 
     <div class="avatar-box d-flex mx-3 align-items-center justify-content-center">
       <%= image_tag "avatar.png", alt: "avatar", class: "avatar-img" %>

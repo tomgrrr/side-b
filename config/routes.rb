@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get 'search/index'
   devise_for :users
   root to: "pages#home"
   resources :vinyls, only:[:show, :index]
@@ -17,6 +18,8 @@ Rails.application.routes.draw do
       get :wishlist
     end
   end
+
+  resources :search, only: [:index]
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
