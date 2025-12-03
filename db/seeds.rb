@@ -6,8 +6,10 @@ KEY    = ENV["DISCOGS_KEY"]
 SECRET = ENV["DISCOGS_SECRET"]
 
 
-artists = ["10584"]
-
+artists = ["251517"]
+#  "251517"]
+#  "81013", "10584", "822730", "31617", "20991", "45", "7987", "45467", "205", "1489", "151223", "19731", "1289", "1778977", "2742944", "30552", "176766", "41441V"]
+Match.destroy_all
 VinylsGenre.destroy_all
 Vinyl.destroy_all
 Artist.destroy_all
@@ -20,7 +22,11 @@ artists.each do |artist|
   puts url
   data = JSON.parse(URI.parse(url).read)
 
-    albums_count = 0
+  albums_count = 0
+
+  artist = Artist.create(
+    name: data["releases"][0]['artist']
+  )
 
   data["releases"].each do |release|
     break if albums_count >= 15
@@ -36,6 +42,7 @@ artists.each do |artist|
       data_album["tracklist"].each do |t|
         track << t["title"]
       end
+
 
       vinyl = Vinyl.create({
         name: release["title"],
@@ -56,9 +63,10 @@ artists.each do |artist|
         vinyl: vinyl
       })
 
-      Artist.create(
-        name: release['artist']
-      )
+      ArtistsVinyl.create({
+        artist: artist,
+        vinyl: vinyl
+      })
 
       albums_count += 1
       puts "✓ Album #{albums_count}: #{release['artist']} - #{release['title']} (#{release['year']} - (#{release['thumb']}))"
@@ -68,5 +76,6 @@ artists.each do |artist|
     end
   end
 end
+
 
 puts "\n✅ Seed terminé !"
