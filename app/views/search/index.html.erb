@@ -10,7 +10,7 @@
             <% end %>
             <h3><%= vinyl.name %></h3>
             <% vinyl.artists.each do |artist| %>
-              <h3><%= artist%></h3>
+              <h3><%= artist.name%></h3>
             <% end %>
             <%= link_to "Voir le vinyle", vinyl_path(vinyl), class: "search-button" %>
           </div>

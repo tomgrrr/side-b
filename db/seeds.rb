@@ -6,10 +6,11 @@ KEY    = ENV["DISCOGS_KEY"]
 SECRET = ENV["DISCOGS_SECRET"]
 
 
-artists = ["251517"]
+artists = ["81013", "10584"]
 #  "251517"]
 #  "81013", "10584", "822730", "31617", "20991", "45", "7987", "45467", "205", "1489", "151223", "19731", "1289", "1778977", "2742944", "30552", "176766", "41441V"]
 Match.destroy_all
+ArtistsVinyl.destroy_all
 VinylsGenre.destroy_all
 Vinyl.destroy_all
 Artist.destroy_all
