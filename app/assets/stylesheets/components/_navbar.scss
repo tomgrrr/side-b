@@ -1,19 +1,20 @@
 .logo-box {
   background-color: #393E41;
   border-radius: 12px 0 0 12px;
-  padding: 20px 30px;
+  padding: 0px 15px;
 }
 
 .avatar-box {
   background-color: #393E41;
   border-radius: 50%;
-  // padding: 20px 30px;
-
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+  
 }
 
 .logo-img {
-  height: 50px;
+  height: 70px;
   width: auto;
+  border-radius: 7px;
 }
 
 .avatar-img {
@@ -26,6 +27,8 @@
   background-color: #800E13;
   border-radius: 12px;
   padding: 20px 30px;
+  height: 70px;
+  overflow: hidden;
 
   a {
     color: #E2C044;
@@ -35,7 +38,10 @@
     white-space: nowrap;
 
     &:hover {
-      color: #f0d060;
+      transform: translateY(-2px);
+      color: #ffe37e;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
+      transition: 0.3s ease;
     }
   }
 }
@@ -45,7 +51,7 @@
   border: none;
   border-radius: 8px;
   padding: 8px 16px;
-  color: white;
+  color: rgb(0, 0, 0);
   width: 450px;
 
   &::placeholder {
@@ -68,6 +74,9 @@
   cursor: pointer;
 
   &:hover {
-    background-color: #f0d060;
+    transform: translateY(-1px);
+    background-color: #ffe37e;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+    transition: 0.3s ease;
   }
 }
