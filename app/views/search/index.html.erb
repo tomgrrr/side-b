@@ -1,37 +1,45 @@
 <div class="search-results">
   <% if @query.present? %>
+
+    <!-- Section Vinyles -->
     <h2>Vinyles (<%= @vinyls.count %>)</h2>
     <% if @vinyls.any? %>
-      <div class="vinyls-list">
+      <div class="card-grid">
         <% @vinyls.each do |vinyl| %>
-          <div class="card-body">
+          <div class="card">
             <% if vinyl.image.present? %>
-              <%= image_tag vinyl.image, alt: vinyl.name %>
+              <%= image_tag vinyl.image, alt: vinyl.name, class: "card-img" %>
             <% end %>
-            <h3><%= vinyl.name %></h3>
-            <% vinyl.artists.each do |artist| %>
-              <h3><%= artist.name%></h3>
-            <% end %>
-            <%= link_to "Voir le vinyle", vinyl_path(vinyl), class: "search-button" %>
+            <div class="card-body">
+              <h4><b><%= vinyl.name %></b></h4>
+              <% vinyl.artists.each do |artist| %>
+                <p><%= artist.name %></p>
+              <% end %>
+              <%= link_to "Voir le vinyle", vinyl_path(vinyl), class: "play-btn" %>
+            </div>
           </div>
         <% end %>
       </div>
     <% else %>
-      <p>Aucun vinyle trouvé.</p>
+      <p class="no-results">Aucun vinyle trouvé.</p>
     <% end %>
 
+    <!-- Section Artistes -->
     <h2>Artistes (<%= @artists.count %>)</h2>
     <% if @artists.any? %>
-      <div class="artists-list">
+      <div class="card-grid">
         <% @artists.each do |artist| %>
-          <div class="card-body">
-            <h3><%= artist.name %></h3>
-            <%= link_to "Voir l'artiste", artist_path(artist), class: "search-button" %>
+          <div class="card">
+            <%= image_tag "proto_logo.png", alt: artist.name, class: "card-img" %>
+            <div class="card-body">
+              <h4><b><%= artist.name %></b></h4>
+              <%= link_to "Voir l'artiste", artist_path(artist), class: "play-btn" %>
+            </div>
           </div>
         <% end %>
       </div>
     <% else %>
-      <p>Aucun artiste trouvé.</p>
+      <p class="no-results">Aucun artiste trouvé.</p>
     <% end %>
 
   <% end %>
