@@ -1,11 +1,11 @@
 class UsersController < ApplicationController
 
   def collection
-    @collections = Match.where(type: "collection")
+    @collections = current_user.matches.where(category: "collection")
   end
 
   def wishlist
-    @wishlists = Match.where(type: "wishlist")
+    @wishlists = Match.where(collection: "wishlist")
   end
-  
+
 end
