@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'matches/create'
+  get 'matches/destroy'
   get 'search/index'
   devise_for :users
   root to: "pages#home"
@@ -21,7 +23,10 @@ Rails.application.routes.draw do
 
   resources :search, only: [:index]
 
+  resources :matches, only: [:create, :destroy]
+
   resources :playlist, only: [:show]
+  get 'wishlist', to: 'users#wishlist', as: 'wishlist'
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
