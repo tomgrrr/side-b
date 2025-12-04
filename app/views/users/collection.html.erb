@@ -74,7 +74,8 @@
                 </div>
               <% end %>
 
-              <%= link_to "Voir détails", vinyl_path(collection.vinyl), class: "details-btn" %>
+              <%= link_to "Details", vinyl_path(collection.vinyl), class: "details-btn" %>
+              <%= button_to "✖ Remove", match_path(collection), method: :delete, class: "details-btn border-0", data: { confirm: "Êtes-vous sûr ?" } %>
             </div>
           </div>
         </div>

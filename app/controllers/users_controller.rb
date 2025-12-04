@@ -9,14 +9,14 @@ class UsersController < ApplicationController
     playlist_ids = @matches_with_playlists.pluck(:playlist_id).uniq
     @playlists = Playlist.where(id: playlist_ids).order(created_at: :desc)
     @playlist_vinyl_counts = current_user.matches
-                                         .where(category: "collection")
-                                         .where.not(playlist_id: nil)
-                                         .group(:playlist_id)
-                                         .count
+    .where(category: "collection")
+    .where.not(playlist_id: nil)
+    .group(:playlist_id)
+    .count
   end
 
   def wishlist
-    @wishlists = Match.where(collection: "wishlist")
+    @wishlists = Match.where(category: "wishlist")
   end
 
 end

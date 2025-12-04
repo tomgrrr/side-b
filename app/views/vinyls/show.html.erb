@@ -1,18 +1,60 @@
 <div class="page-content">
   <div class="main-card">
     <div class="card large-card">
-    <%= image_tag "proto_logo.png", alt: "Main image", class: "card-img-large" %>
+      <% if @vinyl.image.present? %>
+        <%= image_tag @vinyl.image, alt: @vinyl.name, class: "card-img-large" %>
+      <% else %>
+        <%= image_tag "proto_logo.png", alt: "Default image", class: "card-img-large" %>
+      <% end %>
+    </div>
 
-  </div>
   <div class="album-info">
-    <h1>Album Name</h1>
-      <h2>Artist Name</h2>
-        <p><strong>Label:</strong> XYZ Records</p>
-        <p><strong>Year:</strong> 1980</p>
-        <p><strong>Tracklist:</strong> Song 1...</p>
+      <h1><%= @vinyl.name %></h1>
 
-    <button class="play-btn">▶ Play</button>
-    <button class="wishlist-btn">♡ Wishlist</button>
+      <% @vinyl.artists.each do |artist| %>
+        <h2><%= artist.name %></h2>
+      <% end %>
+
+      <% if @vinyl.release_date.present? %>
+        <p><strong>Year:</strong> <%= @vinyl.release_date %></p>
+      <% end %>
+
+      <% if @vinyl.price.present? %>
+        <p><strong>Price:</strong> <%= @vinyl.price %>$</p>
+      <% end %>
+
+
+<div class="info-buttons">
+    <% if @in_collection %>
+        <%= button_to "Remove from Collection", match_path(@collection_match), method: :delete, class: "play-btn", data: { confirm: "Êtes-vous sûr ?" } %>
+    <% else %>
+        <%= button_to matches_path(vinyl_id: @vinyl.id, category: "collection"), method: :post, class: "play-btn" do %>
+        ▶ Add to Collection
+        <% end %>
+    <% end %>
+
+    <% if @in_wishlist %>
+        <%= button_to "Remove from Wishlist", match_path(@wishlist_match), method: :delete, class: "play-btn", data: { confirm: "Êtes-vous sûr ?" } %>
+    <% else %>
+        <% unless @in_collection %>
+        <%= button_to matches_path(vinyl_id: @vinyl.id, category: "wishlist"), method: :post, class: "play-btn" do %>
+            ♡ Add to Wishlist
+            <% end %>
+        <% end %>
+    <% end %>
+</div>
+
+        <% if @vinyl.songs.present? %>
+        <div class="mt-3">
+          <p><strong>Tracklist:</strong></p>
+          <ul style="color: #F0D060;">
+            <% @vinyl.parsed_songs.each do |song| %>
+              <li><%= song %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
   </div>
 </div>
 

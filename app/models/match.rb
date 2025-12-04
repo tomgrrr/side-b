@@ -7,8 +7,8 @@ class Match < ApplicationRecord
     value = 0
 
     array.each do |s|
-     value += s.vinyl.price if s.vinyl.price.present?
-    end
+    value += s.vinyl.price if s.vinyl.price.present?
+  end
 
     value
 end

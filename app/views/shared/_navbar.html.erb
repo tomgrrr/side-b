@@ -1,15 +1,16 @@
 <div class="wrapper d-flex align-items-stretch m-3">
   <!-- Logo -->
   <div class="logo-box d-flex align-items-center justify-content-center">
-    <%= image_tag "proto_logo.png", alt: "Logo", class: "logo-img" %>
+  <%= link_to image_tag("proto_logo.png", alt: "Logo", class: "logo-img"), root_path %>
+
   </div>
 
   <!-- Navbar -->
   <nav class="custom-navbar d-flex align-items-center flex-grow-1">
     <!-- Links à gauche -->
     <div class="d-flex gap-4 me-auto">
-      <a href="#collection">My Collection</a>
-      <a href="#wishlist">My Wishlist</a>
+      <%= link_to "My Collection", collection_users_path %>
+      <%= link_to "My Wishlist", wishlist_users_path %>
       <a href="#ai">AI assistant</a>
     </div>
 
