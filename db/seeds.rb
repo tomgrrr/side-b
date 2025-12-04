@@ -31,6 +31,7 @@ Artist.destroy_all
 Genre.destroy_all
 puts "✅ Base nettoyée\n\n"
 
+
 def clean_artist_name(name)
   # Retire le (2), (3), etc. à la fin du nom
   name.gsub(/\s*\(\d+\)\s*$/, '').strip
@@ -175,9 +176,7 @@ ARTISTS_IDS.each do |artist_id|
       release_date: release["year"],
       image: image_url,
       songs: tracks,
-      notes: data_master["notes"],
-      genre: genre,
-      artist: artist
+      notes: data_master["notes"]
     })
 
     # Genres
