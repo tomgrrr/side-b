@@ -9,6 +9,8 @@ gem "ruby_llm", "~> 1.2.0"
 
 gem "cloudinary"
 
+gem "solid_queue"
+
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails"
 

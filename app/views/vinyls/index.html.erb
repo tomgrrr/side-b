@@ -12,8 +12,12 @@
         <p><strong>Label:</strong> XYZ Records</p>
         <p><strong>Year:</strong> 1980</p>
 
-    <button class="play-btn">▶ Play</button>
-    <button class="wishlist-btn">♡ Wishlist</button>
+    <%= button_to matches_path(vinyl_id: @vinyl.id, category: "collection"), method: :post, class: "play-btn" do %>
+            ▶ Add to Collection
+    <% end %>
+    <%= button_to matches_path(vinyl_id: @vinyl.id, category: "wishlist"), method: :post, class: "play-btn" do %>
+            ♡ Add to Wishlist
+    <% end %>
   </div>
 
 <div class="card-grid">

@@ -1,3 +1,3 @@
 class Playlist < ApplicationRecord
-  belongs_to :match
+  has_many :matches
 end
