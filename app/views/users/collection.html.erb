@@ -1,42 +1,87 @@
 <div class="container">
+  <!-- Header avec H1 et bandeau sur la même ligne -->
+  <div class="header-section">
+    <h1>Your collection is worth <%=  @match.total_value(@collections) %> $</h1>
 
-  <h1>Your collection</h1>
+    <% if @playlists.any? %>
+      <div class="playlists-banner"
+           data-controller="playlist-slider"
+           data-playlist-slider-items-per-page-value="3">
 
-<div class="cards-container">
-  <% @collections.each_with_index do |collection| %>
-    <div class="vinyl-card">
-      <%= link_to vinyl_path(collection.vinyl), class: "vinyl-link" do %>
-        <div class="vinyl-image" style="background-image: url('<%= collection.vinyl.image %>');"></div>
-        <div class="card-body">
-          <h4><b><%= collection.vinyl.name %></b></h4>
-          <% collection.vinyl.artists.each do |artist| %>
-            <p>
-              by:
-              <%= link_to artist.name, artist_path(artist), class: "artist-link" %>
-            </p>
-          <% end %>
+        <button class="playlist-nav-btn prev-btn"
+                data-playlist-slider-target="prevBtn"
+                data-action="click->playlist-slider#previous">
+          <span>‹</span>
+        </button>
+
+        <div class="playlists-slider-wrapper">
+          <div class="playlists-slider" data-playlist-slider-target="slider">
+            <% @playlists.each do |playlist| %>
+              <%= link_to playlist_path(playlist),
+                  class: "playlist-pill #{playlist.id == @current_playlist_id ? 'active' : ''}" do %>
+                <span class="playlist-icon">🎵</span>
+                <span class="playlist-name"><%= playlist.name %></span>
+                <span class="playlist-count">
+                  <%= @playlist_vinyl_counts[playlist.id] || 0 %>
+                </span>
+              <% end %>
+            <% end %>
+          </div>
         </div>
-      <% end %>
-    </div>
-  <% end %>
-</div>
 
-
-<div data-controller="collection" class="text-slider-container">
-  <button data-action="collection#prevSlide" class="slide-btn left">&#8592;</button>
-
-  <div class="text-slider" data-collection-target="slider">
-    <% @playlists.each do |playlist| %>
-      <%= link_to playlist.playlist.name, class: "slider-link" %>
+        <button class="playlist-nav-btn next-btn"
+                data-playlist-slider-target="nextBtn"
+                data-action="click->playlist-slider#next">
+          <span>›</span>
+        </button>
+      </div>
     <% end %>
   </div>
 
-  <button data-action="collection#nextSlide" class="slide-btn right">&#8594;</button>
-</div>
+  <!-- Grille de vinyles -->
+  <div class="cards-container">
+    <% @collections.each_with_index do |collection| %>
+      <div class="vinyl-card">
+        <div class="vinyl-flip-container">
+          <!-- Face avant (image du vinyle) -->
+          <div class="vinyl-face vinyl-front">
+            <div class="vinyl-image" style="background-image: url('<%= collection.vinyl.image %>');"></div>
+          </div>
 
+          <!-- Face arrière (informations) -->
+          <div class="vinyl-face vinyl-back">
+            <div class="vinyl-info">
+              <h4><%= collection.vinyl.name %></h4>
 
+              <% collection.vinyl.artists.each do |artist| %>
+                <p class="artist-name">by: <%= artist.name %></p>
+              <% end %>
 
-</div>
+              <% if collection.vinyl.songs.present? %>
+                <div class="tracklist">
+                  <h5>Tracklist:</h5>
+                  <ul>
+                    <% collection.vinyl.parsed_songs.first(5).each do |song| %>
+                      <li><%= song %></li>
+                    <% end %>
+                  </ul>
+                </div>
+              <% end %>
+
+              <% if collection.vinyl.price.present? %>
+                <div class="vinyl-price">
+                  <h5>Value: <%= collection.vinyl.price %>$</h5>
+                </div>
+              <% end %>
+
+              <%= link_to "Voir détails", vinyl_path(collection.vinyl), class: "details-btn" %>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
 </div>
 
 
