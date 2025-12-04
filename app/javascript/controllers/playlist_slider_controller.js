@@ -11,9 +11,7 @@ export default class extends Controller {
 
   connect() {
     console.log("Playlist slider connecté!")
-
     this.totalItems = this.sliderTarget.querySelectorAll('.playlist-pill').length
-
     this.updateSlider()
   }
 
@@ -64,7 +62,7 @@ export default class extends Controller {
       this.nextBtnTarget.style.opacity = '0.3'
       this.nextBtnTarget.style.pointerEvents = 'none'
     } else {
-    
+
       this.nextBtnTarget.style.opacity = '1'
       this.nextBtnTarget.style.pointerEvents = 'auto'
     }
