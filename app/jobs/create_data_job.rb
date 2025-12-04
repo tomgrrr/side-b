@@ -70,12 +70,6 @@ class CreateDataJob < ApplicationJob
 
   def perform
     Rails.logger.info "🧹 Nettoyage base…"
-    Match.destroy_all
-    ArtistsVinyl.destroy_all
-    VinylsGenre.destroy_all
-    Vinyl.destroy_all
-    Artist.destroy_all
-    Genre.destroy_all
 
     Rails.logger.info "📀 Début import Discogs + Spotify"
 
@@ -90,8 +84,13 @@ class CreateDataJob < ApplicationJob
       artist_name = clean_artist_name(data["releases"][0]["artist"])
       albums_count = 0
 
-      CSV.open("db/data/vinyls.csv", "wb") do |csv|
-        csv << ["name", "release_date", "image", "songs", "notes", "artist"]
+      csv_path = "db/data/vinyls.csv"
+
+      write_headers = !File.exist?(csv_path)
+
+      CSV.open(csv_path, "ab") do |csv|
+        csv << ["name", "release_date", "image", "songs", "notes", "artist", "genre"] if write_headers
+
 
         data["releases"].each do |release|
           break if albums_count >= MAX_ALBUMS_PER_ARTIST
@@ -117,7 +116,8 @@ class CreateDataJob < ApplicationJob
             image_url,
             tracks.join(" | "),
             notes,
-            artist_name
+            artist_name,
+            master["genres"]
           ]
         end
       end
