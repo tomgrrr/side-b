@@ -1,5 +1,5 @@
 .logo-box {
-  background-color: #393E41;
+  background-color: #222222;
   border-radius: 12px 0 0 12px;
   padding: 0px 15px;
 }
@@ -8,7 +8,7 @@
   background-color: #393E41;
   border-radius: 50%;
   box-shadow: 0 8px 20px rgba(0,0,0,0.25);
-  
+
 }
 
 .logo-img {
@@ -47,20 +47,20 @@
 }
 
 .search-input {
-  background-color: #939598;
+  background-color: #232323;
   border: none;
   border-radius: 8px;
   padding: 8px 16px;
-  color: rgb(0, 0, 0);
+  color: rgb(224, 224, 224);
   width: 450px;
 
   &::placeholder {
-    color: #333;
+    color: rgb(224, 224, 224);
   }
 
   &:focus {
     outline: none;
-    background-color: #a5a6a8;
+    background-color: #232323;
   }
 }
 
