@@ -13,7 +13,6 @@ class UsersController < ApplicationController
                                          .where.not(playlist_id: nil)
                                          .group(:playlist_id)
                                          .count
-
   end
 
   def wishlist
