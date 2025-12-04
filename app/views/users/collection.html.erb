@@ -1,7 +1,7 @@
 <div class="container">
   <!-- Header avec H1 et bandeau sur la même ligne -->
   <div class="header-section">
-    <h1>Your collection is worth <%=  @match.total_value(@collections) %></h1>
+    <h1>Your collection is worth <%=  @match.total_value(@collections) %> $</h1>
 
     <% if @playlists.any? %>
       <div class="playlists-banner"

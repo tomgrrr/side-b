@@ -6,7 +6,7 @@ KEY    = ENV["DISCOGS_KEY"]
 SECRET = ENV["DISCOGS_SECRET"]
 
 
-artists = ["81013", "10584"]
+artists = ["20991"]
 #  "251517"]
 #  "81013", "10584", "822730", "31617", "20991", "45", "7987", "45467", "205", "1489", "151223", "19731", "1289", "1778977", "2742944", "30552", "176766", "41441V"]
 Match.destroy_all
@@ -44,6 +44,11 @@ artists.each do |artist|
         track << t["title"]
       end
 
+      # image_url = if data_album["images"][0]["uri"].any?
+      #               data_album["images"][0]["uri"]
+      #             else
+      #               release["thumb"]
+      #             end
 
       vinyl = Vinyl.create({
         name: release["title"],
