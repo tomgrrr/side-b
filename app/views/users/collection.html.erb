@@ -26,8 +26,8 @@
   <button data-action="collection#prevSlide" class="slide-btn left">&#8592;</button>
 
   <div class="text-slider" data-collection-target="slider">
-    <% @playlists.each do |playlis| %>
-      <%= link_to playlis.playlist.name, class: "slider-link" %>
+    <% @playlists.each do |playlist| %>
+      <%= link_to playlist.playlist.name, class: "slider-link" %>
     <% end %>
   </div>
 
@@ -38,3 +38,15 @@
 
 </div>
 </div>
+
+
+# Créer à la table vinyl un attribut 0 par defaut.
+
+# Si l'user clique sur add un disque à la wishlist et son attibut prend 1. AddEventListener click
+View wishlist:
+              itération sur les disques avec l'attribut 1
+
+# Si l'user clique sur add un disque à la collection et son attibut prend 2 (supprimer vinyl attr 1)
+
+View collection:
+              itération sur les disques avec l'attribut 2
