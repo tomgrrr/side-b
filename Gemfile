@@ -7,6 +7,8 @@ gem "rails", "~> 7.1.6"
 
 gem "cloudinary"
 
+gem "solid_queue"
+
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails"
 

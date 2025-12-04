@@ -61,7 +61,7 @@
                 <div class="tracklist">
                   <h5>Tracklist:</h5>
                   <ul>
-                    <% collection.vinyl.parsed_songs.first(5).each do |song| %>
+                    <% collection.vinyl.parsed_songs.each do |song| %>
                       <li><%= song %></li>
                     <% end %>
                   </ul>
@@ -81,5 +81,5 @@
       </div>
     <% end %>
   </div>
-  
+
 </div>
