@@ -1,0 +1,61 @@
+  <div class="container chatbox">
+
+    <h1 id="chat_title" class="text-primary my-5"><%= @chat.title %></h1>
+
+    <div class="row my-5">
+
+      <div class="col-2">
+
+        <% current_user.chats.each do |chat| %>
+          <ul class="ul">
+            <li class="text-primary d-flex justify-content-between">
+
+              <div><%= link_to chat.title, chat_path(chat), class: "chat" %></div>
+
+              <div> <%= link_to chat_path(chat), data: { turbo_method: :delete, turbo_confirm: "Supprimer ?" }, class: "btn-delete" do %>
+                      <i class="fa-regular fa-circle-xmark"></i>
+                    <% end %>
+              </div>
+
+              </li>
+          </ul>
+          <% end %>
+
+      </div>
+
+      <div class="col-1 border-start border-2">
+
+      </div>
+
+      <div id="messages" class="col-9">
+
+        <% @chat.messages.each do |message| %>
+          <% if message.role == "user" %>
+            <div class="d-flex justify-content-end my-2">
+              <div class="bg-primary px-3 py-3 rounded-3">
+                <%= message.content %>
+              </div>
+            </div>
+          <% elsif message.role == "assistant" %>
+            <div class="d-flex justify-content-start my-5">
+              <div class="px-3 py-3 rounded-3 answer me">
+                <%= message.content %>
+              </div>
+            </div>
+          <% end %>
+        <% end %>
+
+        </div>
+    </div>
+
+    <div id="new_message_container" class="my-4">
+
+      <%= simple_form_for [@chat, @message] do |f| %>
+        <%= f.input :content, label: false, required: true, placeholder: "You can ask me anything related to vinyls" %>
+        <%= f.button :submit, 'Ask VinylBot', class: 'btn-chat' %>
+      <% end %>
+
+    </div>
+
+  </div>
+</div>
