@@ -3,13 +3,16 @@ class Match < ApplicationRecord
   belongs_to :user
   belongs_to :playlist, optional: true
 
-  def total_value(array)
-    value = 0
+  def user_taste(matches)
+    titles = ""
+    genres = ""
+    artists = ""
 
-    array.each do |s|
-    value += s.vinyl.price if s.vinyl.price.present?
+    #matches.each do |match|
+     # titles += match.vinyl.title
+      #genres += match.vinyl.genre
+      #artists += match.vinyl.artist
+    #end
+
   end
-
-    value
-end
 end
