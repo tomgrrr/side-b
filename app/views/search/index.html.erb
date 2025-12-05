@@ -1,46 +1,66 @@
 <div class="search-results">
-  <% if @query.present? %>
-
-    <!-- Section Vinyles -->
-    <h2>Vinyles (<%= @vinyls.count %>)</h2>
-    <% if @vinyls.any? %>
-      <div class="card-grid">
-        <% @vinyls.each do |vinyl| %>
-          <div class="card">
-            <% if vinyl.image.present? %>
-              <%= image_tag vinyl.image, alt: vinyl.name, class: "card-img" %>
-            <% end %>
-            <div class="card-body">
-              <h4><b><%= vinyl.name %></b></h4>
-              <% vinyl.artists.each do |artist| %>
-                <p><%= artist.name %></p>
+  <div class="container-search">
+    <% if @query.present? %>
+      <h1 class="page-title">
+        Vinyles
+        <span class="count"><%= @vinyls.count %></span>
+      </h1>
+      <% if @vinyls.any? %>
+        <div class="vinyl-grid">
+          <% @vinyls.each do |vinyl| %>
+            <div class="vinyl-card">
+              <% if vinyl.image.present? %>
+                <div class="vinyl-image" style="background-image: url('<%= vinyl.image %>');">
+                  <div class="vinyl-overlay">
+                    <%= link_to "Voir le vinyle", vinyl_path(vinyl), class: "view-btn" %>
+                  </div>
+                </div>
+              <% else %>
+                <div class="vinyl-image" style="background: linear-gradient(135deg, #9b59b6 20%, #2c3e50 80%);">
+                  <div class="vinyl-disc"></div>
+                  <div class="vinyl-overlay">
+                    <%= link_to "Voir le vinyle", vinyl_path(vinyl), class: "play-btn" %>
+                  </div>
+                </div>
               <% end %>
-              <%= link_to "Voir le vinyle", vinyl_path(vinyl), class: "play-btn" %>
+              <div class="vinyl-info">
+                <div class="vinyl-title"><%= vinyl.name %></div>
+                <div class="vinyl-artist">
+                  <% vinyl.artists.each do |artist| %>
+                    <%= artist.name %>
+                  <% end %>
+                </div>
+              </div>
             </div>
-          </div>
-        <% end %>
-      </div>
-    <% else %>
-      <p class="no-results">Aucun vinyle trouvé.</p>
-    <% end %>
+          <% end %>
+        </div>
+      <% else %>
+        <p class="no-results">Aucun vinyle trouvé.</p>
+      <% end %>
 
-    <!-- Section Artistes -->
-    <h2>Artistes (<%= @artists.count %>)</h2>
-    <% if @artists.any? %>
-      <div class="card-grid">
-        <% @artists.each do |artist| %>
-          <div class="card">
-            <%= image_tag "proto_logo.png", alt: artist.name, class: "card-img" %>
-            <div class="card-body">
-              <h4><b><%= artist.name %></b></h4>
-              <%= link_to "Voir l'artiste", artist_path(artist), class: "play-btn" %>
+      <h1 class="page-title">
+        Artistes
+        <span class="count"><%= @artists.count %></span>
+      </h1>
+      <% if @artists.any? %>
+        <div class="vinyl-grid">
+          <% @artists.each do |artist| %>
+            <div class="vinyl-card">
+              <div class="vinyl-image" style="background: linear-gradient(135deg, #9b59b6 20%, #2c3e50 80%);">
+                <div class="vinyl-disc"></div>
+                <div class="vinyl-overlay">
+                  <%= link_to "Voir l'artiste", artist_path(artist), class: "view-btn" %>
+                </div>
+              </div>
+              <div class="vinyl-info">
+                <div class="vinyl-title"><%= artist.name %></div>
+              </div>
             </div>
-          </div>
-        <% end %>
-      </div>
-    <% else %>
-      <p class="no-results">Aucun artiste trouvé.</p>
+          <% end %>
+        </div>
+      <% else %>
+        <p class="no-results">Aucun artiste trouvé.</p>
+      <% end %>
     <% end %>
-
-  <% end %>
+  </div>
 </div>
