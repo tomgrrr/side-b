@@ -1,17 +1,31 @@
 class MessagesController < ApplicationController
-   def create
-    @matches = Match.all
-    system_prompt = "You are a Vinyl collector, a music expert and assistant.\n\n I am somebody who wants to have new suggestions about vinyls so I can grow my vinyl collection.\n\n Help me get the most relevant vinyls, based on my musical taste and vinyl collection .\n\n Answer concisely in Markdown."
+  def create
     @chat = current_user.chats.find(params[:chat_id])
+    user_question_embedding = RubyLLM.embed(params[:message][:content])
+
+    relevant_vinyls = Vinyl.nearest_neighbors(
+      :embedding,
+      user_question_embedding.vectors,
+      distance: "cosine"
+    ).first(5)
+
+    user_collection = current_user.matches.includes(vinyl: [:artists, :genres])
+
+    system_prompt = base_system_prompt
+    system_prompt += user_collection_context(user_collection)
+    system_prompt += catalog_vinyls_context(relevant_vinyls)
 
     @message = Message.new(message_params)
     @message.chat = @chat
     @message.role = "user"
+
     if @message.save!
       @ruby_llm_chat = RubyLLM.chat
       build_conversation_history
-      response = @ruby_llm_chat.with_instructions(instructions(system_prompt,challenge_context(@matches))).ask(@message.content)
+
+      response = @ruby_llm_chat.with_instructions(system_prompt).ask(@message.content)
       Message.create(role: "assistant", content: response.content, chat: @chat)
+
       @chat.generate_title_from_first_message
       redirect_to chat_path(@chat)
     else
@@ -20,18 +34,110 @@ class MessagesController < ApplicationController
   end
 
   private
+
   def build_conversation_history
     @chat.messages.each do |message|
       @ruby_llm_chat.add_message(message)
     end
   end
 
-  def challenge_context(matches)
+  def base_system_prompt
+    <<~PROMPT
+      You are a specialized assistant for vinyl record recommendations for collectors.
 
+      # ⚠️ ABSOLUTE RULES - NON-NEGOTIABLE:
+      1. ❌ You can ONLY recommend vinyls listed in the "📀 AVAILABLE CATALOG" section
+      2. ❌ You MUST NEVER invent, imagine, or mention a vinyl that is NOT in the provided catalog
+      3. ❌ You MUST NEVER recommend a vinyl from the "📀 USER'S COLLECTION" (they already own it)
+      4. ✅ If NO vinyl in the catalog matches the request, you MUST respond exactly:
+         "Sorry, I couldn't find any vinyl matching your request in our current catalog. Try rephrasing your search or explore other genres!"
+      5. ✅ For each recommendation, you MUST ALWAYS include the vinyl ID in the format [ID: XX]
+
+      # 🎯 YOUR MISSION:
+      - Analyze the user's current collection to understand their musical tastes (genres, artists, eras)
+      - Recommend ONLY vinyls from the provided catalog that match their preferences
+      - Clearly explain why each recommended vinyl will appeal to them
+      - Limit recommendations to 3-5 maximum to avoid overwhelming the user
+
+      # 📐 MANDATORY RESPONSE FORMAT IN MARKDOWN:
+      For each recommended vinyl, use EXACTLY this format:
+
+      **[Exact Vinyl Name]** [ID: XX] by [Exact Artists]
+      - **Genres**: [genres from catalog]
+      - **Year**: [year from catalog]
+      - **Price**: [exact price]€
+      - **Why this choice**: [Personalized explanation based on their collection - e.g., "Since you own X, you'll love Y because..."]
+      - **[View this vinyl]([exact URL])**
+
+      ---
+
+      # 💡 EXAMPLE OF A GOOD RESPONSE:
+
+      Based on your jazz collection, here are my recommendations:
+
+      **Blue Train** [ID: 23] by John Coltrane
+      - **Genres**: Jazz, Bebop
+      - **Year**: 1957
+      - **Price**: 32€
+      - **Why this choice**: Since you own "A Love Supreme," you'll love this Coltrane classic with its explosive improvisations.
+      - **[View this vinyl](https://example.com/vinyls/23)**
+
+      ---
+
+      # ❌ EXAMPLE OF A BAD RESPONSE (NEVER DO THIS):
+
+      ❌ "I recommend 'Abbey Road' by The Beatles" → THIS VINYL IS NOT IN THE CATALOG
+      ❌ "Listen to 'Thriller' by Michael Jackson" → INVENTION IS FORBIDDEN
+      ❌ Recommending a vinyl without mentioning [ID: XX] → INCORRECT FORMAT
+
+      # 🎨 RESPONSE STYLE:
+      - Warm and collector-passionate tone
+      - Natural use of "you" (informal)
+      - Concise but personalized
+      - Avoid generic phrases
+      - Show that you've analyzed their collection
+    PROMPT
   end
 
-  def instructions(prompt, matches)
-    [prompt, matches].compact.join("\n\n")
+  def user_collection_context(matches)
+    return "" if matches.empty?
+
+    context = "\n📀 User's Current Collection:\n"
+    matches.each do |match|
+      vinyl = match.vinyl
+      artists = vinyl.artists.map(&:name).join(", ")
+      genres = vinyl.genres.map(&:name).join(", ")
+
+      context += "- **#{vinyl.name}** by #{artists} (#{genres})"
+      context += " - Category: #{match.category}" if match.category.present?
+      context += "\n"
+    end
+
+    context
+  end
+
+  def catalog_vinyls_context(vinyls)
+    context = "\n\n## 🎵 Available Vinyls in Catalog:\n\n"
+    vinyls.each do |vinyl|
+      context += vinyl_context(vinyl)
+      context += "\n---\n\n"
+    end
+
+    context
+  end
+
+  def vinyl_context(vinyl)
+    artists_names = vinyl.artists.map(&:name).join(", ")
+    genres_names = vinyl.genres.map(&:name).join(", ")
+
+    "**VINYL ID**: #{vinyl.id}\n" \
+    "**Name**: #{vinyl.name}\n" \
+    "**Artists**: #{artists_names}\n" \
+    "**Genres**: #{genres_names}\n" \
+    "**Year**: #{vinyl.release_date}\n" \
+    "**Price**: #{vinyl.price}€\n" \
+    "**Notes**: #{vinyl.notes}\n" \
+    "**URL**: #{vinyl_url(vinyl)}"
   end
 
   def message_params
