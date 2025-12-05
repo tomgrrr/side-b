@@ -18,10 +18,13 @@ class CreateDataJob < ApplicationJob
   SPOTIFY_CLIENT_ID = ENV["SPOTIFY_CLIENT_ID"]
   SPOTIFY_CLIENT_SECRET = ENV["SPOTIFY_CLIENT_SECRET"]
 
-  ARTISTS_IDS = ["2742944"] # Travis Scott
   MAX_ALBUMS_PER_ARTIST = 15
 
+  FILE_PATH = Rails.root.join("db/data/artist_id.txt")
 
+  def read_artist_id
+    File.read(FILE_PATH).to_i
+  end
 
   def clean_artist_name(name)
     name.gsub(/\s*\(\d+\)\s*$/, '').strip
@@ -69,19 +72,18 @@ class CreateDataJob < ApplicationJob
 
 
   def perform
+
+    artist_id = ["#{read_artist_id}"]
+
+    Rails.logger.info "#{artist_id}"
+
     Rails.logger.info "🧹 Nettoyage base…"
-    Match.destroy_all
-    ArtistsVinyl.destroy_all
-    VinylsGenre.destroy_all
-    Vinyl.destroy_all
-    Artist.destroy_all
-    Genre.destroy_all
 
     Rails.logger.info "📀 Début import Discogs + Spotify"
 
     token = get_spotify_token
 
-    ARTISTS_IDS.each do |artist_id|
+    artist_id.each do |artist_id|
       url = "#{DISCOGS_BASE}/artists/#{artist_id}/releases?type=master&per_page=100&key=#{KEY}&secret=#{SECRET}"
       data = JSON.parse(URI.parse(url).read)
 
@@ -90,34 +92,49 @@ class CreateDataJob < ApplicationJob
       artist_name = clean_artist_name(data["releases"][0]["artist"])
       albums_count = 0
 
-      CSV.open("db/data/vinyls.csv", "wb") do |csv|
-        csv << ["name", "release_date", "image", "songs", "notes", "artist"]
+      csv_path = "db/data/vinyls.csv"
 
-        data["releases"].each do |release|
-          break if albums_count >= MAX_ALBUMS_PER_ARTIST
-          next unless release["type"] == "master"
+      write_headers = !File.exist?(csv_path)
 
-          album_name = release["title"]
-          albums_count += 1
+      data["releases"].each do |release|
+        break if albums_count >= MAX_ALBUMS_PER_ARTIST
+        next unless release["type"] == "master"
 
-          # Details master Discogs
-          master = JSON.parse(URI.parse(release["resource_url"]).read)
+        album_name = release["title"]
+        albums_count += 1
 
-          tracks = master["tracklist"]&.map { |t| t["title"] } || []
+        # Details master Discogs
+        master = JSON.parse(URI.parse(release["resource_url"]).read)
 
-          # Pochette Spotify
-          image_url = search_spotify_album(token, artist_name, album_name)
+        tracks = master["tracklist"]&.map { |t| t["title"] } || []
+
+        # Pochette Spotify
+        image_url = search_spotify_album(token, artist_name, album_name)
+
+        Rails.logger.info "✅ Image Spotify trouvée url: #{image_url}"
+
+        if image_url
+          Rails.logger.info "✅ Image Spotify trouvée pour #{album_name}"
+        else
+          Rails.logger.info "⚠️ Image Spotify non trouvée, utilisation de Discogs"
           image_url ||= release["thumb"]
+        end
 
-          notes = master["notes"]
+        notes = master["notes"]
+
+      CSV.open(csv_path, "ab") do |csv|
+        csv << ["name", "release_date", "image", "songs", "notes", "artist", "genre"] if write_headers
+
+
 
           csv << [
             album_name,
             release["year"],
             image_url,
-            tracks.join(" | "),
+            tracks.join("|"),
             notes,
-            artist_name
+            artist_name,
+            master["genres"],
           ]
         end
       end
