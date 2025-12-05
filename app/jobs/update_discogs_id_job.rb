@@ -14,6 +14,7 @@ class UpdateDiscogsIdJob < ApplicationJob
   def perform
 
     new_id = read_artist_id + 1
+
     
     write_artist_id(new_id)
 
