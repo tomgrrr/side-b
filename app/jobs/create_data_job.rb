@@ -18,10 +18,17 @@ class CreateDataJob < ApplicationJob
   SPOTIFY_CLIENT_ID = ENV["SPOTIFY_CLIENT_ID"]
   SPOTIFY_CLIENT_SECRET = ENV["SPOTIFY_CLIENT_SECRET"]
 
-  ARTISTS_IDS = ["2742944"] # Travis Scott
   MAX_ALBUMS_PER_ARTIST = 15
 
+  FILE_PATH = Rails.root.join("db/data/artist_id.txt")
 
+  def read_artist_id
+    File.read(FILE_PATH).to_i
+  end
+
+  def write_artist_id(new_id)
+    File.write(FILE_PATH, new_id.to_s)
+  end
 
   def clean_artist_name(name)
     name.gsub(/\s*\(\d+\)\s*$/, '').strip
@@ -69,13 +76,18 @@ class CreateDataJob < ApplicationJob
 
 
   def perform
+
+    artist_id = ["#{read_artist_id}"]
+
+    Rails.logger.info "#{artist_id}"
+
     Rails.logger.info "🧹 Nettoyage base…"
 
     Rails.logger.info "📀 Début import Discogs + Spotify"
 
     token = get_spotify_token
 
-    ARTISTS_IDS.each do |artist_id|
+    artist_id.each do |artist_id|
       url = "#{DISCOGS_BASE}/artists/#{artist_id}/releases?type=master&per_page=100&key=#{KEY}&secret=#{SECRET}"
       data = JSON.parse(URI.parse(url).read)
 
@@ -117,10 +129,14 @@ class CreateDataJob < ApplicationJob
             tracks.join(" | "),
             notes,
             artist_name,
-            master["genres"]
+            master["genres"],
           ]
         end
       end
+
+      new_id = read_artist_id + 1
+
+      write_artist_id(new_id)
 
       Rails.logger.info "📄 CSV généré pour #{artist_name}"
     end

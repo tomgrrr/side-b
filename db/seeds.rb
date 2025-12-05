@@ -21,15 +21,15 @@
 # ARTISTS_IDS = ["2742944"] # Travis Scott
 # MAX_ALBUMS_PER_ARTIST = 15
 
-# # Nettoyage
-# puts "🧹 Nettoyage de la base de données..."
-# Match.destroy_all
-# ArtistsVinyl.destroy_all
-# VinylsGenre.destroy_all
-# Vinyl.destroy_all
-# Artist.destroy_all
-# Genre.destroy_all
-# puts "✅ Base nettoyée\n\n"
+# Nettoyage
+puts "🧹 Nettoyage de la base de données..."
+Match.destroy_all
+ArtistsVinyl.destroy_all
+VinylsGenre.destroy_all
+Vinyl.destroy_all
+Artist.destroy_all
+Genre.destroy_all
+puts "✅ Base nettoyée\n\n"
 
 
 # def clean_artist_name(name)
@@ -216,20 +216,14 @@ filepath = "db/data/vinyls.csv"
 
 CSV.foreach(filepath) do |row|
 
-  release_date = row[1]
-  image_url = row[2]
-  songs = row[3]
-  notes = row[4]
-  title = row[0]
-
   artist = Artist.find_or_create_by!(name: row[5])
 
   vinyl = Vinyl.create!({
-      name: title,
-      release_date: release_date,
-      image: image_url,
-      songs: songs,
-      notes: notes
+      name: row[0],
+      release_date: row[1],
+      image: row[2],
+      songs: row[3],
+      notes: row[4]
   })
 
   genre = Genre.find_or_create_by!(name: row[6])
@@ -238,5 +232,5 @@ CSV.foreach(filepath) do |row|
 
   ArtistsVinyl.create!(artist: artist, vinyl: vinyl)
 
-  ArtistGenre.find_or_create_by()
+  ArtistGenre.find_or_create_by(artist: artist, genre: genre)
 end
