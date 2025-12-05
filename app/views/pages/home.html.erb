@@ -1,15 +1,36 @@
 <%# Side bar %>
 <%= render "shared/banner" %>
 
-<div class="card-grid">
-  <% 5.times do %>
-<div class="card">
-  <%= image_tag "proto_logo.png", alt: "Logo", class: "card-img" %>
+<% if @vinyls.any? %>
+        <div class="vinyl-grid">
+          <% @vinyls.each do |vinyl| %>
+            <div class="vinyl-card">
+              <% if vinyl.image.present? %>
+                <div class="vinyl-image" style="background-image: url('<%= vinyl.image %>');">
+                  <div class="vinyl-overlay">
+                    <%= link_to "Voir le vinyle", vinyl_path(vinyl), class: "view-btn" %>
+                  </div>
+                </div>
+              <% else %>
+                <div class="vinyl-image" style="background: linear-gradient(135deg, #9b59b6 20%, #2c3e50 80%);">
+                  <div class="vinyl-disc"></div>
+                  <div class="vinyl-overlay">
+                    <%= link_to "Vinyl details", vinyl_path(vinyl), class: "play-btn" %>
+                  </div>
+                </div>
+              <% end %>
+              <div class="vinyl-info">
+                <div class="vinyl-title"><%= vinyl.name %></div>
+                <div class="vinyl-artist">
+                  <% vinyl.artists.each do |artist| %>
+                    <%= artist.name %>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <p class="no-results">No vinyl found.</p>
+      <% end %>
 
-  <div class="card-body">
-    <h4><b>Album</b></h4>
-    <p>Architect & Engineer</p>
-  </div>
-</div>
-<% end %>
-  </div>
