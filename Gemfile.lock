@@ -138,9 +138,9 @@ GEM
     drb (2.2.3)
     erb (6.0.0)
     erubi (1.13.1)
-    event_stream_parser (1.0.0)
     et-orbi (1.4.0)
       tzinfo
+    event_stream_parser (1.0.0)
     execjs (2.10.0)
     faraday (2.14.0)
       faraday-net_http (>= 2.0, < 3.5)
@@ -208,6 +208,8 @@ GEM
     msgpack (1.8.0)
     multipart-post (2.4.1)
     mutex_m (0.3.0)
+    neighbor (0.6.0)
+      activerecord (>= 7.1)
     net-http (0.8.0)
       uri (>= 0.11.1)
     net-imap (0.5.12)
@@ -406,6 +408,7 @@ DEPENDENCIES
   font-awesome-sass (~> 6.1)
   importmap-rails
   jbuilder
+  neighbor
   pg (~> 1.1)
   puma (>= 5.0)
   rails (~> 7.1.6)

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_12_05_102653) do
+ActiveRecord::Schema[7.1].define(version: 2025_12_05_112510) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "vector"
@@ -56,6 +56,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_05_102653) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.vector "embedding", limit: 1536
   end
 
   create_table "artists_vinyls", force: :cascade do |t|
@@ -79,6 +80,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_05_102653) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.vector "embedding", limit: 1536
   end
 
   create_table "matches", force: :cascade do |t|
@@ -88,6 +90,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_05_102653) do
     t.datetime "updated_at", null: false
     t.string "category"
     t.bigint "playlist_id"
+    t.vector "embedding", limit: 1536
     t.index ["playlist_id"], name: "index_matches_on_playlist_id"
     t.index ["user_id"], name: "index_matches_on_user_id"
     t.index ["vinyl_id"], name: "index_matches_on_vinyl_id"
@@ -261,6 +264,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_05_102653) do
     t.string "image"
     t.float "price"
     t.integer "release_date"
+    t.vector "embedding", limit: 1536
   end
 
   create_table "vinyls_genres", force: :cascade do |t|

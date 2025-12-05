@@ -26,10 +26,6 @@ class CreateDataJob < ApplicationJob
     File.read(FILE_PATH).to_i
   end
 
-  def write_artist_id(new_id)
-    File.write(FILE_PATH, new_id.to_s)
-  end
-
   def clean_artist_name(name)
     name.gsub(/\s*\(\d+\)\s*$/, '').strip
   end
@@ -100,43 +96,48 @@ class CreateDataJob < ApplicationJob
 
       write_headers = !File.exist?(csv_path)
 
+      data["releases"].each do |release|
+        break if albums_count >= MAX_ALBUMS_PER_ARTIST
+        next unless release["type"] == "master"
+
+        album_name = release["title"]
+        albums_count += 1
+
+        # Details master Discogs
+        master = JSON.parse(URI.parse(release["resource_url"]).read)
+
+        tracks = master["tracklist"]&.map { |t| t["title"] } || []
+
+        # Pochette Spotify
+        image_url = search_spotify_album(token, artist_name, album_name)
+
+        Rails.logger.info "✅ Image Spotify trouvée url: #{image_url}"
+
+        if image_url
+          Rails.logger.info "✅ Image Spotify trouvée pour #{album_name}"
+        else
+          Rails.logger.info "⚠️ Image Spotify non trouvée, utilisation de Discogs"
+          image_url ||= release["thumb"]
+        end
+
+        notes = master["notes"]
+
       CSV.open(csv_path, "ab") do |csv|
         csv << ["name", "release_date", "image", "songs", "notes", "artist", "genre"] if write_headers
 
 
-        data["releases"].each do |release|
-          break if albums_count >= MAX_ALBUMS_PER_ARTIST
-          next unless release["type"] == "master"
-
-          album_name = release["title"]
-          albums_count += 1
-
-          # Details master Discogs
-          master = JSON.parse(URI.parse(release["resource_url"]).read)
-
-          tracks = master["tracklist"]&.map { |t| t["title"] } || []
-
-          # Pochette Spotify
-          image_url = search_spotify_album(token, artist_name, album_name)
-          image_url ||= release["thumb"]
-
-          notes = master["notes"]
 
           csv << [
             album_name,
             release["year"],
             image_url,
-            tracks.join(" | "),
+            tracks.join("|"),
             notes,
             artist_name,
             master["genres"],
           ]
         end
       end
-
-      new_id = read_artist_id + 1
-
-      write_artist_id(new_id)
 
       Rails.logger.info "📄 CSV généré pour #{artist_name}"
     end

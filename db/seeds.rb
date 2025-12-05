@@ -25,6 +25,7 @@
 puts "🧹 Nettoyage de la base de données..."
 Match.destroy_all
 ArtistsVinyl.destroy_all
+ArtistGenre.destroy_all
 VinylsGenre.destroy_all
 Vinyl.destroy_all
 Artist.destroy_all
@@ -232,5 +233,5 @@ CSV.foreach(filepath) do |row|
 
   ArtistsVinyl.create!(artist: artist, vinyl: vinyl)
 
-  ArtistGenre.find_or_create_by(artist: artist, genre: genre)
+  ArtistGenre.find_or_create_by!(artist: artist, genre: genre)
 end

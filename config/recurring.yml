@@ -17,3 +17,7 @@ production:
 create_data_job:
   class: CreateDataJob
   schedule: every 2 minutes
+
+update_discogs_id_job:
+  class: UpdateDiscogsIdJob
+  schedule: every 2 minutes
