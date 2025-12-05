@@ -1,0 +1,87 @@
+/* --- Styles pour la grille et les cartes --- */
+
+/* 1. Conteneur de la grille (organisation) */
+.card-grid {
+  display: grid;
+  /* Grille responsive : 200px minimum par colonne */
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px; /* Espace entre les cartes */
+  margin-top: 20px;
+  /* Force toutes les lignes à avoir la même hauteur */
+  grid-auto-rows: 1fr;
+}
+
+/* 2. La carte elle-même */
+.card {
+  background-color: #333333;
+  border-radius: 8px;
+  overflow: visible; /* Changé pour permettre au contenu d'être visible */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  /* Affiche l'image puis le corps verticalement */
+  display: flex;
+  flex-direction: column;
+  /* Force toutes les cartes à avoir la même hauteur */
+  min-height: 400px;
+}
+
+/* 3. Conteneur de l'image : FIXE LA HAUTEUR UNIFORME */
+.card-img-container {
+  width: 100%;
+  height: 200px; /* HAUTEUR FIXE pour toutes les images */
+  flex-shrink: 0; /* Empêche l'image de rétrécir */
+  background-color: #1a1a1a; /* Fond pour contraste si l'image ne remplit pas */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 8px 8px 0 0;
+}
+
+/* 4. L'image : CONTRÔLE L'AJUSTEMENT (pas d'étirement) */
+.card-img {
+  width: 100%;
+  height: 100%;
+  /* EMPÊCHE L'ÉTIREMENT : L'image s'ajuste entièrement sans déformation */
+  object-fit: contain;
+}
+
+/* 5. Corps de la carte */
+.card-body {
+  padding: 15px;
+  flex-grow: 1;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  /* Ne pas restreindre la hauteur */
+}
+
+/* 6. Nom de l'album/artiste (titre principal) */
+.card-body .album-name {
+  margin: 0;
+  font-size: 0.95em;
+  line-height: 1.3;
+  word-wrap: break-word; /* Permet au texte de se couper si nécessaire */
+  overflow-wrap: break-word;
+  /* Le texte peut prendre autant de lignes que nécessaire */
+  white-space: normal;
+}
+
+/* 7. Nom de l'artiste (texte secondaire) */
+.card-body .artist-name {
+  margin: 0;
+  color: #cccccc;
+  font-size: 0.85em;
+  line-height: 1.3;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+}
+
+
+/* Message "Aucun résultat" */
+.no-results{
+  color: #cccccc;
+  font-style: italic;
+  margin: 20px 0;
+}
