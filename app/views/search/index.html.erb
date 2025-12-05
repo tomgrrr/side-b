@@ -19,7 +19,7 @@
                 <div class="vinyl-image" style="background: linear-gradient(135deg, #9b59b6 20%, #2c3e50 80%);">
                   <div class="vinyl-disc"></div>
                   <div class="vinyl-overlay">
-                    <%= link_to "Voir le vinyle", vinyl_path(vinyl), class: "play-btn" %>
+                    <%= link_to "Vinyl details", vinyl_path(vinyl), class: "play-btn" %>
                   </div>
                 </div>
               <% end %>
@@ -35,11 +35,11 @@
           <% end %>
         </div>
       <% else %>
-        <p class="no-results">Aucun vinyle trouvé.</p>
+        <p class="no-results">No vinyl found.</p>
       <% end %>
 
       <h1 class="page-title">
-        Artistes
+        Artists
         <span class="count"><%= @artists.count %></span>
       </h1>
       <% if @artists.any? %>
@@ -59,7 +59,7 @@
           <% end %>
         </div>
       <% else %>
-        <p class="no-results">Aucun artiste trouvé.</p>
+        <p class="no-results">No artist found.</p>
       <% end %>
     <% end %>
   </div>
