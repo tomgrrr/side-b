@@ -6,9 +6,10 @@
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  margin-bottom: 10px;
 }
 
-h1{
+.banner h1{
   color: #efcc4c;
   padding: 15px;
   font-size: 64px;
@@ -17,7 +18,7 @@ h1{
   left: 50px;
 }
 
-p{
+.banner p{
   color: #fceebc;
   font-size: 32px;
   position: absolute;
