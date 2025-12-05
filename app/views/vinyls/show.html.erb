@@ -29,7 +29,7 @@
         <%= button_to "Remove from Collection", match_path(@collection_match), method: :delete, class: "play-btn", data: { confirm: "Êtes-vous sûr ?" } %>
     <% else %>
         <%= button_to matches_path(vinyl_id: @vinyl.id, category: "collection"), method: :post, class: "play-btn" do %>
-        ▶ Add to Collection
+        + Add to Collection
         <% end %>
     <% end %>
 
