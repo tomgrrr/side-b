@@ -1,10 +1,27 @@
 .banner{
-  height: 300px;
+  height: 500px;
   width: 100%;
-  background-color: #1E2019;
+  background-color: #121212;
+  background-image: linear-gradient(rgba(0,0,0,0.8),rgba(0,0,0,0.8)), image-url('bann.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  margin-bottom: 10px;
 }
 
-h1{
-  color: #E2C044;
+.banner h1{
+  color: #efcc4c;
   padding: 15px;
+  font-size: 64px;
+  position: absolute;
+  top: 160px;
+  left: 50px;
+}
+
+.banner p{
+  color: #fceebc;
+  font-size: 32px;
+  position: absolute;
+  top: 280px;
+  left: 70px;
 }
