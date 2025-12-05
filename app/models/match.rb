@@ -29,8 +29,8 @@ class Match < ApplicationRecord
   private
 
   def set_embedding
-    collection_vinyls = user.matches.where(category: "collection").vinyls
-    wishlist_vinyls   = user.matches.where(category: "wishlist").vinyls
+    collection_vinyls = user.matches.where(category: "collection")
+    wishlist_vinyls   = user.matches.where(category: "wishlist")
 
     embedding = RubyLLM.embed("Vinyls in my collection: #{collection_vinyls.join(', ')}. Vinyls in my wishlist: #{wishlist_vinyls.join(', ')}")
 
