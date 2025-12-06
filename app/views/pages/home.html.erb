@@ -8,7 +8,7 @@
               <% if vinyl.image.present? %>
                 <div class="vinyl-image" style="background-image: url('<%= vinyl.image %>');">
                   <div class="vinyl-overlay">
-                    <%= link_to "Voir le vinyle", vinyl_path(vinyl), class: "view-btn" %>
+                    <%= link_to "See Vinyl", vinyl_path(vinyl), class: "view-btn" %>
                   </div>
                 </div>
               <% else %>
@@ -33,4 +33,3 @@
       <% else %>
         <p class="no-results">No vinyl found.</p>
       <% end %>
-

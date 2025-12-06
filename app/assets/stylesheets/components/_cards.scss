@@ -31,10 +31,10 @@
 }
 
 .vinyl-card {
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(0, 0, 0, 0.15);
     backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 25px;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-radius: 7px;
     overflow: visible;
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     cursor: pointer;
@@ -49,7 +49,7 @@
 
     &:hover {
         transform: translateY(-10px) scale(1.02);
-        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 20px 20px -10px rgba(255, 225, 105, 0.66);
 
         .vinyl-overlay {
             opacity: 1;
@@ -67,6 +67,8 @@
     background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
     position: relative;
     overflow: hidden;
+    border-top-right-radius: 7px;
+    border-top-left-radius: 7px;
 }
 
 .vinyl-overlay {
@@ -85,10 +87,11 @@
 }
 
 .view-btn {
-    background: white;
-    color: #667eea;
+    background: rgb(255, 221, 0);
+    color: #ae0000;
     border: none;
     padding: 15px 40px;
+    text-decoration: none;
     border-radius: 15px;
     font-weight: 700;
     font-size: 16px;
@@ -99,12 +102,14 @@
 
 .vinyl-info {
     padding: 20px;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(156, 0, 0, 0.884);
     color: white;
+    border-bottom-left-radius: 7px;
+    border-bottom-right-radius: 7px;
 }
 
 .vinyl-title {
-    color: white;
+    color: rgb(255, 221, 109);
     font-size: 16px;
     font-weight: 700;
     margin-bottom: 8px;
