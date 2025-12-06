@@ -24,10 +24,12 @@
 .vinyl-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
-    margin-bottom: 60px;
+    gap: 35px;
+    margin-bottom: 35px;
     width: 100%;
     box-sizing: border-box;
+    margin-top: 35px;
+    padding-inline: 35px;
 }
 
 .vinyl-card {
@@ -63,12 +65,13 @@
 
 .vinyl-image {
     width: 100%;
-    aspect-ratio: 1;
+    aspect-ratio: 1 /1;
     background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
     position: relative;
     overflow: hidden;
     border-top-right-radius: 7px;
     border-top-left-radius: 7px;
+
 }
 
 .vinyl-overlay {
@@ -101,8 +104,8 @@
 }
 
 .vinyl-info {
-    padding: 20px;
-    background: rgba(156, 0, 0, 0.884);
+    padding: 15px;
+    background: linear-gradient(to bottom, #a41212 0%, #5b1313 50%, #1a1a1a 100%);
     color: white;
     border-bottom-left-radius: 7px;
     border-bottom-right-radius: 7px;

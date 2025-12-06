@@ -2,6 +2,7 @@
   background-color: #222222;
   border-radius: 12px 0 0 12px;
   padding: 0px 15px;
+
 }
 
 .avatar-box {
@@ -15,6 +16,10 @@
   height: 70px;
   width: auto;
   border-radius: 7px;
+    &:hover {
+        box-shadow: 0 10px 15px -10px rgba(255, 225, 105, 0.66);
+        transition: 0.3s ease;
+    }
 }
 
 .avatar-img {
@@ -24,7 +29,8 @@
 }
 
 .custom-navbar {
-  background-color: #800E13;
+  background: linear-gradient(to right, #800E13 0%, #651414 50%, #5b1111 100%);
+  box-shadow: 0 4px 20px -5px rgba(92, 21, 21, 0.5);
   border-radius: 12px;
   padding: 20px 30px;
   height: 70px;
@@ -50,9 +56,9 @@
   background-color: #232323;
   border: none;
   border-radius: 8px;
-  padding: 8px 16px;
   color: rgb(224, 224, 224);
   width: 450px;
+  margin-left: 12px;
 
   &::placeholder {
     color: rgb(224, 224, 224);
