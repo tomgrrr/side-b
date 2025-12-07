@@ -12,7 +12,7 @@
 
               <div><%= link_to chat.title, chat_path(chat), class: "chat" %></div>
 
-              <div> <%= link_to chat_path(chat), data: { turbo_method: :delete, turbo_confirm: "Supprimer ?" }, class: "btn-delete" do %>
+              <div> <%= link_to chat_path(chat), data: { turbo_method: :delete, turbo_confirm: "Do you want to delete ?" }, class: "btn-delete" do %>
                       <i class="fa-regular fa-circle-xmark"></i>
                     <% end %>
               </div>
