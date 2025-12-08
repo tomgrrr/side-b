@@ -8,6 +8,8 @@ gem "rails", "~> 7.1.6"
 gem "ruby_llm", "~> 1.2.0"
 
 gem "cloudinary"
+gem "csv"
+gem "httparty"
 
 gem "neighbor"
 

@@ -318,37 +318,31 @@ CSV.foreach(filepath) do |row|
   artist = Artist.find_or_create_by!(name: row[5])
 
   artist_name = artist.name
-
-  album_name = row[0]
+  album_name  = row[0]
 
   image_url = search_spotify_album(token, artist_name, album_name)
 
-      Rails.logger.info "✅ Image Spotify trouvée url: #{image_url}"
+  if image_url.nil?
+    puts "❌ Image Spotify non trouvée → Album ignoré : #{album_name}"
+    next
+  end
 
-      if image_url
-        Rails.logger.info "✅ Image Spotify trouvée pour #{album_name}"
-      else
-        Rails.logger.info "⚠️ Image Spotify non trouvée, utilisation de Discogs"
-        image_url ||= row[2]
-      end
+  puts "✅ Spotify OK pour #{album_name} : #{image_url}"
 
+  # === Création du vinyle ===
   vinyl = Vinyl.create!({
-      name: album_name,
-      release_date: row[1],
-      image: image_url,
-      songs: row[3],
-      notes: row[4],
-      price: row[7]
+    name: album_name,
+    release_date: row[1],
+    image: image_url,
+    songs: row[3],
+    notes: row[4],
+    price: row[7]
   })
 
-  puts " songs :#{vinyl.songs}"
   genre = Genre.find_or_create_by!(name: row[6])
-
   VinylsGenre.create!(genre: genre, vinyl: vinyl)
-
   ArtistsVinyl.create!(artist: artist, vinyl: vinyl)
-
   ArtistGenre.find_or_create_by!(artist: artist, genre: genre)
 
-  puts "#{artist.name}: #{vinyl.name} #{vinyl.image}"
+  puts "#{artist.name}: #{vinyl.name} → Importé"
 end
