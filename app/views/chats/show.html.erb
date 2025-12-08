@@ -1,4 +1,4 @@
-  <div class="container chatbox">
+<div class="container chatbox">
 
   <div class="chat-layout">
 
@@ -33,7 +33,7 @@
           <% elsif message.role == "assistant" %>
             <div class="d-flex justify-content-start my-5">
               <div class="px-3 py-3 rounded-3 answer me">
-                <%= message.content %>
+                <%= render_markdown(message.content.to_s) %>
               </div>
             </div>
           <% end %>
