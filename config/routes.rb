@@ -25,7 +25,7 @@ Rails.application.routes.draw do
 
   resources :matches, only: [:create, :destroy, :update]
 
-  resources :playlists, only: [:show, :index, :create]
+  resources :playlists, only: [:show, :index, :new, :create]
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

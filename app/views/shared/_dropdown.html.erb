@@ -1,46 +1,15 @@
+<%# 1. Le bouton et son Dropdown %>
 <div class="btn-group">
-
-  <button type="button" class="btn btn-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-    Add to a playlist
+  <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    Action
   </button>
-
-
   <div class="dropdown-menu">
     <% playlists.each do |playlist| %>
-      <%= link_to playlist.name, match_path(match), data: { turbo_method: :update }, class: "dropdown-item" %>
+      <%= link_to playlist.name, match_path(match, playlist_id: playlist.id),
+          data: { turbo_method: :patch },
+          class: "dropdown-item" %>
     <% end %>
-
     <div class="dropdown-divider"></div>
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">
-  Open modal for @mdo
-</button>
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">New message</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form>
-          <div class="mb-3">
-            <label for="recipient-name" class="col-form-label">Recipient:</label>
-            <input type="text" class="form-control" id="recipient-name">
-          </div>
-          <div class="mb-3">
-            <label for="message-text" class="col-form-label">Message:</label>
-            <textarea class="form-control" id="message-text"></textarea>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Send message</button>
-      </div>
-    </div>
+    <%= link_to ,  %>
   </div>
-</div>
-
-  </div>
-
 </div>

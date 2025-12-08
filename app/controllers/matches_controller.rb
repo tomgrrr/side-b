@@ -15,7 +15,13 @@ class MatchesController < ApplicationController
   end
 
   def update
-
+    @match = Match.find(params[:id])
+    
+    if @match.update(playlist_id: params[:playlist_id])
+      redirect_back fallback_location: root_path, notice: "Vinyl ajouté à la playlist!"
+    else
+      redirect_back fallback_location: root_path, alert: "Erreur"
+    end
   end
 
   def destroy
