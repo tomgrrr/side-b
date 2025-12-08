@@ -1,0 +1,10 @@
+<div class="container">
+
+  <%= simple_form_for @playlist do |f| %>
+    <%= f.input :image, as: :file %>
+    <%= f.input :name, required: true, label: "Name..." %>
+    <%= f.button :submit, 'Create playlist', class: 'btn btn-primary' %>
+  <% end %>
+
+
+</div>

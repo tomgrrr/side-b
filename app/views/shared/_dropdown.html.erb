@@ -1,8 +1,9 @@
 <%# 1. Le bouton et son Dropdown %>
 <div class="btn-group">
-  <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    Action
+  <button type="button" class="btn btn-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+    Add to a playlist
   </button>
+
   <div class="dropdown-menu">
     <% playlists.each do |playlist| %>
       <%= link_to playlist.name, match_path(match, playlist_id: playlist.id),
@@ -10,6 +11,6 @@
           class: "dropdown-item" %>
     <% end %>
     <div class="dropdown-divider"></div>
-    <%= link_to ,  %>
+   <%= link_to "New Playlist", new_playlist_path, class: "clean" %>
   </div>
 </div>
