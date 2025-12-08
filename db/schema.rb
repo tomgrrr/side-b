@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_12_05_112510) do
+ActiveRecord::Schema[7.1].define(version: 2025_12_08_095255) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "vector"
@@ -245,6 +245,13 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_05_112510) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  create_table "vinyl_recommandations", force: :cascade do |t|
+    t.bigint "vinyl_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["vinyl_id"], name: "index_vinyl_recommandations_on_vinyl_id"
+  end
+
   create_table "vinyl_songs", force: :cascade do |t|
     t.integer "number"
     t.bigint "vinyl_id", null: false
@@ -293,6 +300,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_05_112510) do
   add_foreign_key "solid_queue_ready_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_recurring_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_scheduled_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
+  add_foreign_key "vinyl_recommandations", "vinyls"
   add_foreign_key "vinyl_songs", "vinyls"
   add_foreign_key "vinyls_genres", "genres"
   add_foreign_key "vinyls_genres", "vinyls"

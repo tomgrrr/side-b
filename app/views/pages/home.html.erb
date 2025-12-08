@@ -3,7 +3,7 @@
 
 <% if @vinyls.any? %>
         <div class="vinyl-grid">
-          <% @vinyls.each do |vinyl| %>
+          <% @vinyls.first(4).each do |vinyl| %>
             <div class="vinyl-card">
               <% if vinyl.image.present? %>
                 <div class="vinyl-image" style="background-image: url('<%= vinyl.image %>');">
