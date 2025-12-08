@@ -1,20 +1,21 @@
 # app/services/youtube_service.rb
-require 'net/http'
-require 'json'
-require 'uri'
+require 'httparty'
 
 class YoutubeService
-  BASE_URL = "https://www.googleapis.com/youtube/v3"
+  include HTTParty
+  base_uri 'https://www.googleapis.com/youtube/v3'
+
+  default_timeout 10
 
   def self.search_album(artist_name, album_name)
     api_key = ENV['YOUTUBE_API_KEY']
 
     unless api_key.present?
-      Rails.logger.error("YouTube API Key not configured")
+      Rails.logger.error("❌ YouTube API Key not configured")
+      Rails.logger.error("💡 Add YOUTUBE_API_KEY to your .env file")
       return []
     end
 
-    # Recherche optimisée pour les albums complets
     queries = [
       "#{artist_name} #{album_name} full album",
       "#{artist_name} #{album_name} album"
@@ -25,26 +26,28 @@ class YoutubeService
       return results if results.present?
     end
 
+    Rails.logger.warn("⚠️  No YouTube videos found for '#{artist_name} - #{album_name}'")
     []
   end
 
   private
 
   def self.perform_search(query, api_key)
-    encoded_query = URI.encode_www_form_component(query)
-    url = "#{BASE_URL}/search?part=snippet&q=#{encoded_query}&type=video&maxResults=5&key=#{api_key}"
-
     begin
-      uri = URI(url)
-      http = Net::HTTP.new(uri.host, uri.port)
-      http.use_ssl = true
-      http.read_timeout = 10
+      Rails.logger.info("🔍 Searching YouTube: '#{query}'")
 
-      request = Net::HTTP::Get.new(uri.request_uri)
-      response = http.request(request)
+      response = get('/search', {
+        query: {
+          part: 'snippet',
+          q: query,
+          type: 'video',
+          maxResults: 5,
+          key: api_key
+        }
+      })
 
-      if response.is_a?(Net::HTTPSuccess)
-        data = JSON.parse(response.body)
+      if response.success?
+        data = response.parsed_response
 
         if data['items']&.any?
           videos = data['items'].map do |item|
@@ -56,15 +59,25 @@ class YoutubeService
             }
           end
 
-          Rails.logger.info("YouTube: Found #{videos.size} videos")
+          Rails.logger.info("✅ YouTube: Found #{videos.size} videos")
           return videos
+        else
+          Rails.logger.warn("⚠️  YouTube: No items in response")
         end
+      elsif response.code == 403
+        error_msg = response.parsed_response.dig('error', 'message')
+        Rails.logger.error("❌ YouTube API 403: #{error_msg}")
+        Rails.logger.error("💡 Check your API key and quota at https://console.cloud.google.com")
       else
-        Rails.logger.error("YouTube API Error: #{response.code}")
+        Rails.logger.error("❌ YouTube API Error: #{response.code}")
+        Rails.logger.error("Response: #{response.body}")
       end
 
+    rescue HTTParty::Error => e
+      Rails.logger.error("❌ HTTParty Error: #{e.message}")
     rescue StandardError => e
-      Rails.logger.error("YouTube Error: #{e.message}")
+      Rails.logger.error("❌ YouTube Error: #{e.class} - #{e.message}")
+      Rails.logger.error(e.backtrace.first(3).join("\n"))
     end
 
     nil
