@@ -9,6 +9,10 @@ class VinylsController < ApplicationController
 
   @collection_match = current_user.matches.find_by(vinyl: @vinyl, category: "collection")
   @wishlist_match = current_user.matches.find_by(vinyl: @vinyl, category: "wishlist")
+
+  artist_name = @vinyl.artists.first&.name
+  @youtube_videos = YoutubeService.search_album(artist_name, @vinyl.name) if artist_name
+
 end
 
   def index

@@ -8,7 +8,7 @@
       <% end %>
     </div>
 
-  <div class="album-info">
+    <div class="album-info">
       <h1><%= @vinyl.name %></h1>
 
       <% @vinyl.artists.each do |artist| %>
@@ -23,28 +23,56 @@
         <p><strong>Price:</strong> <%= @vinyl.price %>$</p>
       <% end %>
 
-
-<div class="info-buttons">
-    <% if @in_collection %>
-        <%= button_to "Remove from Collection", match_path(@collection_match), method: :delete, class: "play-btn", data: { confirm: "Êtes-vous sûr ?" } %>
-    <% else %>
-        <%= button_to matches_path(vinyl_id: @vinyl.id, category: "collection"), method: :post, class: "play-btn" do %>
-        + Add to Collection
+      <div class="info-buttons">
+        <% if @in_collection %>
+          <%= button_to "Remove from Collection", match_path(@collection_match), method: :delete, class: "play-btn", data: { confirm: "Êtes-vous sûr ?" } %>
+        <% else %>
+          <%= button_to matches_path(vinyl_id: @vinyl.id, category: "collection"), method: :post, class: "play-btn" do %>
+            + Add to Collection
+          <% end %>
         <% end %>
-    <% end %>
 
-    <% if @in_wishlist %>
-        <%= button_to "Remove from Wishlist", match_path(@wishlist_match), method: :delete, class: "play-btn", data: { confirm: "Êtes-vous sûr ?" } %>
-    <% else %>
-        <% unless @in_collection %>
-        <%= button_to matches_path(vinyl_id: @vinyl.id, category: "wishlist"), method: :post, class: "play-btn" do %>
-            ♡ Add to Wishlist
+        <% if @in_wishlist %>
+          <%= button_to "Remove from Wishlist", match_path(@wishlist_match), method: :delete, class: "play-btn", data: { confirm: "Êtes-vous sûr ?" } %>
+        <% else %>
+          <% unless @in_collection %>
+            <%= button_to matches_path(vinyl_id: @vinyl.id, category: "wishlist"), method: :post, class: "play-btn" do %>
+              ♡ Add to Wishlist
             <% end %>
+          <% end %>
         <% end %>
-    <% end %>
-</div>
+      </div>
 
-        <% if @vinyl.songs.present? %>
+      <!-- YouTube Player Section -->
+      <% if @youtube_videos.present? %>
+        <div class="youtube-player-container mt-4" data-controller="youtube-player" data-youtube-player-video-id-value="<%= @youtube_videos.first[:video_id] %>">
+          <h3 class="mb-3">🎵 Listen to this album</h3>
+
+          <!-- Player Frame -->
+          <div id="youtube-player" data-youtube-player-target="frame"></div>
+
+          <!-- Video List -->
+          <div class="video-list mt-3" data-youtube-player-target="videoList">
+            <% @youtube_videos.each_with_index do |video, index| %>
+              <div class="video-item <%= 'active' if index == 0 %>"
+                   data-action="click->youtube-player#playVideo"
+                   data-video-id="<%= video[:video_id] %>">
+                <img src="<%= video[:thumbnail] %>" alt="<%= video[:title] %>" class="video-thumbnail">
+                <div class="video-info">
+                  <p class="video-title"><%= video[:title] %></p>
+                  <p class="video-channel"><%= video[:channel] %></p>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      <% else %>
+        <div class="alert alert-info mt-4">
+          No audio available for this album yet.
+        </div>
+      <% end %>
+
+      <% if @vinyl.songs.present? %>
         <div class="mt-3">
           <p><strong>Tracklist:</strong></p>
           <ul style="color: #F0D060;">
@@ -54,20 +82,18 @@
           </ul>
         </div>
       <% end %>
-
+    </div>
   </div>
-</div>
 
-<div class="card-grid">
-  <% 5.times do %>
-<div class="card">
-  <%= image_tag "proto_logo.png", alt: "Logo", class: "card-img" %>
-
-  <div class="card-body">
-    <h4><b>Album</b></h4>
-    <p>Architect & Engineer</p>
-  </div>
-</div>
-<% end %>
+  <div class="card-grid">
+    <% 5.times do %>
+      <div class="card">
+        <%= image_tag "proto_logo.png", alt: "Logo", class: "card-img" %>
+        <div class="card-body">
+          <h4><b>Album</b></h4>
+          <p>Architect & Engineer</p>
+        </div>
+      </div>
+    <% end %>
   </div>
 </div>
