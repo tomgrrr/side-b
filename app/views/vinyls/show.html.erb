@@ -55,8 +55,8 @@
           <div class="video-list mt-3" data-youtube-player-target="videoList">
             <% @youtube_videos.each_with_index do |video, index| %>
               <div class="video-item <%= 'active' if index == 0 %>"
-                   data-action="click->youtube-player#playVideo"
-                   data-video-id="<%= video[:video_id] %>">
+                  data-action="click->youtube-player#playVideo"
+                  data-video-id="<%= video[:video_id] %>">
                 <img src="<%= video[:thumbnail] %>" alt="<%= video[:title] %>" class="video-thumbnail">
                 <div class="video-info">
                   <p class="video-title"><%= video[:title] %></p>
