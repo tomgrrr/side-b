@@ -1,6 +1,7 @@
 class User < ApplicationRecord
   has_many :chats, dependent: :destroy
   has_many :matches, dependent: :destroy
+  has_many :vinyl_recommandations
   has_one_attached :photo
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
