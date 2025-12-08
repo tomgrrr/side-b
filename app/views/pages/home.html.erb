@@ -2,8 +2,16 @@
 <%= render "shared/banner" %>
 
 <% if @vinyls.any? %>
+<<<<<<< HEAD
+  <div class="vinyl-grid">
+    <%= render partial: "shared/vinyl_card", collection: @vinyls, as: :vinyl %>
+  </div>
+<% else %>
+  <p class="no-results">No vinyl found.</p>
+<% end %>
+=======
         <div class="vinyl-grid">
-          <% @vinyls.each do |vinyl| %>
+          <% @vinyls.first(4).each do |vinyl| %>
             <div class="vinyl-card">
               <% if vinyl.image.present? %>
                 <div class="vinyl-image" style="background-image: url('<%= vinyl.image %>');">
@@ -33,3 +41,4 @@
       <% else %>
         <p class="no-results">No vinyl found.</p>
       <% end %>
+>>>>>>> master

@@ -21,3 +21,7 @@ create_data_job:
 update_discogs_id_job:
   class: UpdateDiscogsIdJob
   schedule: every 2 minutes
+
+update_recommandation_job:
+  class: UpdateRecommandationJob
+  schedule: every 1440 minutes

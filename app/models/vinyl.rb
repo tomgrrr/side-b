@@ -5,6 +5,7 @@ class Vinyl < ApplicationRecord
   has_many :artists, through: :artists_vinyls
   has_many :matches
   has_many :genres, through: :vinyls_genres
+  has_many :vinyl_recommandations
 
   has_neighbors :embedding
   after_create :set_embedding
