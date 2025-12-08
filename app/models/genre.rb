@@ -5,6 +5,10 @@ class Genre < ApplicationRecord
   has_neighbors :embedding
   after_create :set_embedding
 
+  def self.clean(genres)
+    genres.flat_map { |g| JSON.parse(g.name) }.uniq
+  end
+  
   private
 
   def set_embedding
