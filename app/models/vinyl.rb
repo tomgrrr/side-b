@@ -10,12 +10,12 @@ class Vinyl < ApplicationRecord
   after_create :set_embedding
 
   def parsed_songs
-    return [] if songs.blank?
-    JSON.parse(songs)
-  rescue JSON::ParserError
-    []
+    if songs.blank?
+      return []
+    else
+      songs.split("|").map(&:strip)
+    end
   end
-
 
   private
 
