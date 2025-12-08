@@ -9,7 +9,7 @@ class UpdateRecommandationJob < ApplicationJob
       @matches = Match.where(category: "collection", user: user)
       embedding = RubyLLM.embed(Match.user_taste(@matches))
 
-      @first_vinyls = Vinyl.nearest_neighbors(:embedding, embedding.vectors, distance: "euclidean").first(15)
+      @first_vinyls = Vinyl.nearest_neighbors(:embedding, embedding.vectors, distance: "euclidean").first(15w)
 
      @first_vinyls.each { |vinyl| VinylRecommandation.create!(vinyl: vinyl, user: user) }
     end

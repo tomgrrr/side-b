@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_12_08_103856) do
+ActiveRecord::Schema[7.1].define(version: 2025_12_08_111352) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "vector"
@@ -109,6 +109,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_08_103856) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "image"
   end
 
   create_table "solid_queue_blocked_executions", force: :cascade do |t|
