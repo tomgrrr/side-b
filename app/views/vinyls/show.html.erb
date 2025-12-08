@@ -105,15 +105,10 @@
   </div>
 
 
-  <div class="card-grid">
-    <% 5.times do %>
-      <div class="card">
-        <%= image_tag "proto_logo.png", alt: "Logo", class: "card-img" %>
-        <div class="card-body">
-          <h4><b>Album</b></h4>
-          <p>Architect & Engineer</p>
-        </div>
-      </div>
-    <% end %>
-  </div>
-</div>
+<%#<% if @vinyls.any? %>
+  <%#<div class="vinyl-grid">
+    <%= render partial: "shared/vinyl_card", collection: @vinyls, as: :vinyl %>
+  <%#</div>
+<% else %>
+ <%# <p class="no-results">No vinyl found.</p>
+<% end %>
