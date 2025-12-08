@@ -20,7 +20,7 @@ class Match < ApplicationRecord
     artists = ""
 
     #matches.each do |match|
-     # titles += match.vinyl.title
+    # titles += match.vinyl.title
       #genres += match.vinyl.genre
       #artists += match.vinyl.artist
     #end
