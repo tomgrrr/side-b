@@ -211,22 +211,137 @@ puts "✅ Base nettoyée\n\n"
 # puts "   - #{Genre.count} genres"
 # puts "=" * 80
 
+require "json"
+require "open-uri"
+require "net/http"
+require "base64"
+require "uri"
 require "csv"
 
+SPOTIFY_BASE = "https://api.spotify.com/v1"
+SPOTIFY_AUTH = "https://accounts.spotify.com/api/token"
+
+SPOTIFY_CLIENT_ID = ENV["SPOTIFY_CLIENT_ID"]
+SPOTIFY_CLIENT_SECRET = ENV["SPOTIFY_CLIENT_SECRET"]
+
+def get_spotify_token
+  uri = URI(SPOTIFY_AUTH)
+
+  request = Net::HTTP::Post.new(uri)
+  request["Authorization"] = "Basic #{Base64.strict_encode64("#{SPOTIFY_CLIENT_ID}:#{SPOTIFY_CLIENT_SECRET}")}"
+  request["Content-Type"] = "application/x-www-form-urlencoded"
+  request.body = "grant_type=client_credentials"
+
+  begin
+    response = Net::HTTP.start(
+      uri.hostname,
+      uri.port,
+      use_ssl: true,
+      verify_mode: OpenSSL::SSL::VERIFY_NONE # Désactive vérification SSL (dev only)
+    ) do |http|
+      http.request(request)
+    end
+
+    data = JSON.parse(response.body)
+
+    if data["access_token"]
+      return data["access_token"]
+    else
+      puts "❌ Erreur authentification Spotify: #{data['error_description']}"
+      return nil
+    end
+  rescue => e
+    puts "❌ Erreur connexion Spotify: #{e.message}"
+    return nil
+  end
+end
+
+# Fonction : Recherche un album sur Spotify
+def search_spotify_album(token, artist_name, album_name)
+  return nil unless token
+
+  query = "artist:#{artist_name} album:#{album_name}"
+  encoded_query = URI.encode_www_form_component(query)
+  uri = URI("#{SPOTIFY_BASE}/search?q=#{encoded_query}&type=album&limit=1")
+
+  begin
+    request = Net::HTTP::Get.new(uri)
+    request["Authorization"] = "Bearer #{token}"
+
+    response = Net::HTTP.start(
+      uri.hostname,
+      uri.port,
+      use_ssl: true,
+      verify_mode: OpenSSL::SSL::VERIFY_NONE
+    ) do |http|
+      http.request(request)
+    end
+
+    data = JSON.parse(response.body)
+
+    if data["albums"] && data["albums"]["items"].any?
+      album = data["albums"]["items"][0]
+      images = album["images"]
+
+      if images.any?
+        image_url = images[0]["url"]
+        puts "   ✓ Spotify: #{album['name']} (#{images[0]['width']}x#{images[0]['height']})"
+        return image_url
+      end
+    else
+      puts "   ⚠ Pas trouvé sur Spotify"
+    end
+  rescue => e
+    puts "   ⚠ Erreur Spotify: #{e.message}"
+  end
+
+  nil
+end
+
+# Obtention du token Spotify
+puts "🔑 Authentification Spotify..."
+spotify_token = get_spotify_token
+
+if spotify_token
+  puts "✅ Token Spotify obtenu\n\n"
+else
+  puts "❌ Impossible d'obtenir le token Spotify. Vérifiez vos credentials."
+  exit
+end
+
 filepath = "db/data/vinyls.csv"
+
+token = get_spotify_token
 
 CSV.foreach(filepath) do |row|
 
   artist = Artist.find_or_create_by!(name: row[5])
 
+  artist_name = artist.name
+
+  album_name = row[0]
+
+  image_url = search_spotify_album(token, artist_name, album_name)
+
+      Rails.logger.info "✅ Image Spotify trouvée url: #{image_url}"
+
+      if image_url
+        Rails.logger.info "✅ Image Spotify trouvée pour #{album_name}"
+      else
+        Rails.logger.info "⚠️ Image Spotify non trouvée, utilisation de Discogs"
+        image_url ||= row[2]
+      end
+
   vinyl = Vinyl.create!({
-      name: row[0],
+      name: album_name,
       release_date: row[1],
-      image: row[2],
+      image: image_url,
       songs: row[3],
-      notes: row[4]
+      notes: row[4],
+      price: row[7]
   })
 
+  puts " songs :#{vinyl.songs}"
   genre = Genre.find_or_create_by!(name: row[6])
 
   VinylsGenre.create!(genre: genre, vinyl: vinyl)
@@ -234,4 +349,6 @@ CSV.foreach(filepath) do |row|
   ArtistsVinyl.create!(artist: artist, vinyl: vinyl)
 
   ArtistGenre.find_or_create_by!(artist: artist, genre: genre)
+
+  puts "#{artist.name}: #{vinyl.name} #{vinyl.image}"
 end

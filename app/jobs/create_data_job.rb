@@ -30,44 +30,78 @@ class CreateDataJob < ApplicationJob
     name.gsub(/\s*\(\d+\)\s*$/, '').strip
   end
 
-  def get_spotify_token
-    uri = URI(SPOTIFY_AUTH)
+ def get_spotify_token
+  uri = URI(SPOTIFY_AUTH)
 
-    request = Net::HTTP::Post.new(uri)
-    request["Authorization"] = "Basic #{Base64.strict_encode64("#{SPOTIFY_CLIENT_ID}:#{SPOTIFY_CLIENT_SECRET}")}"
-    request["Content-Type"] = "application/x-www-form-urlencoded"
-    request.body = "grant_type=client_credentials"
+  request = Net::HTTP::Post.new(uri)
+  request["Authorization"] = "Basic #{Base64.strict_encode64("#{SPOTIFY_CLIENT_ID}:#{SPOTIFY_CLIENT_SECRET}")}"
+  request["Content-Type"] = "application/x-www-form-urlencoded"
+  request.body = "grant_type=client_credentials"
 
-    response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(request) }
+  begin
+    response = Net::HTTP.start(
+      uri.hostname,
+      uri.port,
+      use_ssl: true,
+      verify_mode: OpenSSL::SSL::VERIFY_NONE # Désactive vérification SSL (dev only)
+    ) do |http|
+      http.request(request)
+    end
+
     data = JSON.parse(response.body)
 
-    data["access_token"]
-  rescue
-    nil
+    if data["access_token"]
+      return data["access_token"]
+    else
+      puts "❌ Erreur authentification Spotify: #{data['error_description']}"
+      return nil
+    end
+  rescue => e
+    puts "❌ Erreur connexion Spotify: #{e.message}"
+    return nil
   end
+end
 
-  def search_spotify_album(token, artist_name, album_name)
-    return nil unless token
+ def search_spotify_album(token, artist_name, album_name)
+  return nil unless token
 
-    query = "artist:#{artist_name} album:#{album_name}"
-    encoded = URI.encode_www_form_component(query)
-    uri = URI("#{SPOTIFY_BASE}/search?q=#{encoded}&type=album&limit=1")
+  query = "artist:#{artist_name} album:#{album_name}"
+  encoded_query = URI.encode_www_form_component(query)
+  uri = URI("#{SPOTIFY_BASE}/search?q=#{encoded_query}&type=album&limit=1")
 
+  begin
     request = Net::HTTP::Get.new(uri)
     request["Authorization"] = "Bearer #{token}"
 
-    response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(request) }
-    data = JSON.parse(response.body)
-
-    if data["albums"]&.dig("items")&.any?
-      return data["albums"]["items"][0]["images"][0]["url"]
+    response = Net::HTTP.start(
+      uri.hostname,
+      uri.port,
+      use_ssl: true,
+      verify_mode: OpenSSL::SSL::VERIFY_NONE
+    ) do |http|
+      http.request(request)
     end
 
-    nil
+    data = JSON.parse(response.body)
+
+    if data["albums"] && data["albums"]["items"].any?
+      album = data["albums"]["items"][0]
+      images = album["images"]
+
+      if images.any?
+        image_url = images[0]["url"]
+        puts "   ✓ Spotify: #{album['name']} (#{images[0]['width']}x#{images[0]['height']})"
+        return image_url
+      end
+    else
+      puts "   ⚠ Pas trouvé sur Spotify"
+    end
   rescue => e
-    Rails.logger.warn "Spotify error: #{e.message}"
-    nil
+    puts "   ⚠ Erreur Spotify: #{e.message}"
   end
+
+  nil
+end
 
 
 
@@ -85,6 +119,9 @@ class CreateDataJob < ApplicationJob
 
     artist_id.each do |artist_id|
       url = "#{DISCOGS_BASE}/artists/#{artist_id}/releases?type=master&per_page=100&key=#{KEY}&secret=#{SECRET}"
+
+      Rails.logger.info "#{url}"
+
       data = JSON.parse(URI.parse(url).read)
 
       next if data["releases"].blank?
@@ -108,6 +145,10 @@ class CreateDataJob < ApplicationJob
 
         tracks = master["tracklist"]&.map { |t| t["title"] } || []
 
+        price = master["lowest_price"]
+
+        price = 0 if price == nil
+
         # Pochette Spotify
         image_url = search_spotify_album(token, artist_name, album_name)
 
@@ -123,7 +164,7 @@ class CreateDataJob < ApplicationJob
         notes = master["notes"]
 
       CSV.open(csv_path, "ab") do |csv|
-        csv << ["name", "release_date", "image", "songs", "notes", "artist", "genre"] if write_headers
+        csv << ["name", "release_date", "image", "songs", "notes", "artist", "genre", "price"] if write_headers
 
 
 
@@ -135,6 +176,7 @@ class CreateDataJob < ApplicationJob
             notes,
             artist_name,
             master["genres"],
+            price
           ]
         end
       end

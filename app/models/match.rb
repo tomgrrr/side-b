@@ -14,16 +14,25 @@ class Match < ApplicationRecord
     total
   end
 
-  def user_taste(matches)
-    titles = ""
-    genres = ""
-    artists = ""
+  # def user_taste(matches)
+  #   titles = ""
+  #   genres = ""
+  #   artists = ""
 
-    #matches.each do |match|
-     # titles += match.vinyl.title
-      #genres += match.vinyl.genre
-      #artists += match.vinyl.artist
-    #end
+  #   #matches.each do |match|
+  #    # titles += match.vinyl.title
+  #     #genres += match.vinyl.genre
+  #     #artists += match.vinyl.artist
+  #   #end
+  # end
+
+  def self.user_taste(matches)
+    prompt = matches.map do |match|
+      genres = Genre.clean(match.vinyl.genres).join(", ")
+      artists = match.vinyl.artists.flat_map { |a| Artist.split_artists(a.name) }.uniq.join(", ")
+      "genres: #{genres} — artists: #{artists} — vinyl: #{match.vinyl.name}"
+    end.join(", ")
+    prompt
   end
 
   private
