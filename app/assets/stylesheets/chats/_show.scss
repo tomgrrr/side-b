@@ -27,6 +27,10 @@ $dark-card: #141414;
   border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 20px 60px rgba(102, 6, 22, 0.4);
+
+  turbo-cable-stream-source {
+    display: none;
+  }
 }
 
 // Sidebar avec dégradé rouge
@@ -234,6 +238,7 @@ $dark-card: #141414;
 }
 
 // Messages
+// Dans la section .message
 .message {
   max-width: 80%;
   padding: 1rem 1.25rem;
@@ -242,9 +247,9 @@ $dark-card: #141414;
 
   &.user {
     align-self: flex-end;
-    background: $gold;
-    color: $red-dark;
-    border-bottom-right-radius: 4px;
+    background: #f0d060; // Même couleur que l'input
+    color: #333;
+    border-radius: 20px; // Plus arrondi (pill)
   }
 
   &.assistant {
@@ -253,7 +258,6 @@ $dark-card: #141414;
     color: white;
     border-bottom-left-radius: 4px;
 
-    // Styles pour le markdown dans les réponses
     a {
       color: $gold;
       text-decoration: underline;
@@ -266,32 +270,38 @@ $dark-card: #141414;
     strong {
       color: $gold;
     }
+  }
 
-    em {
-      font-style: italic;
+  .message-file {
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+
+    a {
+      color: $gold;
     }
   }
 }
 
 // Zone de saisie
+// Zone de saisie
 .input-area {
   padding: 1.5rem;
   border-top: 1px solid $red-dark;
+  background: $dark-card;
 }
 
 .input-wrapper {
   display: flex;
-  gap: 1rem;
+  gap: 0.75rem;
   align-items: center;
-  background: rgba(102, 6, 22, 0.2);
-  border: 2px solid $red;
-  border-radius: 16px;
-  padding: 0.5rem 0.5rem 0.5rem 1.5rem;
+  background: #FAF8F5;
+  border: none;
+  border-radius: 50px;
+  padding: 0.4rem 0.4rem 0.4rem 1.5rem;
   transition: all 0.3s ease;
 
   &:focus-within {
-    border-color: $gold;
-    background: rgba(102, 6, 22, 0.3);
+    box-shadow: 0 0 0 2px $gold;
   }
 }
 
@@ -299,7 +309,7 @@ $dark-card: #141414;
   flex: 1;
   background: transparent;
   border: none;
-  color: white;
+  color: #333;
   font-size: 1rem;
   outline: none;
   resize: none;
@@ -308,17 +318,17 @@ $dark-card: #141414;
   font-family: inherit;
 
   &::placeholder {
-    color: rgba(255, 255, 255, 0.4);
+    color: rgba(0, 0, 0, 0.4);
   }
 }
 
 .send-btn {
-  width: 50px;
-  height: 50px;
+  width: 46px;
+  height: 46px;
   background: $gold;
   border: none;
-  border-radius: 12px;
-  color: $red-dark;
+  border-radius: 50%;
+  color: $red;
   font-size: 1.2rem;
   cursor: pointer;
   display: flex;

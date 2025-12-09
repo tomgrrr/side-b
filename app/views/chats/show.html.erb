@@ -2,7 +2,6 @@
 
   <%= turbo_stream_from @chat %>
 
-
   <div class="chat-sidebar">
     <div class="sidebar-header">
       <span class="sidebar-title">Conversations</span>
@@ -42,20 +41,14 @@
         </div>
       <% else %>
         <% @chat.messages.each do |message| %>
-          <div class="message <%= message.role %>">
-            <% if message.role == "assistant" %>
-              <%= render_markdown(message.content.to_s) %>
-            <% else %>
-              <%= message.content %>
-            <% end %>
-          </div>
+          <%= render partial: "messages/message", locals: { message: message } %>
         <% end %>
       <% end %>
     </div>
 
     <!-- Zone de saisie -->
     <div class="input-area">
-      <%= simple_form_for [@chat, @message], html: { class: 'chat-form' } do |f| %>
+      <%= simple_form_for [@chat, @message], html: { class: 'chat-form', id: 'new_message' } do |f| %>
         <div class="input-wrapper">
           <%= f.input :content,
               as: :string,
