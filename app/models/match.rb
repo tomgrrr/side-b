@@ -14,6 +14,14 @@ class Match < ApplicationRecord
     total
   end
 
+  def total_artist(array)
+      total = 0
+      array.each do |a|
+        total += a.vinyl.artists.size
+      end
+      total
+    end
+
   # def user_taste(matches)
   #   titles = ""
   #   genres = ""

@@ -1,129 +1,121 @@
-<section id="collection-section" class="design-section">
-   <div class="section-header">
-    <span class="section-label">Proposition</span>
-     <h2 class="section-title">Page Collection - Avec bouton Playlist</h2>
-     <p class="section-desc">Header avec fond dégradé rouge, pills avec bordures rouges, cartes avec bouton "Ajouter à une playlist".</p>
-   </div>
-
-   <div class="collection-v1">
-      <div class="page-header">
-       <div class="header-left">
-         <h1>Ma <span>Collection</span></h1>
-         <div class="stats">
-       <div class="stat">
-            <span class="stat-value">127</span>
-             <span class="stat-label">Vinyles</span>
-            </div>
-          <div class="stat">
-              <span class="stat-value">2,450€</span>
-              <span class="stat-label">Valeur estimée</span>
-            </div>
-            <div class="stat">
-              <span class="stat-value">23</span>
-              <span class="stat-label">Artistes</span>
-            </div>
-          </div>
+<div class="collection-v1">
+  <div class="page-header">
+    <div class="header-left">
+      <h1>My <span>Collection</span></h1>
+      <div class="stats">
+    <div class="stat">
+        <span class="stat-value"><%= @collections.size %></span>
+          <span class="stat-label">Vinyls</span>
         </div>
-        <div class="header-right">
-          <button class="filter-btn">
-            <svg class="icon-svg" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>
-            Filtrer
-          </button>
-          <button class="filter-btn">
-            <svg class="icon-svg" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"/></svg>
-            Trier
-          </button>
+      <div class="stat">
+          <span class="stat-value"><%= @match.total_value(@collections) %> €</span>
+          <span class="stat-label">Estimated value</span>
         </div>
-      </div>
-
-      <div class="playlists-row">
-        <div class="playlist-pill active">
-          <span class="icon">📀</span>
-          <span>Tous</span>
-          <span class="count">127</span>
-        </div>
-        <div class="playlist-pill">
-          <span class="icon">⭐</span>
-          <span>Favoris</span>
-          <span class="count">12</span>
-        </div>
-        <div class="playlist-pill">
-          <span class="icon">🎷</span>
-          <span>Jazz Classics</span>
-          <span class="count">34</span>
-        </div>
-        <div class="playlist-pill">
-          <span class="icon">🎸</span>
-          <span>Rock 70s</span>
-          <span class="count">28</span>
-        </div>
-      </div>
-
-      <div class="vinyl-grid">
-        <div class="vinyl-card">
-          <div class="cover">
-            <span class="badge">Rare</span>
-            <div class="actions">
-              <button class="action-btn playlist-btn">
-                <span>+</span> Ajouter à playlist
-              </button>
-              <div class="actions-row">
-                <button class="action-btn">Détails</button>
-                <button class="action-btn">Retirer</button>
-              </div>
-            </div>
-          </div>
-          <div class="info">
-            <div class="title">Blue Train</div>
-            <div class="artist">John Coltrane</div>
-            <div class="meta">
-              <span class="price">32€</span>
-              <span class="year">1957</span>
-            </div>
-          </div>
-        </div>
-        <div class="vinyl-card">
-          <div class="cover">
-            <div class="actions">
-              <button class="action-btn playlist-btn">
-                <span>+</span> Ajouter à playlist
-              </button>
-              <div class="actions-row">
-                <button class="action-btn">Détails</button>
-                <button class="action-btn">Retirer</button>
-              </div>
-            </div>
-          </div>
-          <div class="info">
-            <div class="title">Kind of Blue</div>
-            <div class="artist">Miles Davis</div>
-            <div class="meta">
-              <span class="price">45€</span>
-              <span class="year">1959</span>
-            </div>
-          </div>
-        </div>
-        <div class="vinyl-card">
-          <div class="cover">
-            <div class="actions">
-              <button class="action-btn playlist-btn">
-                <span>+</span> Ajouter à playlist
-              </button>
-              <div class="actions-row">
-                <button class="action-btn">Détails</button>
-                <button class="action-btn">Retirer</button>
-              </div>
-            </div>
-          </div>
-          <div class="info">
-            <div class="title">A Love Supreme</div>
-            <div class="artist">John Coltrane</div>
-            <div class="meta">
-              <span class="price">38€</span>
-              <span class="year">1965</span>
-            </div>
-          </div>
+        <div class="stat">
+          <span class="stat-value"><%= @match.total_artist(@collections) %></span>
+          <span class="stat-label">Artistes</span>
         </div>
       </div>
     </div>
-</section>
+    <div class="header-right">
+      <button class="filter-btn">
+        <svg class="icon-svg" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>
+        Filtrer
+      </button>
+      <button class="filter-btn">
+        <svg class="icon-svg" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"/></svg>
+        Trier
+      </button>
+    </div>
+  </div>
+
+  <div class="playlists-row">
+    <div class="playlist-pill active">
+      <span class="icon">📀</span>
+      <span>Tous</span>
+      <span class="count">127</span>
+    </div>
+    <div class="playlist-pill">
+      <span class="icon">⭐</span>
+      <span>Favoris</span>
+      <span class="count">12</span>
+    </div>
+    <div class="playlist-pill">
+      <span class="icon">🎷</span>
+      <span>Jazz Classics</span>
+      <span class="count">34</span>
+    </div>
+    <div class="playlist-pill">
+      <span class="icon">🎸</span>
+      <span>Rock 70s</span>
+      <span class="count">28</span>
+    </div>
+  </div>
+
+  <div class="vinyl-grid">
+    <div class="vinyl-card">
+      <div class="cover">
+        <span class="badge">Rare</span>
+        <div class="actions">
+          <button class="action-btn playlist-btn">
+            <span>+</span> Ajouter à playlist
+          </button>
+          <div class="actions-row">
+            <button class="action-btn">Détails</button>
+            <button class="action-btn">Retirer</button>
+          </div>
+        </div>
+      </div>
+      <div class="info">
+        <div class="title">Blue Train</div>
+        <div class="artist">John Coltrane</div>
+        <div class="meta">
+          <span class="price">32€</span>
+          <span class="year">1957</span>
+        </div>
+      </div>
+    </div>
+    <div class="vinyl-card">
+      <div class="cover">
+        <div class="actions">
+          <button class="action-btn playlist-btn">
+            <span>+</span> Ajouter à playlist
+          </button>
+          <div class="actions-row">
+            <button class="action-btn">Détails</button>
+            <button class="action-btn">Retirer</button>
+          </div>
+        </div>
+      </div>
+      <div class="info">
+        <div class="title">Kind of Blue</div>
+        <div class="artist">Miles Davis</div>
+        <div class="meta">
+          <span class="price">45€</span>
+          <span class="year">1959</span>
+        </div>
+      </div>
+    </div>
+    <div class="vinyl-card">
+      <div class="cover">
+        <div class="actions">
+          <button class="action-btn playlist-btn">
+            <span>+</span> Ajouter à playlist
+          </button>
+          <div class="actions-row">
+            <button class="action-btn">Détails</button>
+            <button class="action-btn">Retirer</button>
+          </div>
+        </div>
+      </div>
+      <div class="info">
+        <div class="title">A Love Supreme</div>
+        <div class="artist">John Coltrane</div>
+        <div class="meta">
+          <span class="price">38€</span>
+          <span class="year">1965</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
