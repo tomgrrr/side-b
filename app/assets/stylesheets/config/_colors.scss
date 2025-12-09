@@ -8,3 +8,23 @@ $orange: #E67E22;
 $green: #1EDD88;
 $gray: #0E0000;
 $light-gray: #F4F4F4;
+
+:root {
+  // Rouge bordeaux - COULEUR PRINCIPALE
+  --red: #660616;
+  --red-light: #8B1E2F;
+  --red-lighter: #A52A3A;
+  --red-dark: #4A0411;
+  --red-glow: rgba(102, 6, 22, 0.5);
+
+  // Gold - COULEUR SECONDAIRE
+  --gold: #F0D060;
+  --gold-light: #FFE88A;
+  --gold-dark: #C4A830;
+
+  // Neutres
+  --dark: #0D0D0D;
+  --dark-lighter: #1A1A1A;
+  --dark-card: #141414;
+  --cream: #FFF8F0;
+}

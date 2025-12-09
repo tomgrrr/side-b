@@ -1,25 +1,18 @@
-<div class="vinyl-card">
-  <% if vinyl.image.present? %>
-    <div class="vinyl-image" style="background-image: url('<%= vinyl.image %>');">
-      <div class="vinyl-overlay">
-        <%= link_to "See Vinyl", vinyl_path(vinyl), class: "view-btn" %>
+<div class="vinyl-grid">
+  <% vinyls.each do |vinyl| %>
+    <%= link_to vinyl_path(vinyl), class: "vinyl-card-link" do %>
+      <div class="vinyl-card">
+        <div class="cover">
+          <% if vinyl.image.present? %>
+            <%= image_tag vinyl.image, alt: vinyl.name, class: "cover-image" %>
+          <% end %>
+          <div class="overlay"></div>
+        </div>
+        <div class="info">
+          <div class="title"><%= vinyl.name %></div>
+          <div class="artist"><%= vinyl.artists.map(&:name).join(", ") %></div>
+        </div>
       </div>
-    </div>
-  <% else %>
-    <div class="vinyl-image" style="background: linear-gradient(135deg, #9b59b6 20%, #2c3e50 80%);">
-      <div class="vinyl-disc"></div>
-      <div class="vinyl-overlay">
-        <%= link_to "Vinyl details", vinyl_path(vinyl), class: "play-btn" %>
-      </div>
-    </div>
+    <% end %>
   <% end %>
-
-  <div class="vinyl-info">
-    <div class="vinyl-title"><%= vinyl.name %></div>
-    <div class="vinyl-artist">
-      <% vinyl.artists.each do |artist| %>
-        <%= artist.name %>
-      <% end %>
-    </div>
-  </div>
 </div>
