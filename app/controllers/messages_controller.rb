@@ -1,4 +1,6 @@
 class MessagesController < ApplicationController
+  include ActionView::RecordIdentifier
+
   def create
     @chat = current_user.chats.find(params[:chat_id])
     user_question_embedding = RubyLLM.embed(params[:message][:content])
@@ -19,15 +21,32 @@ class MessagesController < ApplicationController
     @message.chat = @chat
     @message.role = "user"
 
-    if @message.save!
+    if @message.save
+      # Message user broadcasté automatiquement par le callback
+
+      # Créer le message assistant vide (broadcasté automatiquement)
+      @assistant_message = @chat.messages.create!(role: "assistant", content: "")
+
+      # Streaming
       @ruby_llm_chat = RubyLLM.chat
       build_conversation_history
 
-      response = @ruby_llm_chat.with_instructions(system_prompt).ask(@message.content)
-      Message.create(role: "assistant", content: response.content, chat: @chat)
+      @ruby_llm_chat.with_instructions(system_prompt).ask(@message.content) do |chunk|
+        next if chunk.content.blank?
+
+        @assistant_message.content += chunk.content
+        broadcast_replace(@assistant_message)
+      end
+
+      # Sauvegarder UNE SEULE FOIS à la fin
+      @assistant_message.save!
 
       @chat.generate_title_from_first_message
-      redirect_to chat_path(@chat)
+
+      respond_to do |format|
+        format.turbo_stream
+        format.html { redirect_to chat_path(@chat) }
+      end
     else
       render "chats/show", status: :unprocessable_entity
     end
@@ -35,8 +54,20 @@ class MessagesController < ApplicationController
 
   private
 
+  def broadcast_replace(message)
+    Turbo::StreamsChannel.broadcast_replace_to(
+      @chat,
+      target: dom_id(message),
+      partial: "messages/message",
+      locals: { message: message }
+    )
+  end
+
   def build_conversation_history
     @chat.messages.each do |message|
+      next if message.content.blank?
+      next if message.id == @assistant_message.id
+
       @ruby_llm_chat.add_message(message)
     end
   end
@@ -50,7 +81,7 @@ class MessagesController < ApplicationController
       2. ❌ You MUST NEVER invent, imagine, or mention a vinyl that is NOT in the provided catalog
       3. ❌ You MUST NEVER recommend a vinyl from the "📀 USER'S COLLECTION" (they already own it)
       4. ✅ If NO vinyl in the catalog matches the request, you MUST respond exactly:
-         "Sorry, I couldn't find any vinyl matching your request in our current catalog. Try rephrasing your search or explore other genres!"
+        "Sorry, I couldn't find any vinyl matching your request in our current catalog. Try rephrasing your search or explore other genres!"
       5. ✅ For each recommendation, you MUST ALWAYS include the vinyl ID in the format [ID: XX]
 
       # 🎯 YOUR MISSION:
@@ -141,6 +172,6 @@ class MessagesController < ApplicationController
   end
 
   def message_params
-    params.require(:message).permit(:content)
+    params.require(:message).permit(:content, :file)
   end
 end
