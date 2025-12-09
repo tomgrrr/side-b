@@ -1,25 +1,48 @@
-<div class="vinyl-grid">
-<% @playlists.each do |playlist| %>
-  <div class="vinyl-card">
-    <% if playlist.image.attached? %>
-     <%= cl_image_tag playlist.image.key, height: 350, width: 312, crop: :fill %>
-      <div class="vinyl-overlay">
-        <%= link_to "Go To Playlist", playlist_path(playlist), class: "view-btn" %>
-      </div>
-    <% else %>
-      <div class="vinyl-card">
-        <div class="vinyl-image" style="background: linear-gradient(135deg, #F1C40F 0%, #F39C12 100%);">
-          <div class="vinyl-disc"></div>
-          <div class="vinyl-overlay">
-              <%= link_to "Go To Playlist", playlist_path(playlist), class: "play-btn" %>
+<div class="playlist-index">
+  <div class="page-header">
+    <div class="header-left">
+      <h1>My <span>Playlists</span></h1>
+      <p>Organize your vinyl collection by mood, genre, or occasion</p>
+    </div>
+    <%= link_to new_playlist_path, class: "create-btn" do %>
+      <i class="fa-solid fa-plus"></i>
+      Create Playlist
+    <% end %>
+  </div>
+
+  <div class="playlist-grid">
+    <% @playlists.each do |playlist| %>
+      <div class="playlist-card">
+        <div class="playlist-cover">
+          <% if playlist.image.present? %>
+            <%= image_tag playlist.image, alt: playlist.name, class: "cover-img" %>
+          <% else %>
+            <div class="default-cover">🎵</div>
+          <% end %>
+          <div class="play-overlay">
+            <%= link_to playlist_path(playlist), class: "play-btn" do %>
+              <i class="fa-solid fa-play"></i>
+            <% end %>
           </div>
         </div>
-     </div>
+        <div class="playlist-info">
+          <div class="playlist-name"><%= playlist.name %></div>
+          <div class="playlist-meta">
+            <div class="playlist-count">
+              <span class="count-badge"><%= Match.where(playlist_id: playlist.id).count %></span> vinyls
+            </div>
+          </div>
+        </div>
+      </div>
     <% end %>
 
-    <div class="vinyl-info">
-      <div class="vinyl-title"><%= playlist.name %></div>
-    </div>
+    <!-- Empty card for creating new playlist -->
+    <%= link_to new_playlist_path, class: "playlist-card empty" do %>
+      <div class="empty-content">
+        <div class="empty-icon"><i class="fa-solid fa-plus"></i></div>
+        <h3>Create Playlist</h3>
+        <p>Add your favorite vinyls</p>
+      </div>
+    <% end %>
   </div>
-<% end %>
 </div>
