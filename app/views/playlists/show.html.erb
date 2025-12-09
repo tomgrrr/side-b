@@ -1,1 +1,59 @@
-test
+<div class="playlist-page">
+  <div class="playlist-header">
+    <div class="playlist-cover">
+      <% if @playlist.image.present? %>
+        <%= image_tag @playlist.image, height: 232, width: 232, class: "playlist-img" %>
+      <% else %>
+        <div class="default-cover">🎵</div>
+      <% end %>
+    </div>
+    <div class="playlist-info">
+      <div class="playlist-type">Playlist</div>
+      <h1 class="playlist-title"><%= @playlist.name %></h1>
+      <div class="playlist-meta">
+        <div class="avatar"><%= current_user.nickname.first.upcase %></div>
+        <span><%= current_user.nickname %></span>
+        <span>•</span>
+        <span><%= Match.where(playlist_id: @playlist.id).count || 0 %> vinyls</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="playlist-actions">
+    <button class="play-btn"><i class="fa-solid fa-play"></i></button>
+    <button class="action-btn"><i class="fa-regular fa-heart"></i></button>
+    <button class="action-btn"><i class="fa-solid fa-ellipsis"></i></button>
+  </div>
+
+  <div class="track-list">
+    <div class="track-header">
+      <span>#</span>
+      <span>Vinyl</span>
+      <span>Artist</span>
+      <span>Genre</span>
+    </div>
+
+    <% Match.where(playlist_id: @playlist.id).map(&:vinyl).each_with_index do |vinyl, index| %>
+      <div class="track-item">
+        <div class="track-num"><%= index + 1 %></div>
+        <div class="track-info">
+          <div class="track-cover">
+            <% if vinyl.image.present? %>
+              <%= image_tag vinyl.image, alt: vinyl.name %>
+            <% end %>
+          </div>
+          <div class="track-details">
+            <h4><%= vinyl.name %></h4>
+            <p><%= vinyl.artists.map(&:name).join(", ") %></p>
+          </div>
+        </div>
+        <div class="track-artist">
+          <%= vinyl.artists.map(&:name).join(", ") %>
+        </div>
+        <div class="track-genre">
+          <%= vinyl.genres.map(&:name).join(", ") %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
