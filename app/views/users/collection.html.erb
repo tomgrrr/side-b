@@ -30,29 +30,23 @@
   </div>
 
   <div class="playlists-row">
+
     <div class="playlist-pill active">
       <span class="icon">📀</span>
-      <span>Tous</span>
-      <span class="count">127</span>
+      <span>All</span>
+      <span class="count"><%= @collections.size %></span>
     </div>
-    <div class="playlist-pill">
-      <span class="icon">⭐</span>
-      <span>Favoris</span>
-      <span class="count">12</span>
-    </div>
-    <div class="playlist-pill">
-      <span class="icon">🎷</span>
-      <span>Jazz Classics</span>
-      <span class="count">34</span>
-    </div>
-    <div class="playlist-pill">
-      <span class="icon">🎸</span>
-      <span>Rock 70s</span>
-      <span class="count">28</span>
-    </div>
-  </div>
+
+    <% @playlists.each do |playlist| %>
+      <div class="playlist-pill">
+        <span class="icon">⭐</span>
+        <span><%= playlist.name %></span>
+        <span class="count"><%= @playlist_vinyl_counts[playlist.id] || 0%></span>
+      </div>
+      <% end %>
 
   <div class="vinyl-grid">
+
     <div class="vinyl-card">
       <div class="cover">
         <span class="badge">Rare</span>
@@ -75,6 +69,7 @@
         </div>
       </div>
     </div>
+
     <div class="vinyl-card">
       <div class="cover">
         <div class="actions">
@@ -96,6 +91,7 @@
         </div>
       </div>
     </div>
+
     <div class="vinyl-card">
       <div class="cover">
         <div class="actions">
@@ -118,4 +114,5 @@
       </div>
     </div>
   </div>
+
 </div>
