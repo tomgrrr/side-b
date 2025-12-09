@@ -4,7 +4,7 @@ class Chat < ApplicationRecord
 
   DEFAULT_TITLE = "New chat"
   TITLE_PROMPT = <<~PROMPT
-  Generate a short, descriptive, 3-to-6-word title that summarizes the user question for a chat conversation.
+  Generate a short, descriptive, 3 word title that summarizes the user question for a chat conversation.
   PROMPT
 
   def generate_title_from_first_message

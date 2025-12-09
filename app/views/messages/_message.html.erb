@@ -1,0 +1,22 @@
+<% if message.role == "user" %>
+  <div class="d-flex justify-content-end mb-2">
+    <div>
+      <div class="bg-white px-3 pb-1 pt-3 rounded-pill">
+        <%= raw(render_markdown(message.content)) %>
+      </div>
+
+      <% if message.file.attached? %>
+        <div class="ps-3 pt-1">
+          <strong>File:</strong>
+          <%= link_to message.file.filename, rails_blob_path(message.file, disposition: "attachment") %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% elsif message.role == "assistant" %>
+  <div class="d-flex justify-content-start mb-5">
+    <div class="px-3 pb-0 pt-3">
+      <%= message.content.present? ? raw(render_markdown(message.content)) : "..." %>
+    </div>
+  </div>
+<% end %>

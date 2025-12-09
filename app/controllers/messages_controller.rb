@@ -1,37 +1,42 @@
 class MessagesController < ApplicationController
+
   def create
-    @chat = current_user.chats.find(params[:chat_id])
-    user_question_embedding = RubyLLM.embed(params[:message][:content])
+  @chat = current_user.chats.find(params[:chat_id])
+  user_question_embedding = RubyLLM.embed(params[:message][:content])
 
-    relevant_vinyls = Vinyl.nearest_neighbors(
-      :embedding,
-      user_question_embedding.vectors,
-      distance: "cosine"
-    ).first(5)
+  relevant_vinyls = Vinyl.nearest_neighbors(
+    :embedding,
+    user_question_embedding.vectors,
+    distance: "cosine"
+  ).first(5)
 
-    user_collection = current_user.matches.includes(vinyl: [:artists, :genres])
+  user_collection = current_user.matches.includes(vinyl: [:artists, :genres])
 
-    system_prompt = base_system_prompt
-    system_prompt += user_collection_context(user_collection)
-    system_prompt += catalog_vinyls_context(relevant_vinyls)
+  system_prompt = base_system_prompt
+  system_prompt += user_collection_context(user_collection)
+  system_prompt += catalog_vinyls_context(relevant_vinyls)
 
-    @message = Message.new(message_params)
-    @message.chat = @chat
-    @message.role = "user"
+  @message = Message.new(message_params)
+  @message.chat = @chat
+  @message.role = "user"
 
-    if @message.save!
-      @ruby_llm_chat = RubyLLM.chat
-      build_conversation_history
+  if @message.save
+    @ruby_llm_chat = RubyLLM.chat
+    build_conversation_history
 
-      response = @ruby_llm_chat.with_instructions(system_prompt).ask(@message.content)
-      Message.create(role: "assistant", content: response.content, chat: @chat)
+    response = @ruby_llm_chat.with_instructions(system_prompt).ask(@message.content)
+    @assistant_message = Message.create(role: "assistant", content: response.content, chat: @chat)
 
-      @chat.generate_title_from_first_message
-      redirect_to chat_path(@chat)
-    else
-      render "chats/show", status: :unprocessable_entity
+    @chat.generate_title_from_first_message
+
+    respond_to do |format|
+      format.turbo_stream
+      format.html { redirect_to chat_path(@chat) }
     end
+  else
+    render "chats/show", status: :unprocessable_entity
   end
+end
 
   private
 
@@ -50,7 +55,7 @@ class MessagesController < ApplicationController
       2. ❌ You MUST NEVER invent, imagine, or mention a vinyl that is NOT in the provided catalog
       3. ❌ You MUST NEVER recommend a vinyl from the "📀 USER'S COLLECTION" (they already own it)
       4. ✅ If NO vinyl in the catalog matches the request, you MUST respond exactly:
-         "Sorry, I couldn't find any vinyl matching your request in our current catalog. Try rephrasing your search or explore other genres!"
+        "Sorry, I couldn't find any vinyl matching your request in our current catalog. Try rephrasing your search or explore other genres!"
       5. ✅ For each recommendation, you MUST ALWAYS include the vinyl ID in the format [ID: XX]
 
       # 🎯 YOUR MISSION:
@@ -141,6 +146,6 @@ class MessagesController < ApplicationController
   end
 
   def message_params
-    params.require(:message).permit(:content)
+    params.require(:message).permit(:content, :file)
   end
 end
