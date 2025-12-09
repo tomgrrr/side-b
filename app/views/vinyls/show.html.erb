@@ -51,44 +51,7 @@
         <% end %>
       </div>
 
-      <!-- Section YouTube Player -->
-      <% if @youtube_videos.present? %>
-        <div class="youtube-player-container mt-4"
-            data-controller="youtube-player"
-            data-youtube-player-video-id-value="<%= @youtube_videos.first[:video_id] %>">
-
-          <h3 class="mb-3">🎵 Listen to this album</h3>
-
-
-          <div id="youtube-player" data-youtube-player-target="frame"></div>
-
-          <!-- Liste des vidéos disponibles -->
-          <div class="video-list mt-3" data-youtube-player-target="videoList">
-            <% @youtube_videos.each_with_index do |video, index| %>
-              <div class="video-item <%= 'active' if index == 0 %>"
-                  data-action="click->youtube-player#playVideo"
-                  data-video-id="<%= video[:video_id] %>">
-
-                <!-- Miniature de la vidéo -->
-                <img src="<%= video[:thumbnail] %>"
-                    alt="<%= video[:title] %>"
-                    class="video-thumbnail">
-
-                <!-- Infos de la vidéo -->
-                <div class="video-info">
-                  <p class="video-title"><%= video[:title] %></p>
-                  <p class="video-channel"><%= video[:channel] %></p>
-                </div>
-              </div>
-            <% end %>
-          </div>
-        </div>
-      <% else %>
-        <!-- Message si aucune vidéo trouvée -->
-        <div class="alert alert-info mt-4">
-          No audio available for this album yet.
-        </div>
-      <% end %>
+     
 
       <!-- Tracklist -->
       <% if @vinyl.songs.present? %>
