@@ -11,8 +11,16 @@ class Match < ApplicationRecord
     array.each do |a|
       total += a.vinyl.price
     end
-    total
+    total.round
   end
+
+  def total_artist(array)
+      total = 0
+      array.each do |a|
+        total += a.vinyl.artists.size
+      end
+      total
+    end
 
   # def user_taste(matches)
   #   titles = ""
