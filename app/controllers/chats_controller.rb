@@ -1,5 +1,5 @@
 class ChatsController < ApplicationController
- def create
+def create
     @chat = Chat.new(title: Chat::DEFAULT_TITLE)
     @chat.user = current_user
 
@@ -19,6 +19,6 @@ class ChatsController < ApplicationController
     @chat = Chat.find(params[:id])
     @chat.destroy
 
-   redirect_to chats_path, status: :see_other
+  redirect_to chats_path, status: :see_other
   end
 end

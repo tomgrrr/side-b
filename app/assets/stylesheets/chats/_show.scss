@@ -1,122 +1,378 @@
-.chatbox {
-  background: linear-gradient(135deg, rgb(26, 3, 5), rgb(96, 0, 0));
-  border: 2px solid #efcc4c;
-  margin-top: 30px;
-  box-shadow: 0 12px 28px rgba(252, 238, 188, 0.434);
-  border-radius: 10px;
+// ============================================
+//    CHAT - ROUGE MODERNE (Side-B Design)
+// ============================================
+
+// Variables CSS
+$red: #660616;
+$red-light: #8B1E2F;
+$red-lighter: #A52A3A;
+$red-dark: #4A0411;
+$red-glow: rgba(102, 6, 22, 0.5);
+$gold: #F0D060;
+$gold-light: #FFE88A;
+$gold-dark: #C4A830;
+$dark: #0D0D0D;
+$dark-lighter: #1A1A1A;
+$dark-card: #141414;
+
+// Container principal
+.chat-v1 {
+  max-width: 1200px;
+  margin: 30px auto;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 0;
+  min-height: 70vh;
+  border-radius: 16px;
   overflow: hidden;
+  box-shadow: 0 20px 60px rgba(102, 6, 22, 0.4);
 }
 
-.chat-layout {
-  display: flex;
-  min-height: 600px;
-}
-
+// Sidebar avec dégradé rouge
 .chat-sidebar {
-  width: 220px;
-  background: rgba(0, 0, 0, 0.4);
-  border-right: 2px solid rgba(196, 163, 90, 0.4);
-  padding: 80px 20px 20px 20px;
-  flex-shrink: 0;
-}
-
-.chat-main {
-  flex: 1;
+  background: linear-gradient(180deg, $red 0%, $red-dark 100%);
+  padding: 1.5rem;
   display: flex;
   flex-direction: column;
-  padding: 20px;
 }
 
-.chat-title {
-  text-align: center;
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.sidebar-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem;
   color: white;
-  margin-bottom: 20px;
 }
 
-#messages {
-  flex: 1;
-  overflow-y: auto;
-}
-
-.bg-primary {
-  margin-right: 8px;
-  margin-left: 15px;
-  background-color: #ef525a !important;
-  color: rgb(239, 239, 239);
-}
-
-.answer {
-  background-color: rgb(252, 238, 188);
-  margin-right: 8px;
-  margin-left: 15px;
-  color: black;
-  box-shadow: 0 12px 28px rgba(255, 255, 255, 0.244);
-}
-
-#new_message_container {
-  padding-top: 20px;
-}
-
-.input-wrapper {
-  position: relative;
-}
-
-textarea.form-control,
-input.form-control {
-  width: 100%;
-  padding: 11px 150px 11px 20px;
-  border-radius: 10px;
-  background-color: white;
-  color: black;
-  border: 1px solid rgba(196, 163, 90, 0.3);
-  resize: none;
-
-  &:focus {
-    outline: none;
-    border-color: #c4a35a;
-  }
-}
-
-.btn-chat {
-  position: absolute;
-  right: 0px;
-  top: 50%;
-  transform: translateY(-50%);
-  background-color: rgb(255, 214, 65);
-  padding: 11px 24px;
-  border-radius: 10px;
+.new-chat-btn {
+  width: 36px;
+  height: 36px;
+  background: $gold;
   border: none;
-  font-weight: bold;
+  border-radius: 10px;
+  color: $red-dark;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  font-weight: 700;
+  transition: all 0.3s ease;
+  text-decoration: none;
 
   &:hover {
-    background-color: rgb(255, 221, 0);
+    transform: scale(1.1);
+    box-shadow: 0 5px 20px rgba(240, 208, 96, 0.4);
   }
 }
 
-.ul {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
+// Liste des conversations
+.chat-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(240, 208, 96, 0.5);
+    border-radius: 3px;
+  }
 }
 
-.chat {
+.chat-item {
+  padding: 0.8rem 1rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: rgba(255, 255, 255, 0.8);
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.4);
+    color: white;
+  }
+
+  &.active {
+    background: $gold;
+    color: $red-dark;
+
+    .chat-item-link {
+      color: $red-dark;
+    }
+
+    .chat-item-delete {
+      color: $red-dark;
+      opacity: 0;
+    }
+
+    &:hover .chat-item-delete {
+      opacity: 1;
+    }
+  }
+}
+
+.chat-item-link {
+  flex: 1;
   text-decoration: none;
-  color: white;
+  color: inherit;
+  display: block;
 }
 
-.btn-delete {
-  color: rgb(252, 238, 188);
+.chat-item-title {
+  font-size: 0.9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+}
+
+.chat-item-delete {
+  opacity: 0;
+  transition: opacity 0.3s ease;
   background: none;
   border: none;
+  color: rgba(255, 255, 255, 0.8);
   cursor: pointer;
-  font-size: 15px;
+  font-size: 1rem;
+  padding: 0;
+  margin-left: 0.5rem;
 
   &:hover {
     color: #e74c3c;
   }
 }
 
-.text-primary {
-  margin: 15px;
+.chat-item:hover .chat-item-delete {
+  opacity: 1;
+}
+
+// Zone principale du chat
+.main-chat {
+  background: $dark-card;
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid $red-dark;
+}
+
+// Header du chat
+.chat-header {
+  padding: 1.5rem;
+  border-bottom: 2px solid $red;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: linear-gradient(90deg, $red-dark, transparent);
+}
+
+.ai-avatar {
+  width: 50px;
+  height: 50px;
+  background: $gold;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+}
+
+.chat-title-area {
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    color: white;
+    margin: 0;
+  }
+
+  p {
+    font-size: 0.8rem;
+    color: white;
+    margin: 0.25rem 0 0 0;
+  }
+}
+
+// Zone des messages
+.messages-area {
+  flex: 1;
+  padding: 1.5rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: $red;
+    border-radius: 4px;
+  }
+}
+
+// Messages
+.message {
+  max-width: 80%;
+  padding: 1rem 1.25rem;
+  border-radius: 16px;
+  line-height: 1.6;
+
+  &.user {
+    align-self: flex-end;
+    background: $gold;
+    color: $red-dark;
+    border-bottom-right-radius: 4px;
+  }
+
+  &.assistant {
+    align-self: flex-start;
+    background: $red;
+    color: white;
+    border-bottom-left-radius: 4px;
+
+    // Styles pour le markdown dans les réponses
+    a {
+      color: $gold;
+      text-decoration: underline;
+
+      &:hover {
+        color: $gold-light;
+      }
+    }
+
+    strong {
+      color: $gold;
+    }
+
+    em {
+      font-style: italic;
+    }
+  }
+}
+
+// Zone de saisie
+.input-area {
+  padding: 1.5rem;
+  border-top: 1px solid $red-dark;
+}
+
+.input-wrapper {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  background: rgba(102, 6, 22, 0.2);
+  border: 2px solid $red;
+  border-radius: 16px;
+  padding: 0.5rem 0.5rem 0.5rem 1.5rem;
+  transition: all 0.3s ease;
+
+  &:focus-within {
+    border-color: $gold;
+    background: rgba(102, 6, 22, 0.3);
+  }
+}
+
+.chat-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 1rem;
+  outline: none;
+  resize: none;
+  min-height: 24px;
+  max-height: 120px;
+  font-family: inherit;
+
+  &::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+  }
+}
+
+.send-btn {
+  width: 50px;
+  height: 50px;
+  background: $gold;
+  border: none;
+  border-radius: 12px;
+  color: $red-dark;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  font-weight: bold;
+
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 20px rgba(240, 208, 96, 0.4);
+  }
+}
+
+// Responsive
+@media (max-width: 900px) {
+  .chat-v1 {
+    grid-template-columns: 1fr;
+    margin: 15px;
+  }
+
+  .chat-sidebar {
+    display: none; // Ou transformer en drawer/modal
+  }
+
+  .main-chat {
+    border-left: none;
+    border-radius: 16px;
+  }
+}
+
+@media (max-width: 600px) {
+  .message {
+    max-width: 90%;
+  }
+
+  .chat-header {
+    padding: 1rem;
+  }
+
+  .messages-area {
+    padding: 1rem;
+  }
+
+  .input-area {
+    padding: 1rem;
+  }
+
+  .input-wrapper {
+    padding: 0.25rem 0.25rem 0.25rem 1rem;
+  }
+
+  .send-btn {
+    width: 44px;
+    height: 44px;
+  }
 }

@@ -1,57 +1,69 @@
-<div class="container chatbox">
+<div class="chat-v1">
+  <!-- Sidebar Rouge -->
+  <div class="chat-sidebar">
+    <div class="sidebar-header">
+      <span class="sidebar-title">Conversations</span>
+      <%= link_to "+", chats_path, data: { turbo_method: :post }, class: "new-chat-btn" %>
+    </div>
 
-  <div class="chat-layout">
+    <div class="chat-list">
+      <% current_user.chats.order(updated_at: :desc).each do |chat| %>
+        <div class="chat-item <%= 'active' if chat == @chat %>">
+          <%= link_to chat_path(chat), class: "chat-item-link" do %>
+            <span class="chat-item-title"><%= chat.title %></span>
+          <% end %>
+          <%= link_to chat_path(chat), data: { turbo_method: :delete, turbo_confirm: "Delete this convo ?" }, class: "chat-item-delete" do %>
+            ×
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
 
-    <!-- Sidebar -->
-    <div class="chat-sidebar">
-      <% current_user.chats.each do |chat| %>
-        <ul class="ul">
-          <li class="text-primary d-flex justify-content-between">
-            <div><%= link_to chat.title, chat_path(chat), class: "chat" %></div>
-            <div>
-              <%= link_to chat_path(chat), data: { turbo_method: :delete, turbo_confirm: "Do you want to delete?" }, class: "btn-delete" do %>
-                <i class="fa-regular fa-circle-xmark"></i>
-              <% end %>
-            </div>
-          </li>
-        </ul>
+  <!-- Zone principale du chat -->
+  <div class="main-chat">
+    <!-- Header -->
+    <div class="chat-header">
+      <div class="ai-avatar">🎵</div>
+      <div class="chat-title-area">
+        <h2><%= @chat.title %></h2>
+        <p>Your personal expert !</p>
+      </div>
+    </div>
+
+    <!-- Zone des messages -->
+    <div class="messages-area" id="messages">
+      <% if @chat.messages.empty? %>
+        <div class="message assistant">
+          Hello, I'm your Vinyl expert, ask me whatever you want !
+        </div>
+      <% else %>
+        <% @chat.messages.each do |message| %>
+          <div class="message <%= message.role %>">
+            <% if message.role == "assistant" %>
+              <%= render_markdown(message.content.to_s) %>
+            <% else %>
+              <%= message.content %>
+            <% end %>
+          </div>
+        <% end %>
       <% end %>
     </div>
 
-    <!-- Main chat area -->
-    <div class="chat-main">
-      <h1 class="chat-title"><%= @chat.title %></h1>
-
-      <div id="messages">
-        <% @chat.messages.each do |message| %>
-          <% if message.role == "user" %>
-            <div class="d-flex justify-content-end my-2">
-              <div class="bg-primary px-3 py-3 rounded-3">
-                <%= message.content %>
-              </div>
-            </div>
-          <% elsif message.role == "assistant" %>
-            <div class="d-flex justify-content-start my-5">
-              <div class="px-3 py-3 rounded-3 answer me">
-                <%= render_markdown(message.content.to_s) %>
-              </div>
-            </div>
-          <% end %>
-        <% end %>
-      </div>
-
-      <div id="new_message_container">
-        <%= simple_form_for [@chat, @message] do |f| %>
-          <div class="input-wrapper">
-            <%= f.input :content, label: false, required: true,
-                placeholder: "You can ask me anything related to vinyls",
-                wrapper: false %>
-            <%= f.button :submit, 'Ask VinylBot', class: 'btn-chat' %>
-          </div>
-        <% end %>
-      </div>
+    <!-- Zone de saisie -->
+    <div class="input-area">
+      <%= simple_form_for [@chat, @message], html: { class: 'chat-form' } do |f| %>
+        <div class="input-wrapper">
+          <%= f.input :content,
+              as: :string,
+              label: false,
+              required: true,
+              placeholder: "Demandez-moi des recommandations...",
+              wrapper: false,
+              input_html: { class: 'chat-input', autocomplete: 'off' } %>
+          <%= f.button :submit, '→', class: 'send-btn' %>
+        </div>
+      <% end %>
     </div>
-
   </div>
-
 </div>
