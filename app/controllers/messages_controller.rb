@@ -22,21 +22,24 @@ class MessagesController < ApplicationController
     @message.role = "user"
 
     if @message.save
-      @assistant_message = Message.create!(role: "assistant", content: "", chat: @chat)
+      # Message user broadcasté automatiquement par le callback
 
-      # Streaming avec broadcast à chaque chunk
+      # Créer le message assistant vide (broadcasté automatiquement)
+      @assistant_message = @chat.messages.create!(role: "assistant", content: "")
+
+      # Streaming
       @ruby_llm_chat = RubyLLM.chat
       build_conversation_history
 
-      full_content = ""
-
       @ruby_llm_chat.with_instructions(system_prompt).ask(@message.content) do |chunk|
-        if chunk.content.present?
-          full_content += chunk.content
-          @assistant_message.update!(content: full_content)
-          broadcast_replace(@assistant_message)
-        end
+        next if chunk.content.blank?
+
+        @assistant_message.content += chunk.content
+        broadcast_replace(@assistant_message)
       end
+
+      # Sauvegarder UNE SEULE FOIS à la fin
+      @assistant_message.save!
 
       @chat.generate_title_from_first_message
 
@@ -61,7 +64,10 @@ class MessagesController < ApplicationController
   end
 
   def build_conversation_history
-    @chat.messages.where.not(id: @assistant_message.id).each do |message|
+    @chat.messages.each do |message|
+      next if message.content.blank?
+      next if message.id == @assistant_message.id
+
       @ruby_llm_chat.add_message(message)
     end
   end

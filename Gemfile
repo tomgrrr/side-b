@@ -4,6 +4,7 @@ ruby "3.3.5"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.1.6"
+gem "solid_cable"
 
 gem "ruby_llm", "~> 1.2.0"
 
