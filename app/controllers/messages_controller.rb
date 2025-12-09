@@ -1,47 +1,67 @@
 class MessagesController < ApplicationController
+  include ActionView::RecordIdentifier
 
   def create
-  @chat = current_user.chats.find(params[:chat_id])
-  user_question_embedding = RubyLLM.embed(params[:message][:content])
+    @chat = current_user.chats.find(params[:chat_id])
+    user_question_embedding = RubyLLM.embed(params[:message][:content])
 
-  relevant_vinyls = Vinyl.nearest_neighbors(
-    :embedding,
-    user_question_embedding.vectors,
-    distance: "cosine"
-  ).first(5)
+    relevant_vinyls = Vinyl.nearest_neighbors(
+      :embedding,
+      user_question_embedding.vectors,
+      distance: "cosine"
+    ).first(5)
 
-  user_collection = current_user.matches.includes(vinyl: [:artists, :genres])
+    user_collection = current_user.matches.includes(vinyl: [:artists, :genres])
 
-  system_prompt = base_system_prompt
-  system_prompt += user_collection_context(user_collection)
-  system_prompt += catalog_vinyls_context(relevant_vinyls)
+    system_prompt = base_system_prompt
+    system_prompt += user_collection_context(user_collection)
+    system_prompt += catalog_vinyls_context(relevant_vinyls)
 
-  @message = Message.new(message_params)
-  @message.chat = @chat
-  @message.role = "user"
+    @message = Message.new(message_params)
+    @message.chat = @chat
+    @message.role = "user"
 
-  if @message.save
-    @ruby_llm_chat = RubyLLM.chat
-    build_conversation_history
+    if @message.save
+      @assistant_message = Message.create!(role: "assistant", content: "", chat: @chat)
 
-    response = @ruby_llm_chat.with_instructions(system_prompt).ask(@message.content)
-    @assistant_message = Message.create(role: "assistant", content: response.content, chat: @chat)
+      # Streaming avec broadcast à chaque chunk
+      @ruby_llm_chat = RubyLLM.chat
+      build_conversation_history
 
-    @chat.generate_title_from_first_message
+      full_content = ""
 
-    respond_to do |format|
-      format.turbo_stream
-      format.html { redirect_to chat_path(@chat) }
+      @ruby_llm_chat.with_instructions(system_prompt).ask(@message.content) do |chunk|
+        if chunk.content.present?
+          full_content += chunk.content
+          @assistant_message.update!(content: full_content)
+          broadcast_replace(@assistant_message)
+        end
+      end
+
+      @chat.generate_title_from_first_message
+
+      respond_to do |format|
+        format.turbo_stream
+        format.html { redirect_to chat_path(@chat) }
+      end
+    else
+      render "chats/show", status: :unprocessable_entity
     end
-  else
-    render "chats/show", status: :unprocessable_entity
   end
-end
 
   private
 
+  def broadcast_replace(message)
+    Turbo::StreamsChannel.broadcast_replace_to(
+      @chat,
+      target: dom_id(message),
+      partial: "messages/message",
+      locals: { message: message }
+    )
+  end
+
   def build_conversation_history
-    @chat.messages.each do |message|
+    @chat.messages.where.not(id: @assistant_message.id).each do |message|
       @ruby_llm_chat.add_message(message)
     end
   end

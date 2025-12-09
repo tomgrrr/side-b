@@ -1,6 +1,10 @@
-<div class="message <%= message.role %>">
+<%= tag.div class: "message #{message.role}", id: dom_id(message) do %>
   <% if message.role == "assistant" %>
-    <%= render_markdown(message.content.to_s) %>
+    <% if message.content.present? %>
+      <%= render_markdown(message.content.to_s) %>
+    <% else %>
+      <span class="typing-indicator">...</span>
+    <% end %>
   <% else %>
     <%= message.content %>
     <% if message.file.attached? %>
@@ -9,4 +13,4 @@
       </div>
     <% end %>
   <% end %>
-</div>
+<% end %>
