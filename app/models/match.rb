@@ -11,7 +11,7 @@ class Match < ApplicationRecord
     array.each do |a|
       total += a.vinyl.price
     end
-    total
+    total.round
   end
 
   def total_artist(array)

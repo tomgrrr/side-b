@@ -132,6 +132,7 @@
     white-space: nowrap;
     cursor: pointer;
     transition: all 0.3s ease;
+    color: white;
 
     &:hover {
       border-color: var(--red);
@@ -248,6 +249,8 @@
       cursor: pointer;
       transition: all 0.3s ease;
       border-radius: 8px;
+      text-decoration: none;
+      text-align: center;
 
       &:hover {
         background: var(--gold);
