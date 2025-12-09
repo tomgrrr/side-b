@@ -1,11 +1,3 @@
-<%= turbo_stream.append "messages" do %>
-  <%= render partial: "messages/message", locals: { message: @message } %>
-<% end %>
-
-<%= turbo_stream.append "messages" do %>
-  <%= render partial: "messages/message", locals: { message: @assistant_message } %>
-<% end %>
-
 <%= turbo_stream.replace "new_message" do %>
   <%= simple_form_for [@chat, Message.new], html: { class: 'chat-form', id: 'new_message' } do |f| %>
     <div class="input-wrapper">
