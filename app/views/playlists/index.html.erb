@@ -1,0 +1,25 @@
+<div class="vinyl-grid">
+<% @playlists.each do |playlist| %>
+  <div class="vinyl-card">
+    <% if playlist.image.attached? %>
+     <%= cl_image_tag playlist.image.key, height: 350, width: 312, crop: :fill %>
+      <div class="vinyl-overlay">
+        <%= link_to "Go To Playlist", playlist_path(playlist), class: "view-btn" %>
+      </div>
+    <% else %>
+      <div class="vinyl-card">
+        <div class="vinyl-image" style="background: linear-gradient(135deg, #F1C40F 0%, #F39C12 100%);">
+          <div class="vinyl-disc"></div>
+          <div class="vinyl-overlay">
+              <%= link_to "Go To Playlist", playlist_path(playlist), class: "play-btn" %>
+          </div>
+        </div>
+     </div>
+    <% end %>
+
+    <div class="vinyl-info">
+      <div class="vinyl-title"><%= playlist.name %></div>
+    </div>
+  </div>
+<% end %>
+</div>

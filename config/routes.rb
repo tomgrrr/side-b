@@ -23,10 +23,9 @@ Rails.application.routes.draw do
 
   resources :search, only: [:index]
 
-  resources :matches, only: [:create, :destroy]
+  resources :matches, only: [:create, :destroy, :update]
 
-  resources :playlist, only: [:show]
-  get 'wishlist', to: 'users#wishlist', as: 'wishlist'
+  resources :playlists, only: [:show, :index, :new, :create]
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

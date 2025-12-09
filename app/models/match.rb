@@ -9,7 +9,7 @@ class Match < ApplicationRecord
   def total_value(array)
     total = 0
     array.each do |a|
-      total = a.vinyl.price
+      total += a.vinyl.price
     end
     total
   end
