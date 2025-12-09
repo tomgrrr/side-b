@@ -1,6 +1,27 @@
-<div>
-  <div class="banner mt-3">
-    <h1 class="libre-bodoni d-flex justify-content-center-">Welcome to Side-B</h1>
-    <p class="libre-bodoni d-flex justify-content-center-">See your vinyl collection clearer and upgrade your 'digging' habits !</p>
+<div class="home-v2">
+  <div class="bg-pattern"></div>
+  <div class="red-stripe"></div>
+
+  <div class="floating-elements">
+    <% featured_vinyls.first(4).each_with_index do |vinyl, index| %>
+      <div class="float-item float-item-<%= index + 1 %>">
+        <% if vinyl.image.present? %>
+          <%= image_tag vinyl.image, alt: vinyl.name, class: "float-cover" %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="content">
+    <div class="tagline">Your magnified collection</div>
+    <h1>
+      <span class="line-1">Explore the</span><br>
+      <span class="line-2">sound of vinyl</span>
+    </h1>
+    <p class="subtitle">Catalogue your treasures, discover new gems and let our AI guide you.</p>
+    <div class="cta-group">
+      <%= link_to "My Wishlist", wishlist_users_path, class: "btn-gold" %>
+      <%= link_to "My Collection", collection_users_path, class: "btn-red" %>
+    </div>
   </div>
 </div>

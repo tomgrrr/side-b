@@ -1,90 +1,129 @@
-<div class="container">
-  <!-- Header avec H1 et bandeau sur la même ligne -->
-  <div class="header-section">
-    <h1>Your collection is worth <%=  @match.total_value(@collections) %> $</h1>
+<section id="collection-section" class="design-section">
+   <div class="section-header">
+    <span class="section-label">Proposition</span>
+     <h2 class="section-title">Page Collection - Avec bouton Playlist</h2>
+     <p class="section-desc">Header avec fond dégradé rouge, pills avec bordures rouges, cartes avec bouton "Ajouter à une playlist".</p>
+   </div>
 
-    <% if @playlists.any? %>
-      <div class="playlists-banner"
-           data-controller="playlist-slider"
-           data-playlist-slider-items-per-page-value="3">
-
-        <button class="playlist-nav-btn prev-btn"
-                data-playlist-slider-target="prevBtn"
-                data-action="click->playlist-slider#previous">
-          <span>‹</span>
-        </button>
-
-        <div class="playlists-slider-wrapper">
-          <div class="playlists-slider" data-playlist-slider-target="slider">
-            <% @playlists.each do |playlist| %>
-              <%= link_to playlist_path(playlist),
-                  class: "playlist-pill #{playlist.id == @current_playlist_id ? 'active' : ''}" do %>
-                <span class="playlist-icon">🎵</span>
-                <span class="playlist-name"><%= playlist.name %></span>
-                <span class="playlist-count">
-                  <%= @playlist_vinyl_counts[playlist.id] || 0 %>
-                </span>
-              <% end %>
-            <% end %>
+   <div class="collection-v1">
+      <div class="page-header">
+       <div class="header-left">
+         <h1>Ma <span>Collection</span></h1>
+         <div class="stats">
+       <div class="stat">
+            <span class="stat-value">127</span>
+             <span class="stat-label">Vinyles</span>
+            </div>
+          <div class="stat">
+              <span class="stat-value">2,450€</span>
+              <span class="stat-label">Valeur estimée</span>
+            </div>
+            <div class="stat">
+              <span class="stat-value">23</span>
+              <span class="stat-label">Artistes</span>
+            </div>
           </div>
         </div>
-
-        <button class="playlist-nav-btn next-btn"
-                data-playlist-slider-target="nextBtn"
-                data-action="click->playlist-slider#next">
-          <span>›</span>
-        </button>
+        <div class="header-right">
+          <button class="filter-btn">
+            <svg class="icon-svg" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>
+            Filtrer
+          </button>
+          <button class="filter-btn">
+            <svg class="icon-svg" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"/></svg>
+            Trier
+          </button>
+        </div>
       </div>
-    <% end %>
-  </div>
 
-  <!-- Grille de vinyles -->
-  <div class="cards-container">
-    <% @collections.each_with_index do |collection| %>
-      <div class="vinyl-card">
-        <div class="vinyl-flip-container">
-          <!-- Face avant (image du vinyle) -->
-          <div class="vinyl-face vinyl-front">
-            <div class="vinyl-image" style="background-image: url('<%= collection.vinyl.image %>');"></div>
+      <div class="playlists-row">
+        <div class="playlist-pill active">
+          <span class="icon">📀</span>
+          <span>Tous</span>
+          <span class="count">127</span>
+        </div>
+        <div class="playlist-pill">
+          <span class="icon">⭐</span>
+          <span>Favoris</span>
+          <span class="count">12</span>
+        </div>
+        <div class="playlist-pill">
+          <span class="icon">🎷</span>
+          <span>Jazz Classics</span>
+          <span class="count">34</span>
+        </div>
+        <div class="playlist-pill">
+          <span class="icon">🎸</span>
+          <span>Rock 70s</span>
+          <span class="count">28</span>
+        </div>
+      </div>
+
+      <div class="vinyl-grid">
+        <div class="vinyl-card">
+          <div class="cover">
+            <span class="badge">Rare</span>
+            <div class="actions">
+              <button class="action-btn playlist-btn">
+                <span>+</span> Ajouter à playlist
+              </button>
+              <div class="actions-row">
+                <button class="action-btn">Détails</button>
+                <button class="action-btn">Retirer</button>
+              </div>
+            </div>
           </div>
-
-          <!-- Face arrière (informations) -->
-          <div class="vinyl-face vinyl-back">
-            <div class="vinyl-info">
-              <h4><%= collection.vinyl.name %></h4>
-
-              <% collection.vinyl.artists.each do |artist| %>
-                <p class="artist-name">by: <%= artist.name %></p>
-              <% end %>
-
-              <% if collection.vinyl.songs.present? %>
-                <div class="tracklist">
-                  <h5>Tracklist:</h5>
-                  <ul>
-                    <% collection.vinyl.parsed_songs.each do |song| %>
-                      <li><%= song %></li>
-                    <% end %>
-                  </ul>
-                </div>
-              <% end %>
-
-              <% if collection.vinyl.price.present? %>
-                <div class="vinyl-price">
-                  <h5>Value: <%= collection.vinyl.price %>$</h5>
-                </div>
-              <% end %>
-
-              <%= render "shared/dropdown", match: collection, playlists: @playlists %>
-
-              <%= link_to "Details", vinyl_path(collection.vinyl), class: "details-btn" %>
-              <%= button_to "✖ Remove", match_path(collection), method: :delete, class: "details-btn border-0", data: { confirm: "Êtes-vous sûr ?" } %>
+          <div class="info">
+            <div class="title">Blue Train</div>
+            <div class="artist">John Coltrane</div>
+            <div class="meta">
+              <span class="price">32€</span>
+              <span class="year">1957</span>
+            </div>
+          </div>
+        </div>
+        <div class="vinyl-card">
+          <div class="cover">
+            <div class="actions">
+              <button class="action-btn playlist-btn">
+                <span>+</span> Ajouter à playlist
+              </button>
+              <div class="actions-row">
+                <button class="action-btn">Détails</button>
+                <button class="action-btn">Retirer</button>
+              </div>
+            </div>
+          </div>
+          <div class="info">
+            <div class="title">Kind of Blue</div>
+            <div class="artist">Miles Davis</div>
+            <div class="meta">
+              <span class="price">45€</span>
+              <span class="year">1959</span>
+            </div>
+          </div>
+        </div>
+        <div class="vinyl-card">
+          <div class="cover">
+            <div class="actions">
+              <button class="action-btn playlist-btn">
+                <span>+</span> Ajouter à playlist
+              </button>
+              <div class="actions-row">
+                <button class="action-btn">Détails</button>
+                <button class="action-btn">Retirer</button>
+              </div>
+            </div>
+          </div>
+          <div class="info">
+            <div class="title">A Love Supreme</div>
+            <div class="artist">John Coltrane</div>
+            <div class="meta">
+              <span class="price">38€</span>
+              <span class="year">1965</span>
             </div>
           </div>
         </div>
       </div>
-    <% end %>
-  </div>
-  
-
-
-</div>
+    </div>
+</section>

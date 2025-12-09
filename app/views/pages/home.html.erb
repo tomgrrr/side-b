@@ -1,10 +1,10 @@
 <%# Side bar %>
-<%= render "shared/banner" %>
+<%= render "shared/banner", featured_vinyls: @featured_vinyls %>
 
-<% if @vinyls.any? %>
-  <div class="vinyl-grid">
-    <%= render partial: "shared/vinyl_card", collection: @vinyls, as: :vinyl %>
-  </div>
-<% else %>
-  <p class="no-results">No vinyl found.</p>
-<% end %>
+<div class="section-header">
+  <h3 class="section-title">Your recommandations</h3>
+  <a href="#" class="view-all">See All →</a>
+</div>
+
+
+<%= render 'shared/vinyl_card', vinyls: @vinyls %>
