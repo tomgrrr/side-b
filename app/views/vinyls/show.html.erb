@@ -1,3 +1,13 @@
+<%
+  # Parse genres from the genre name which contains a JSON array string
+  if @vinyl.genres.any?
+    raw_genre_name = @vinyl.genres.first.name
+    parsed_genres = JSON.parse(raw_genre_name) rescue [raw_genre_name]
+  else
+    parsed_genres = []
+  end
+%>
+
 <div class="vinyl-show-v1">
   <div class="main-content">
     <div class="cover-section">
@@ -14,14 +24,18 @@
     <div class="info-section">
       <div class="breadcrumb">
         <%= link_to "Collection", collection_users_path %> /
-        <% if @vinyl.genres.any? %>
-          <%= @vinyl.genres.map(&:name).join(", ") %> /
+        <% if parsed_genres.any? %>
+          <%= parsed_genres.first %> /
         <% end %>
         <%= @vinyl.name %>
       </div>
 
-      <% if @vinyl.genres.any? %>
-        <span class="genre-badge"><%= @vinyl.genres.map(&:name).join(", ") %></span>
+      <% if parsed_genres.any? %>
+        <div class="genre-badges">
+          <% parsed_genres.each do |genre| %>
+            <span class="genre-badge"><%= genre %></span>
+          <% end %>
+        </div>
       <% end %>
 
       <h1 class="album-title"><%= @vinyl.name %></h1>
@@ -37,7 +51,7 @@
           <div class="meta-label">Price</div>
         </div>
         <div class="meta-item">
-          <div class="meta-value"><%= @vinyl.genres.any? ? @vinyl.genres.map(&:name).join(", ") : "N/A" %></div>
+          <div class="meta-value"><%= parsed_genres.any? ? parsed_genres.join(", ") : "N/A" %></div>
           <div class="meta-label">Genre</div>
         </div>
       </div>
