@@ -14,13 +14,14 @@
 .navbar-v1 .logo-link {
   display: flex;
   align-items: center;
+  margin-left: -2.1rem;
 }
 
 .navbar-v1 .logo-img {
   width: 80px;
-  height: 80px;
+  height: 70px;
   object-fit: contain;
-  border-radius: 12px;
+  border-radius: 19px;
   margin: -20px 0;                // negative margin keeps navbar same height
 }
 
@@ -31,9 +32,9 @@
 }
 
 .navbar-v1 .nav-link {
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 228, 160, 0.8);
   text-decoration: none;
-  font-size: 1.1rem;              // bigger text
+  font-size: 1.2rem;              // bigger text
   font-weight: 500;
   padding: 0.6rem 1.2rem;
   border-radius: 8px;
@@ -60,10 +61,10 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(0, 0, 0, 0.424);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 50px;
-  padding: 0.5rem 1rem;
+  padding: 0.4rem 0.4rem 0.4rem 1rem;
   transition: all 0.3s ease;
 
   &:focus-within {
@@ -81,7 +82,7 @@
   border: none;
   color: white;
   font-size: 0.85rem;
-  width: 180px;
+  width: 300px;
   outline: none;
 
   &::placeholder {
