@@ -1,41 +1,34 @@
-<div class="search-results">
-  <div class="container-search">
-    <% if @query.present? %>
-      <h1 class="page-title">
-        Vinyles
-        <span class="count"><%= @vinyls.count %></span>
-      </h1>
-      <% if @vinyls.any? %>
-        <div class="vinyl-grid">
-          <%= render partial: "shared/vinyl_card", collection: @vinyls, as: :vinyl %>
-        </div>
-      <% else %>
-        <p class="no-results">No vinyl found.</p>
-      <% end %>
+<div class="search-page">
+  <% if @query.present? %>
+    <div class="section-header">
+      <h3 class="section-title">Vinyles (<%= @vinyls.count %>)</h3>
+    </div>
 
-      <h1 class="page-title">
-        Artists
-        <span class="count"><%= @artists.count %></span>
-      </h1>
-      <% if @artists.any? %>
-        <div class="vinyl-grid">
-          <% @artists.each do |artist| %>
-            <div class="vinyl-card">
-              <div class="vinyl-image" style="background: linear-gradient(135deg, #9b59b6 20%, #2c3e50 80%);">
-                <div class="vinyl-disc"></div>
-                <div class="vinyl-overlay">
-                  <%= link_to "Voir l'artiste", artist_path(artist), class: "view-btn" %>
-                </div>
-              </div>
-              <div class="vinyl-info">
-                <div class="vinyl-title"><%= artist.name %></div>
-              </div>
-            </div>
-          <% end %>
-        </div>
-      <% else %>
-        <p class="no-results">No artist found.</p>
-      <% end %>
+    <% if @vinyls.any? %>
+      <%= render 'shared/vinyl_card', vinyls: @vinyls %>
+    <% else %>
+      <p class="no-results">No vinyl found.</p>
     <% end %>
-  </div>
+
+    <div class="section-header">
+      <h3 class="section-title">Artists (<%= @artists.count %>)</h3>
+    </div>
+
+    <% if @artists.any? %>
+      <div class="vinyl-grid">
+        <% @artists.each do |artist| %>
+          <div class="vinyl-card">
+            <div class="cover" style="background: linear-gradient(135deg, #9b59b6 20%, #2c3e50 80%);">
+              <div class="overlay"></div>
+            </div>
+            <div class="info">
+              <div class="title"><%= artist.name %></div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <p class="no-results">No artist found.</p>
+    <% end %>
+  <% end %>
 </div>
