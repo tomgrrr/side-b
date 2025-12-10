@@ -1,0 +1,338 @@
+.footer-minimal {
+  background: #0D0D0D;
+  position: relative;
+  overflow: hidden;
+}
+
+.footer-minimal .footer-glow {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 500px;
+  height: 100px;
+  background: radial-gradient(ellipse, rgba(102, 6, 22, 0.2) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.footer-minimal .footer-minimal-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.5rem 2rem 1rem;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.footer-minimal .footer-row-brand {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.footer-minimal .footer-brand-minimal {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.footer-minimal .brand-mark {
+  display: flex;
+  align-items: baseline;
+  gap: 0.15rem;
+}
+
+.footer-minimal .brand-side {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.9);
+  letter-spacing: 3px;
+}
+
+.footer-minimal .brand-b {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #F0D060;
+  font-style: italic;
+}
+
+.footer-minimal .footer-brand-minimal p {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.75rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.footer-minimal .footer-social-minimal {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.footer-minimal .footer-social-minimal a {
+  width: 32px;
+  height: 32px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.85rem;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.footer-minimal .footer-social-minimal a:hover {
+  border-color: #F0D060;
+  color: #F0D060;
+  background: rgba(240, 208, 96, 0.1);
+  transform: translateY(-2px);
+}
+
+.footer-minimal .footer-nav-minimal {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  padding: 0.5rem 0;
+}
+
+.footer-minimal .footer-nav-minimal a {
+  color: rgba(255, 255, 255, 0.6);
+  text-decoration: none;
+  font-size: 0.8rem;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.footer-minimal .footer-nav-minimal a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: #F0D060;
+  transition: width 0.3s ease;
+}
+
+.footer-minimal .footer-nav-minimal a:hover {
+  color: white;
+}
+
+.footer-minimal .footer-nav-minimal a:hover::after {
+  width: 100%;
+}
+
+/* DIVIDER AVEC VINYLE QUI TOURNE */
+.footer-minimal .footer-divider {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 0.5rem 0;
+}
+
+.footer-minimal .divider-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(102, 6, 22, 0.4), transparent);
+}
+
+/* VINYLE AVEC SIDE AU-DESSUS ET B EN-DESSOUS */
+.footer-minimal .spinning-vinyl {
+  width: 50px;
+  height: 50px;
+  background:
+    repeating-radial-gradient(
+      circle at center,
+      #111 0px, #111 2px,
+      #1a1a1a 3px, #1a1a1a 4px
+    );
+  border-radius: 50%;
+  border: 2px solid #F0D060;
+  box-shadow:
+    0 4px 15px rgba(0, 0, 0, 0.5),
+    inset 0 0 15px rgba(0, 0, 0, 0.5);
+  animation: spin 6s linear infinite;
+  position: relative;
+  flex-shrink: 0;
+}
+
+/* Rond central (trou du vinyle) */
+.footer-minimal .spinning-vinyl::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px;
+  height: 8px;
+  background: #F0D060;
+  border-radius: 50%;
+  z-index: 2;
+}
+
+/* SIDE au-dessus du centre - REMONTÉ */
+.footer-minimal .vinyl-side {
+  position: absolute;
+  bottom: 60%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.4rem;
+  font-weight: 600;
+  color: #F0D060;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  z-index: 1;
+}
+
+/* B en-dessous du centre */
+.footer-minimal .vinyl-b {
+  position: absolute;
+  top: 55%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Playfair Display', serif;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #F0D060;
+  font-style: italic;
+  z-index: 1;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.footer-minimal .footer-stats {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 0.5rem 0;
+}
+
+.footer-minimal .stat-item {
+  display: flex;
+  align-items: baseline;
+  gap: 0.3rem;
+}
+
+.footer-minimal .stat-number {
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  color: #F0D060;
+  font-weight: 700;
+}
+
+.footer-minimal .stat-text {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.footer-minimal .stat-separator {
+  width: 3px;
+  height: 3px;
+  background: #660616;
+  border-radius: 50%;
+}
+
+.footer-minimal .footer-row-bottom {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  padding-top: 0.25rem;
+}
+
+.footer-minimal .copyright-minimal {
+  color: rgba(255, 255, 255, 0.35);
+  font-size: 0.75rem;
+  margin: 0;
+}
+
+.footer-minimal .legal-minimal {
+  display: flex;
+  gap: 1rem;
+}
+
+.footer-minimal .legal-minimal a {
+  color: rgba(255, 255, 255, 0.35);
+  text-decoration: none;
+  font-size: 0.75rem;
+  transition: color 0.3s ease;
+}
+
+.footer-minimal .legal-minimal a:hover {
+  color: #F0D060;
+}
+
+.footer-minimal .footer-accent-bar {
+  height: 2px;
+  background: linear-gradient(90deg,
+    #660616 0%,
+    #8B1E2F 15%,
+    #F0D060 50%,
+    #8B1E2F 85%,
+    #660616 100%
+  );
+}
+
+@media (max-width: 768px) {
+  .footer-minimal .footer-row-brand {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .footer-minimal .footer-brand-minimal {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .footer-minimal .footer-nav-minimal {
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .footer-minimal .footer-stats {
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .footer-minimal .footer-row-bottom {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .footer-minimal .spinning-vinyl {
+    width: 40px;
+    height: 40px;
+  }
+
+  .footer-minimal .spinning-vinyl::before {
+    width: 6px;
+    height: 6px;
+  }
+
+  .footer-minimal .vinyl-side {
+    font-size: 0.3rem;
+  }
+
+  .footer-minimal .vinyl-b {
+    font-size: 0.5rem;
+  }
+}
