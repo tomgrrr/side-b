@@ -1,0 +1,124 @@
+.wishlist-page {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.wishlist-page .page-header {
+  margin-bottom: 2rem;
+  padding: 2rem;
+  background: linear-gradient(135deg, #660616 0%, #450510 100%);
+  border-radius: 16px;
+}
+
+.wishlist-page .page-header h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 3rem;
+  color: white;
+}
+
+.wishlist-page .page-header h1 span {
+  color: #c4a35a;
+}
+
+.wishlist-page .page-header p {
+  color: rgba(255, 255, 255, 0.7);
+  margin-top: 0.5rem;
+  font-size: 1.2rem;
+}
+
+.wishlist-page .vinyl-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.wishlist-page .vinyl-item {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1rem;
+  background: #141414;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all 0.3s;
+}
+
+.wishlist-page .vinyl-item:hover {
+  border-color: #660616;
+  transform: translateX(8px);
+}
+
+.wishlist-page .vinyl-item .cover {
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  background-size: cover;
+  background-position: center;
+  background-color: #660616;
+  flex-shrink: 0;
+}
+
+.wishlist-page .vinyl-item .info {
+  flex: 1;
+}
+
+.wishlist-page .vinyl-item .info h4 {
+  font-size: 1.2rem;
+  margin-bottom: 0.25rem;
+  color: white;
+}
+
+.wishlist-page .vinyl-item .info .artist {
+  color: #c4a35a;
+  font-size: 0.85rem;
+  margin-bottom: 0.5rem;
+}
+
+.wishlist-page .vinyl-item .info .tracks {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.8rem;
+}
+
+.wishlist-page .vinyl-item .price {
+  color: #c4a35a;
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-right: 1rem;
+}
+
+.wishlist-page .vinyl-item .actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.wishlist-page .vinyl-item .action-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+  text-decoration: none;
+}
+
+.wishlist-page .vinyl-item .btn-details {
+  background: #c4a35a;
+  color: #450510;
+}
+
+.wishlist-page .vinyl-item .btn-details:hover {
+  transform: scale(1.1);
+}
+
+.wishlist-page .vinyl-item .btn-remove {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.wishlist-page .vinyl-item .btn-remove:hover {
+  background: #ff4444;
+}
