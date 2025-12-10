@@ -1,9 +1,13 @@
 class SearchController < ApplicationController
   def index
+    @vinyls = Vinyl.all
     @query = params[:query]
     if @query.present?
-      @artists = Artist.where("name ILIKE ?", "%#{@query}%")
-      @vinyls = Vinyl.where("name ILIKE ?", "%#{@query}%")
+        sql_subquery = <<~SQL
+        vinyls.name ILIKE :query
+        OR artists.name ILIKE :query
+      SQL
+      @vinyls = @vinyls.joins(:artists).where(sql_subquery,query: "%#{@query}%")
     end
   end
 end

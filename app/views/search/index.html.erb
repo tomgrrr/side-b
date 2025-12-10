@@ -1,34 +1,17 @@
 <div class="search-page">
   <% if @query.present? %>
     <div class="section-header">
-      <h3 class="section-title">Vinyles (<%= @vinyls.count %>)</h3>
+      <% if @vinyls.count > 1 %>
+        <h3 class="section-title">Vinyls (<%= @vinyls.count %>)</h3>
+      <% else %>
+        <h3 class="section-title">Vinyl (<%= @vinyls.count %>)</h3>
+      <% end %>
     </div>
 
     <% if @vinyls.any? %>
       <%= render 'shared/vinyl_card', vinyls: @vinyls %>
     <% else %>
       <p class="no-results">No vinyl found.</p>
-    <% end %>
-
-    <div class="section-header">
-      <h3 class="section-title">Artists (<%= @artists.count %>)</h3>
-    </div>
-
-    <% if @artists.any? %>
-      <div class="vinyl-grid">
-        <% @artists.each do |artist| %>
-          <div class="vinyl-card">
-            <div class="cover" style="background: linear-gradient(135deg, #9b59b6 20%, #2c3e50 80%);">
-              <div class="overlay"></div>
-            </div>
-            <div class="info">
-              <div class="title"><%= artist.name %></div>
-            </div>
-          </div>
-        <% end %>
-      </div>
-    <% else %>
-      <p class="no-results">No artist found.</p>
     <% end %>
   <% end %>
 </div>
