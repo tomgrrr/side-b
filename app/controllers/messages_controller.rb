@@ -9,18 +9,17 @@ class MessagesController < ApplicationController
       :embedding,
       user_question_embedding.vectors,
       distance: "cosine"
-    ).first(3)
+    ).first(4)
 
     user_collection = current_user.matches.includes(vinyl: [:artists, :genres])
 
     system_prompt = base_system_prompt
     system_prompt += user_collection_context(user_collection)
-    system_prompt += catalog_vinyls_context(relevant_vinyls)
+    system_prompt += catalog_vinyls_context(@relevant_vinyls)
 
     @message = Message.new(message_params)
     @message.chat = @chat
     @message.role = "user"
-    raise
 
     if @message.save
 
