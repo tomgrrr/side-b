@@ -154,7 +154,7 @@
     color: white;
 
     span {
-      color: var(--gold);
+      color: #C4A35A;
     }
   }
 
@@ -173,7 +173,7 @@
     font-family: 'Unbounded', sans-serif;
     font-size: 2rem;
     font-weight: 700;
-    color: var(--gold);
+    color: #C4A35A;
   }
 
   .stat-label {
@@ -253,6 +253,7 @@
       transform: translateY(-10px);
       border-color: var(--red);
       box-shadow: 0 30px 60px rgba(102, 6, 22, 0.4);
+      background: linear-gradient(to top, var(--red-dark) 0%, transparent 50%);
 
       .actions {
         opacity: 1;
@@ -270,7 +271,7 @@
         content: '';
         position: absolute;
         inset: 0;
-        background: linear-gradient(to top, var(--red-dark) 0%, transparent 50%);
+
       }
 
       .cover-image {
@@ -341,7 +342,7 @@
         gap: 0.5rem;
 
         &:hover {
-          background: white;
+          background: #C4A35A;
         }
       }
     }
@@ -377,7 +378,7 @@
     }
 
     .year {
-      color: rgba(255, 255, 255, 0.4);
+      color: rgba(255, 255, 255, 0.781);
       font-size: 0.8rem;
     }
   }
