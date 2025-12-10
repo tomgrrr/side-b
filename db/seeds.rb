@@ -23,6 +23,7 @@
 
 # Nettoyage
 puts "🧹 Nettoyage de la base de données..."
+VinylRecommandation.destroy_all
 Match.destroy_all
 ArtistsVinyl.destroy_all
 ArtistGenre.destroy_all
