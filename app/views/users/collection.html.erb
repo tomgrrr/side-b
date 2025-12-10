@@ -3,11 +3,11 @@
     <div class="header-left">
       <h1>My <span>Collection</span></h1>
       <div class="stats">
-    <div class="stat">
-        <span class="stat-value"><%= @collections.size %></span>
+        <div class="stat">
+          <span class="stat-value"><%= @collections.size %></span>
           <span class="stat-label">Vinyls</span>
         </div>
-      <div class="stat">
+        <div class="stat">
           <span class="stat-value"><%= @match.total_value(@collections) %> €</span>
           <span class="stat-label">Estimated value</span>
         </div>
@@ -21,24 +21,22 @@
 
   <div class="playlists-row">
 
-    <div class="playlist-pill active">
+   <div class="playlist-pill active">
       <span class="icon">📀</span>
       <span>All</span>
       <span class="count"><%= @collections.size %></span>
-    </div>
+   </div>
 
-   <% @playlists.each do |playlist| %>
-      <div class="playlist-pill">
+    <% @playlists.each do |playlist| %>
+      <%= link_to playlist_path(playlist), class: "playlist-pill #{'active' if params[:playlist_id] == playlist.id.to_s}" do %>
         <span class="icon">🎵</span>
         <span><%= playlist.name %></span>
-        <span class="count"><%= @playlist_vinyl_counts[playlist.id] || 0%></span>
-      </div>
+        <span class="count"><%= @playlist_vinyl_counts[playlist.id] || 0 %></span>
+      <% end %>
     <% end %>
-
   </div>
 
   <div class="vinyl-grid">
-
     <% @collections.each do |collection| %>
       <div class="vinyl-card">
         <div class="cover">
@@ -49,9 +47,36 @@
             <span class="badge">Rare</span>
           <% end %>
           <div class="actions">
-            <button class="action-btn playlist-btn">
-              <span>+</span> Add to a playlist
-            </button>
+            <!-- DROPDOWN PLAYLIST -->
+            <div class="dropdown playlist-dropdown">
+              <button class="action-btn playlist-btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <span>+</span> Add to a playlist
+              </button>
+              <ul class="dropdown-menu playlist-dropdown-menu">
+                <li class="dropdown-header">Choose a playlist</li>
+                <li><hr class="dropdown-divider"></li>
+                <% @playlists.each do |playlist| %>
+                  <li>
+                    <%= link_to match_path(collection, playlist_id: playlist.id), data: { turbo_method: :patch }, class: "dropdown-item" do %>
+                      <span class="playlist-icon">🎵</span>
+                      <span class="playlist-name"><%= playlist.name %></span>
+                      <span class="playlist-count"><%= @playlist_vinyl_counts[playlist.id] || 0 %></span>
+                    <% end %>
+                  </li>
+                <% end %>
+                <% if @playlists.empty? %>
+                  <li><span class="dropdown-item disabled">No playlist yet</span></li>
+                <% end %>
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                  <%= link_to new_playlist_path, class: "dropdown-item create-playlist-item" do %>
+                    <span class="playlist-icon">➕</span>
+                    <span class="playlist-name">Create new playlist</span>
+                  <% end %>
+                </li>
+              </ul>
+            </div>
+
             <div class="actions-row">
               <%= link_to "Details", vinyl_path(collection.vinyl), class: "action-btn" %>
               <%= link_to "Remove", match_path(collection), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, class: "action-btn" %>
@@ -60,16 +85,13 @@
         </div>
         <div class="info">
           <div class="title"><%= collection.vinyl.name %></div>
-          <div class="artist">
-            <% collection.vinyl.artists.each do |artist| %>
-              <%= artist.name %>
-            <% end %>
-          </div>
+          <div class="artist"><%= collection.vinyl.artists.map(&:name).join(", ") %></div>
           <div class="meta">
             <span class="price"><%= collection.vinyl.price %> €</span>
             <span class="year"><%= collection.vinyl.release_date %></span>
           </div>
         </div>
       </div>
-      <% end %>
+    <% end %>
+  </div>
 </div>
