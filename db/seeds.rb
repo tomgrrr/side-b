@@ -337,7 +337,7 @@ CSV.foreach(filepath) do |row|
     image: image_url,
     songs: row[3],
     notes: row[4],
-    price: row[7].to_f * 10
+    price: row[7].to_f.round(2) * 10
   })
 
   genre = Genre.find_or_create_by!(name: row[6])

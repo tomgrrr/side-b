@@ -11,15 +11,45 @@
 <div class="vinyl-show-v1">
   <div class="main-content">
     <div class="cover-section">
-      <div class="cover-frame">
-        <% if @vinyl.image.present? %>
-          <%= image_tag @vinyl.image, alt: @vinyl.name, class: "cover-img" %>
-        <% else %>
-          <div class="cover-img default">🎵</div>
+  <div class="cover-frame">
+    <% if @vinyl.image.present? %>
+      <%= image_tag @vinyl.image, alt: @vinyl.name, class: "cover-img" %>
+    <% else %>
+      <div class="cover-img default">🎵</div>
+    <% end %>
+    <div class="vinyl-disc">
+      <% if @vinyl.image.present? %>
+        <%= image_tag @vinyl.image, class: "disc-label" %>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- YouTube Player -->
+  <% if @youtube_videos.present? %>
+    <div class="youtube-player-container mt-4"
+        data-controller="youtube-player"
+        data-youtube-player-video-id-value="<%= @youtube_videos.first[:video_id] %>">
+      <h3 class="mb-3">🎵 Listen to this album</h3>
+      <div id="youtube-player" data-youtube-player-target="frame"></div>
+      <div class="video-list mt-3" data-youtube-player-target="videoList">
+        <% @youtube_videos.each_with_index do |video, index| %>
+          <div class="video-item <%= 'active' if index == 0 %>"
+              data-action="click->youtube-player#playVideo"
+              data-video-id="<%= video[:video_id] %>">
+            <img src="<%= video[:thumbnail] %>"
+                alt="<%= video[:title] %>"
+                class="video-thumbnail">
+            <div class="video-info">
+              <p class="video-title"><%= video[:title] %></p>
+              <p class="video-channel"><%= video[:channel] %></p>
+            </div>
+          </div>
         <% end %>
-        <div class="vinyl-disc"></div>
       </div>
     </div>
+  <% end %>
+</div>
+
 
     <div class="info-section">
       <div class="breadcrumb">
@@ -47,7 +77,8 @@
           <div class="meta-label">Year</div>
         </div>
         <div class="meta-item">
-          <div class="meta-value"><%= @vinyl.price.present? ? "$#{@vinyl.price}" : "N/A" %></div>
+        <div class="meta-value"><%= @vinyl.price.present? ? number_to_currency(@vinyl.price, unit: "€", format: "%n %u") : "N/A" %></div>
+
           <div class="meta-label">Price</div>
         </div>
         <div class="meta-item">
@@ -66,12 +97,12 @@
         <% end %>
 
         <% if @in_wishlist %>
-          <%= button_to "♡", match_path(@wishlist_match), method: :delete, class: "btn-wishlist", data: { confirm: "Are you sure?" } %>
+          <%= button_to match_path(@wishlist_match), method: :delete, class: "btn-wishlist active" do %>
+          <i class="fas fa-heart"></i>
+        <% end %>
         <% else %>
-          <% unless @in_collection %>
-            <%= button_to matches_path(vinyl_id: @vinyl.id, category: "wishlist"), method: :post, class: "btn-wishlist" do %>
-              ♡
-            <% end %>
+          <%= button_to matches_path(vinyl_id: @vinyl.id, category: "wishlist"), method: :post, class: "btn-wishlist" do %>
+            <i class="far fa-heart"></i>
           <% end %>
         <% end %>
       </div>

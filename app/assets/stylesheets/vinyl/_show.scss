@@ -24,10 +24,13 @@
   border-radius: 20px;
   box-shadow: 0 40px 80px rgba(102, 6, 22, 0.5);
   border: 4px solid #660616;
-  overflow: hidden;
+  overflow: visible;
+  clip-path: inset(-10px -10px -10px -10px);
+  transition: clip-path 0s 0.6s;
 
   &:hover {
-    overflow: visible;
+    clip-path: inset(-10px -60% -10px -10px);
+    transition: clip-path 0s 0s;
   }
 }
 
@@ -52,7 +55,8 @@
   position: absolute;
   top: 50%;
   right: 10px;
-  transform: translateY(-50%);
+  left: 50%;
+  transform: translate(-50%, -50%);
   width: 92%;
   height: 92%;
   background:
@@ -68,22 +72,21 @@
 }
 
 .vinyl-show-v1 .cover-frame:hover .vinyl-disc {
-  transform: translateY(-50%) translateX(55%);
+  transform: translate(15%, -50%);
 }
 
-.vinyl-show-v1 .vinyl-disc::after {
-  content: '';
+.vinyl-show-v1 .vinyl-disc .disc-label {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 30%;
-  height: 30%;
-  background: #c4a35a;
+  width: 35%;
+  height: 35%;
   border-radius: 50%;
   border: 3px solid #660616;
+  object-fit: cover;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
-
 .vinyl-show-v1 .info-section {
   padding-top: 1rem;
   position: relative;
@@ -282,4 +285,13 @@
 .vinyl-show-v1 .track-title {
   flex: 1;
   color: white;
+}
+
+.vinyl-show-v1 .btn-wishlist.active {
+  background: #c4a35a;
+  color: #450510;
+
+  &:hover {
+    background: #d4b36a;
+  }
 }
