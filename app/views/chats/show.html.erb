@@ -41,7 +41,7 @@
         </div>
       <% else %>
         <% @chat.messages.each do |message| %>
-          <%= render partial: "messages/message", locals: { message: message } %>
+          <%= render partial: "messages/message", locals: { message: message, vinyls: @relevant_vinyls } %>
         <% end %>
       <% end %>
     </div>
