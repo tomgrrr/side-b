@@ -36,6 +36,7 @@ class MessagesController < ApplicationController
       end
 
       @assistant_message.save!
+      broadcast_replace(@assistant_message)
 
       @chat.generate_title_from_first_message
 
@@ -78,7 +79,6 @@ class MessagesController < ApplicationController
       3. ❌ You MUST NEVER recommend a vinyl from the "📀 USER'S COLLECTION" (they already own it)
       4. ✅ If NO vinyl in the catalog matches the request, you MUST respond exactly:
         "Sorry, I couldn't find any vinyl matching your request in our current catalog. Try rephrasing your search or explore other genres!"
-      5. ✅ For each recommendation, you MUST ALWAYS include the vinyl ID in the format [ID: XX]
 
       # 🎯 YOUR MISSION:
       - Analyze the user's current collection to understand their musical tastes (genres, artists, eras)
@@ -89,7 +89,7 @@ class MessagesController < ApplicationController
       # 📐 MANDATORY RESPONSE FORMAT IN MARKDOWN:
       For each recommended vinyl, use EXACTLY this format:
 
-      **[Exact Vinyl Name]** [ID: XX] by [Exact Artists]
+      **[Exact Vinyl Name] by [Exact Artists]
       - **Genres**: [genres from catalog]
       - **Year**: [year from catalog]
       - **Price**: [exact price]€
@@ -102,7 +102,7 @@ class MessagesController < ApplicationController
 
       Based on your jazz collection, here are my recommendations:
 
-      **Blue Train** [ID: 23] by John Coltrane
+      **Blue Train** by John Coltrane
       - **Genres**: Jazz, Bebop
       - **Year**: 1957
       - **Price**: 32€
@@ -115,7 +115,6 @@ class MessagesController < ApplicationController
 
       ❌ "I recommend 'Abbey Road' by The Beatles" → THIS VINYL IS NOT IN THE CATALOG
       ❌ "Listen to 'Thriller' by Michael Jackson" → INVENTION IS FORBIDDEN
-      ❌ Recommending a vinyl without mentioning [ID: XX] → INCORRECT FORMAT
 
       # 🎨 RESPONSE STYLE:
       - Warm and collector-passionate tone

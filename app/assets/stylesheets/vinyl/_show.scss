@@ -13,7 +13,7 @@
 }
 
 .vinyl-show-v1 .cover-section {
-  position: sticky;
+
   top: 100px;
 }
 
@@ -24,10 +24,13 @@
   border-radius: 20px;
   box-shadow: 0 40px 80px rgba(102, 6, 22, 0.5);
   border: 4px solid #660616;
-  overflow: hidden;
+  overflow: visible;
+  clip-path: inset(-10px -10px -10px -10px);
+  transition: clip-path 0s 0.6s;
 
   &:hover {
-    overflow: visible;
+    clip-path: inset(-10px -60% -10px -10px);
+    transition: clip-path 0s 0s;
   }
 }
 
@@ -52,7 +55,8 @@
   position: absolute;
   top: 50%;
   right: 10px;
-  transform: translateY(-50%);
+  left: 50%;
+  transform: translate(-50%, -50%);
   width: 92%;
   height: 92%;
   background:
@@ -68,22 +72,21 @@
 }
 
 .vinyl-show-v1 .cover-frame:hover .vinyl-disc {
-  transform: translateY(-50%) translateX(55%);
+  transform: translate(15%, -50%);
 }
 
-.vinyl-show-v1 .vinyl-disc::after {
-  content: '';
+.vinyl-show-v1 .vinyl-disc .disc-label {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 30%;
-  height: 30%;
-  background: #c4a35a;
+  width: 35%;
+  height: 35%;
   border-radius: 50%;
   border: 3px solid #660616;
+  object-fit: cover;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
-
 .vinyl-show-v1 .info-section {
   padding-top: 1rem;
   position: relative;
@@ -282,4 +285,110 @@
 .vinyl-show-v1 .track-title {
   flex: 1;
   color: white;
+}
+
+.vinyl-show-v1 .btn-wishlist.active {
+  background: #c4a35a;
+  color: #450510;
+
+  &:hover {
+    background: #d4b36a;
+  }
+}
+
+// YouTube Player Section
+.vinyl-show-v1 .youtube-player-container {
+  margin-top: 2rem;
+  background: linear-gradient(135deg, #550412 0%, #2b0707 100%);
+  border-radius: 16px;
+  padding: 1.5rem;
+  border: 1px solid #660616;
+
+  h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    color: #c4a35a;
+    margin-bottom: 1rem;
+  }
+}
+
+.vinyl-show-v1 #youtube-player {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.vinyl-show-v1 .video-list {
+  max-height: 250px;
+  overflow-y: auto;
+  margin-top: 1rem;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #660616;
+    border-radius: 3px;
+  }
+}
+
+.vinyl-show-v1 .video-item {
+  display: flex;
+  gap: 12px;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+
+  &:hover {
+    background: rgba(102, 6, 22, 0.4);
+    transform: translateX(5px);
+  }
+
+  &.active {
+    background: rgba(196, 163, 90, 0.15);
+    border-color: #c4a35a;
+  }
+}
+
+.vinyl-show-v1 .video-thumbnail {
+  width: 100px;
+  height: 75px;
+  object-fit: cover;
+  border-radius: 8px;
+  flex-shrink: 0;
+  border: 2px solid #450510;
+}
+
+.vinyl-show-v1 .video-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+
+  .video-title {
+    color: white;
+    font-weight: 600;
+    margin: 0 0 4px 0;
+    font-size: 0.85rem;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .video-channel {
+    color: #c4a35a;
+    margin: 0;
+    font-size: 0.75rem;
+  }
 }
