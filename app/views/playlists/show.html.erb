@@ -34,16 +34,7 @@
     </div>
 
     <% Match.where(playlist_id: @playlist.id).map(&:vinyl).each_with_index do |vinyl, index| %>
-      <%
-        # Parse genres from the genre name which contains a JSON array string
-        if vinyl.genres.any?
-          raw_genre_name = vinyl.genres.first.name
-          parsed_genres = JSON.parse(raw_genre_name) rescue [raw_genre_name]
-        else
-          parsed_genres = []
-        end
-      %>
-      <div class="track-item">
+      <%= link_to vinyl_path(vinyl), class: "track-item" do %>
         <div class="track-num"><%= index + 1 %></div>
         <div class="track-info">
           <div class="track-cover">
@@ -60,9 +51,9 @@
           <%= vinyl.artists.map(&:name).join(", ") %>
         </div>
         <div class="track-genre">
-          <%= parsed_genres.join(", ") %>
+          <%= vinyl.genres.flat_map { |genre| JSON.parse(genre.name) }.join(", ").gsub(" /", ",") %>
         </div>
-      </div>
+      <% end %>
     <% end %>
   </div>
 </div>

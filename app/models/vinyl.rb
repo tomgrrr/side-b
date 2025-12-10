@@ -18,6 +18,11 @@ class Vinyl < ApplicationRecord
     end
   end
 
+  def parsed_genres
+    genres.flat_map { |g| JSON.parse(g.name) rescue [g.name] }.uniq
+  end
+
+
   private
 
   def set_embedding
