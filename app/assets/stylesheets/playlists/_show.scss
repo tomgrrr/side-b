@@ -132,7 +132,7 @@
   letter-spacing: 1px;
 }
 
-.track-item {
+a.track-item {
   display: grid;
   grid-template-columns: 50px 2fr 1fr 1fr;
   gap: 16px;
@@ -140,6 +140,8 @@
   border-radius: 8px;
   transition: background 0.2s;
   cursor: pointer;
+  text-decoration: none;
+  color: inherit;
 
   &:hover {
     background: rgba(255, 255, 255, 0.1);
