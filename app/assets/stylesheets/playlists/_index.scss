@@ -30,27 +30,6 @@
   margin: 0;
 }
 
-.playlist-index .create-btn {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 1rem 2rem;
-  background: #c4a35a;
-  color: #450510;
-  border: none;
-  border-radius: 12px;
-  font-weight: 700;
-  font-size: 1rem;
-  cursor: pointer;
-  text-decoration: none;
-  transition: all 0.3s ease;
-
-  &:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 15px 40px rgba(196, 163, 90, 0.3);
-  }
-}
-
 .playlist-index .playlist-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -58,7 +37,7 @@
 }
 
 .playlist-index .playlist-card {
-  background: #c4a35a;
+  background: #30000b;
   border-radius: 16px;
   overflow: hidden;
   border: 1px solid #450510;
@@ -73,20 +52,24 @@
 }
 
 .playlist-index .playlist-cover {
+  width: 100%;
   aspect-ratio: 1;
   background: linear-gradient(135deg, #660616, #450510);
   position: relative;
   overflow: hidden;
+}
 
-  img {
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: cover !important;
-    position: absolute !important;
-    top: 0 !important;
-    left: 0 !important;
-    display: block !important;
-  }
+.playlist-index .playlist-cover img,
+.playlist-index .playlist-cover .cover-img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  display: block !important;
+  max-width: none !important;
+  z-index: 1;
 }
 
 .playlist-index .playlist-cover .default-cover {
@@ -107,6 +90,7 @@
   justify-content: center;
   opacity: 0;
   transition: opacity 0.3s;
+  z-index: 2;
 }
 
 .playlist-index .playlist-card:hover .play-overlay {
@@ -141,14 +125,14 @@
   font-family: 'Playfair Display', serif;
   font-size: 1.2rem;
   margin-bottom: 0.5rem;
-  color: white;
+  color: #dab669;
 }
 
 .playlist-index .playlist-meta {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.788);
   font-size: 0.85rem;
 }
 
@@ -179,7 +163,7 @@
 }
 
 .playlist-index .playlist-card.empty:hover {
-  background: rgba(102, 6, 22, 0.1);
+  background: rgba(0, 0, 0, 0.436);
 }
 
 .playlist-index .empty-content {
