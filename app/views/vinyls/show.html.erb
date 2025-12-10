@@ -59,6 +59,36 @@
       <div class="action-buttons">
         <% if @in_collection %>
           <%= button_to "Remove from Collection", match_path(@collection_match), method: :delete, class: "btn-add", data: { confirm: "Are you sure?" } %>
+          <div class="actions">
+            <div class="dropdown playlist-dropdown">
+              <button class="action-btn btn-playlist dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <span>♫</span> Add to a playlist
+              </button>
+              <ul class="dropdown-menu playlist-dropdown-menu">
+                <li class="dropdown-header">Choose a playlist</li>
+                <li><hr class="dropdown-divider"></li>
+                <% @playlists.each do |playlist| %>
+                  <li>
+                    <%= link_to match_path(@collection, playlist_id: playlist.id), data: { turbo_method: :patch }, class: "dropdown-item" do %>
+                      <span class="playlist-icon">🎵</span>
+                      <span class="playlist-name"><%= playlist.name %></span>
+                      <span class="playlist-count"><%= @playlist_vinyl_counts[playlist.id] || 0 %></span>
+                    <% end %>
+                  </li>
+                <% end %>
+                <% if @playlists.empty? %>
+                  <li><span class="dropdown-item disabled">No playlist yet</span></li>
+                <% end %>
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                  <%= link_to new_playlist_path, class: "dropdown-item create-playlist-item" do %>
+                    <span class="playlist-icon">➕</span>
+                    <span class="playlist-name">Create new playlist</span>
+                  <% end %>
+                </li>
+              </ul>
+            </div>
+          </div>
         <% else %>
           <%= button_to matches_path(vinyl_id: @vinyl.id, category: "collection"), method: :post, class: "btn-add" do %>
             <span>+</span> Add to Collection
@@ -75,11 +105,6 @@
           <% end %>
         <% end %>
       </div>
-
-      <button class="btn-playlist">
-        <span class="icon">♫</span>
-        Add to Playlist
-      </button>
 
       <% if @vinyl.songs.present? %>
         <div class="tracklist">
