@@ -79,20 +79,14 @@
   overflow: hidden;
 
   img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    display: block !important;
   }
-}
-
-.playlist-index .playlist-cover .cover-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  position: absolute;
-  top: 0;
-  left: 0;
 }
 
 .playlist-index .playlist-cover .default-cover {
@@ -159,10 +153,9 @@
 }
 
 .playlist-index .playlist-count {
-  aspect-ratio: 1;
-  background: linear-gradient(135deg, #660616, #450510);
-  position: relative;
-  overflow: hidden;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .playlist-index .count-badge {

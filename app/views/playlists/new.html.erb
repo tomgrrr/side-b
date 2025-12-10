@@ -1,10 +1,24 @@
-<div class="container">
+<div class="new-playlist-page">
+  <div class="playlist-form-card">
+    <h1>Create <span>Playlist</span></h1>
+    <p class="subtitle">Organize your vinyl collection</p>
 
-  <%= simple_form_for @playlist do |f| %>
-    <%= f.input :image, as: :file %>
-    <%= f.input :name, required: true, label: "Name..." %>
-    <%= f.button :submit, 'Create playlist', class: 'btn btn-primary' %>
-  <% end %>
+    <%= simple_form_for @playlist do |f| %>
+      <div class="form-group">
+        <label>Cover Image</label>
+        <div class="image-upload">
+          <i class="fa-solid fa-cloud-arrow-up"></i>
+          <p>Click to upload an image</p>
+          <%= f.input :image, as: :file, label: false, wrapper: false, input_html: { class: "file-input" } %>
+        </div>
+      </div>
 
+      <div class="form-group">
+        <label>Playlist Name</label>
+        <%= f.input :name, label: false, placeholder: "Enter playlist name...", input_html: { class: "text-input" } %>
+      </div>
 
+      <%= f.button :submit, "Create Playlist", class: "submit-btn" %>
+    <% end %>
+  </div>
 </div>
