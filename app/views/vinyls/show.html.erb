@@ -11,10 +11,6 @@
 <div class="vinyl-show-v1">
   <div class="main-content">
     <div class="cover-section">
-        <p style="color: yellow; background: #660616; padding: 10px; border-radius: 8px;">
-    Artist: <%= @vinyl.artists.first&.name.inspect %><br>
-    YouTube videos: <%= @youtube_videos.inspect %>
-  </p>
       <div class="cover-frame">
         <% if @vinyl.image.present? %>
           <%= image_tag @vinyl.image, alt: @vinyl.name, class: "cover-img" %>

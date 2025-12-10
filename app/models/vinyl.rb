@@ -26,7 +26,9 @@ class Vinyl < ApplicationRecord
   private
 
   def set_embedding
-    embedding = RubyLLM.embed("Artist: #{name}. Genres: #{genres}. Vinyls: #{name}")
+    artist_names = artists.map(&:name).join(", ")
+    genre_names = genres.map(&:name).join(", ")
+    embedding = RubyLLM.embed("Album: #{name}. Artists: #{artist_names}. Genres: #{genre_names}")
     update(embedding: embedding.vectors)
   end
 end
