@@ -1,16 +1,71 @@
 <%= tag.div class: "message #{message.role}", id: dom_id(message) do %>
   <% if message.role == "assistant" %>
-    <% if message.content.present? %>
-      <%= render_markdown(message.content.to_s) %>
-    <% else %>
-      <span class="typing-indicator">...</span>
-    <% end %>
-  <% else %>
-    <%= message.content %>
-    <% if message.file.attached? %>
-      <div class="message-file">
-        <%= link_to message.file.filename, rails_blob_path(message.file, disposition: "attachment") %>
+    <%
+      vinyl_ids = message.content.to_s.scan(/\/vinyls\/(\d+)/).flatten.map(&:to_i).uniq
+      vinyls = vinyl_ids.any? ? Vinyl.includes(:artists).where(id: vinyl_ids) : []
+
+      clean_content = message.content.to_s
+        .gsub(/\s*-?\s*\*{0,2}\[(?:View this vinyl|Voir ce vinyl)[^\]]*\]\(\/vinyls\/\d+\)\*{0,2}/i, '')
+        .gsub(/\*{0,2}\[(?:View this vinyl|Voir ce vinyl)[^\]]*\]\(\/vinyls\/\d+\)\*{0,2}/i, '')
+        .gsub(/^-?\s*\*{0,2}(?:URL|Lien)\*{0,2}\s*:?\s*.*\/vinyls\/\d+.*$/i, '')
+        .gsub(/\n{3,}/, "\n\n")
+        .strip
+    %>
+
+    <div class="message-content">
+      <% if clean_content.present? %>
+        <%= render_markdown(clean_content) %>
+      <% else %>
+        <span class="typing-indicator">...</span>
+      <% end %>
+    </div>
+
+    <% if vinyls.any? %>
+      <div class="vinyl-cards-container">
+        <div class="section-label">
+          <span class="label-line"></span>
+          <span class="label-text">Recommanded vinyls</span>
+          <span class="label-line"></span>
+        </div>
+        <div class="vinyl-cards-grid">
+          <% vinyls.each do |vinyl| %>
+            <%= link_to vinyl_path(vinyl), class: "vinyl-disc-card" do %>
+              <div class="vinyl-sleeve">
+                <% if vinyl.image.present? %>
+                  <%= image_tag vinyl.image, alt: vinyl.name %>
+                <% else %>
+                  <div class="default-cover">🎵</div>
+                <% end %>
+              </div>
+              <div class="vinyl-disc">
+                <div class="disc-grooves"></div>
+                <div class="disc-label">
+                  <% if vinyl.image.present? %>
+                    <%= image_tag vinyl.image, alt: vinyl.name %>
+                  <% end %>
+                </div>
+                <div class="disc-hole"></div>
+              </div>
+              <div class="vinyl-card-info">
+                <div class="vinyl-card-title"><%= truncate(vinyl.name, length: 25) %></div>
+                <div class="vinyl-card-artist"><%= truncate(vinyl.artists.map(&:name).join(", "), length: 30) %></div>
+                <% if vinyl.price.present? %>
+                  <div class="vinyl-card-price"><%= vinyl.price %>€</div>
+                <% end %>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
       </div>
     <% end %>
+
+  <% else %>
+    <%= message.content %>
+  <% end %>
+
+  <% if message.file.attached? %>
+    <div class="message-file">
+      <%= link_to message.file.filename, rails_blob_path(message.file, disposition: "attachment") %>
+    </div>
   <% end %>
 <% end %>
