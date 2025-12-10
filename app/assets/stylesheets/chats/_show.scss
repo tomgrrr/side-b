@@ -1,8 +1,3 @@
-// ============================================
-//    CHAT - ROUGE MODERNE (Side-B Design)
-// ============================================
-
-// Variables CSS
 $red: #660616;
 $red-light: #8B1E2F;
 $red-lighter: #A52A3A;
@@ -238,7 +233,6 @@ $dark-card: #141414;
 }
 
 // Messages
-// Dans la section .message
 .message {
   max-width: 80%;
   padding: 1rem 1.25rem;
@@ -247,9 +241,9 @@ $dark-card: #141414;
 
   &.user {
     align-self: flex-end;
-    background: #f0d060; // Même couleur que l'input
+    background: #f0d060;
     color: #333;
-    border-radius: 20px; // Plus arrondi (pill)
+    border-radius: 20px;
   }
 
   &.assistant {
@@ -283,7 +277,6 @@ $dark-card: #141414;
 }
 
 // Zone de saisie
-// Zone de saisie
 .input-area {
   padding: 1.5rem;
   border-top: 1px solid $red-dark;
@@ -303,6 +296,12 @@ $dark-card: #141414;
   &:focus-within {
     box-shadow: 0 0 0 2px $gold;
   }
+
+  input,
+  textarea,
+  button {
+    outline: none;
+  }
 }
 
 .chat-input {
@@ -316,6 +315,12 @@ $dark-card: #141414;
   min-height: 24px;
   max-height: 120px;
   font-family: inherit;
+  box-shadow: none;
+
+  &:focus {
+    outline: none;
+    box-shadow: none;
+  }
 
   &::placeholder {
     color: rgba(0, 0, 0, 0.4);
@@ -340,6 +345,7 @@ $dark-card: #141414;
   &:hover {
     transform: scale(1.05);
     box-shadow: 0 5px 20px rgba(240, 208, 96, 0.4);
+    background-color: #dcb000;
   }
 }
 
@@ -351,7 +357,7 @@ $dark-card: #141414;
   }
 
   .chat-sidebar {
-    display: none; // Ou transformer en drawer/modal
+    display: none;
   }
 
   .main-chat {
