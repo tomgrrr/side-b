@@ -1,46 +1,39 @@
-<div class="header-section">
-    <h1>Your Wishlist (<%= @wishlists.count %> vinyls)</h1>
+<div class="wishlist-page">
+  <div class="page-header">
+    <h1>Your <span>Wishlist</span></h1>
+    <p><%= @wishlists.count %> vinyls worth €<%= number_with_precision(@wishlists.sum { |w| w.vinyl.price.to_f }, precision: 2) %></p>
   </div>
 
-  <div class="cards-container">
+  <div class="vinyl-list">
     <% @wishlists.each do |wishlist| %>
-      <div class="vinyl-card">
-        <div class="vinyl-flip-container">
-
-          <div class="vinyl-face vinyl-front">
-            <div class="vinyl-image" style="background-image: url('<%= wishlist.vinyl.image %>');"></div>
-          </div>
-
-          <div class="vinyl-face vinyl-back">
-            <div class="vinyl-info">
-              <h4><%= wishlist.vinyl.name %></h4>
-
-              <% wishlist.vinyl.artists.each do |artist| %>
-                <p class="artist-name">by: <%= artist.name %></p>
-              <% end %>
-
-              <% if wishlist.vinyl.songs.present? %>
-                <div class="tracklist">
-                  <h5>Tracklist:</h5>
-                  <ul>
-                    <% wishlist.vinyl.parsed_songs.first(4).each do |song| %>
-                      <li><%= song %></li>
-                    <% end %>
-                  </ul>
-                </div>
-              <% end %>
-
-              <% if wishlist.vinyl.price.present? %>
-                <div class="vinyl-price">
-                  <h5>Price: <%= wishlist.vinyl.price %>$</h5>
-                </div>
-              <% end %>
-
-              <%= link_to "Details", vinyl_path(wishlist.vinyl), class: "details-btn" %>
-              <%= button_to "✖ Remove", match_path(wishlist), method: :delete, class: "details-btn border-0", data: { confirm: "Êtes-vous sûr ?" } %>
-            </div>
-          </div>
+      <div class="vinyl-item">
+        <div class="cover" style="background-image: url('<%= wishlist.vinyl.image %>');"></div>
+        <div class="info">
+          <h4><%= wishlist.vinyl.name %></h4>
+          <p class="artist">
+            <% wishlist.vinyl.artists.each do |artist| %>
+              <%= artist.name %>
+            <% end %>
+          </p>
+          <p class="tracks">
+            <%= wishlist.vinyl.parsed_songs.count rescue 0 %> tracks
+            <% if wishlist.vinyl.release_date.present? %>
+              • <%= wishlist.vinyl.release_date %>
+            <% end %>
+          </p>
+        </div>
+        <% if wishlist.vinyl.price.present? %>
+          <div class="price">€<%= wishlist.vinyl.price %></div>
+        <% end %>
+        <div class="actions">
+          <%= link_to vinyl_path(wishlist.vinyl), class: "action-btn btn-details" do %>
+            <i class="fa-solid fa-eye"></i>
+          <% end %>
+          <%= button_to match_path(wishlist), method: :delete, class: "action-btn btn-remove", data: { confirm: "Are you sure?" } do %>
+            <i class="fa-solid fa-trash"></i>
+          <% end %>
         </div>
       </div>
     <% end %>
   </div>
+</div>
