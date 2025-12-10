@@ -4,21 +4,17 @@
       <h1>My <span>Playlists</span></h1>
       <p>Organize your vinyl collection by mood, genre, or occasion</p>
     </div>
-    <%= link_to new_playlist_path, class: "create-btn" do %>
-      <i class="fa-solid fa-plus"></i>
-      Create Playlist
-    <% end %>
   </div>
 
   <div class="playlist-grid">
     <% @playlists.each do |playlist| %>
       <div class="playlist-card">
         <div class="playlist-cover">
-          <% if playlist.image.present? %>
-            <%= image_tag playlist.image, alt: playlist.name, class: "cover-img" %>
-          <% else %>
-            <div class="default-cover">🎵</div>
-          <% end %>
+          <% if playlist.image.attached? %>
+    <%= image_tag playlist.image, alt: playlist.name, class: "cover-img" %>
+  <% else %>
+    <div class="default-cover">🎵</div>
+  <% end %>
           <div class="play-overlay">
             <%= link_to playlist_path(playlist), class: "play-btn" do %>
               <i class="fa-solid fa-play"></i>
