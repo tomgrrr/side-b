@@ -22,12 +22,9 @@ class MessagesController < ApplicationController
     @message.role = "user"
 
     if @message.save
-      # Message user broadcasté automatiquement par le callback
 
-      # Créer le message assistant vide (broadcasté automatiquement)
       @assistant_message = @chat.messages.create!(role: "assistant", content: "")
 
-      # Streaming
       @ruby_llm_chat = RubyLLM.chat
       build_conversation_history
 
@@ -38,7 +35,6 @@ class MessagesController < ApplicationController
         broadcast_replace(@assistant_message)
       end
 
-      # Sauvegarder UNE SEULE FOIS à la fin
       @assistant_message.save!
 
       @chat.generate_title_from_first_message
