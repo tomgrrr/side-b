@@ -5,11 +5,11 @@ class MessagesController < ApplicationController
     @chat = current_user.chats.find(params[:chat_id])
     user_question_embedding = RubyLLM.embed(params[:message][:content])
 
-    relevant_vinyls = Vinyl.nearest_neighbors(
+    @relevant_vinyls = Vinyl.nearest_neighbors(
       :embedding,
       user_question_embedding.vectors,
       distance: "cosine"
-    ).first(5)
+    ).first(3)
 
     user_collection = current_user.matches.includes(vinyl: [:artists, :genres])
 
@@ -20,6 +20,7 @@ class MessagesController < ApplicationController
     @message = Message.new(message_params)
     @message.chat = @chat
     @message.role = "user"
+    raise
 
     if @message.save
 
@@ -84,7 +85,7 @@ class MessagesController < ApplicationController
       - Analyze the user's current collection to understand their musical tastes (genres, artists, eras)
       - Recommend ONLY vinyls from the provided catalog that match their preferences
       - Clearly explain why each recommended vinyl will appeal to them
-      - Limit recommendations to 3-5 maximum to avoid overwhelming the user
+      - Limit recommendations to 3 to avoid overwhelming the user
 
       # 📐 MANDATORY RESPONSE FORMAT IN MARKDOWN:
       For each recommended vinyl, use EXACTLY this format:
