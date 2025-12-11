@@ -316,9 +316,7 @@ token = get_spotify_token
 
 CSV.foreach(filepath) do |row|
 
-  artist = Artist.find_or_create_by!(name: row[5])
-
-  artist_name = artist.name
+  artist_name = row[5]
   album_name  = row[0]
 
   image_url = search_spotify_album(token, artist_name, album_name)
@@ -327,6 +325,9 @@ CSV.foreach(filepath) do |row|
     puts "❌ Image Spotify non trouvée → Album ignoré : #{album_name}"
     next
   end
+
+  artist = Artist.find_or_create_by!(name: row[5])
+
 
   puts "✅ Spotify OK pour #{album_name} : #{image_url}"
 
