@@ -39,6 +39,8 @@ puts "✅ Base nettoyée\n\n"
 #   name.gsub(/\s*\(\d+\)\s*$/, '').strip
 # end
 
+#["1463", "3268", "3393458", "132084", "261878", "10995", "235133", "176766", "6197", "40029", "7987", "19731", "137880", "38661", "1778977", "2742944", "321128"]
+
 # # Fonction : Obtenir le token Spotify
 # def get_spotify_token
 #   uri = URI(SPOTIFY_AUTH)
