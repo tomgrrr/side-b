@@ -315,36 +315,45 @@ filepath = "db/data/vinyls.csv"
 token = get_spotify_token
 
 CSV.foreach(filepath) do |row|
+  begin
+    # Vérification qu’on a le nombre de colonnes attendu
+    unless row.size >= 8
+      puts "⚠️ Ligne ignorée (colonnes insuffisantes) : #{row.inspect}"
+      next
+    end
 
-  artist_name = row[5]
-  album_name  = row[0]
+    artist_name = row[5]
+    album_name  = row[0]
 
-  image_url = search_spotify_album(token, artist_name, album_name)
+    image_url = search_spotify_album(token, artist_name, album_name)
 
-  if image_url.nil?
-    puts "❌ Image Spotify non trouvée → Album ignoré : #{album_name}"
+    if image_url.nil?
+      puts "❌ Image Spotify non trouvée → Album ignoré : #{album_name}"
+      next
+    end
+
+    artist = Artist.find_or_create_by!(name: artist_name)
+
+    puts "✅ Spotify OK pour #{album_name} : #{image_url}"
+
+    vinyl = Vinyl.create!(
+      name: album_name,
+      release_date: row[1],
+      image: image_url,
+      songs: row[3],
+      notes: row[4],
+      price: row[7].to_f.round(2) * 7.5
+    )
+
+    genre = Genre.find_or_create_by!(name: row[6])
+    VinylsGenre.create!(genre: genre, vinyl: vinyl)
+    ArtistsVinyl.create!(artist: artist, vinyl: vinyl)
+    ArtistGenre.find_or_create_by!(artist: artist, genre: genre)
+
+    puts "#{artist.name}: #{vinyl.name} → Importé"
+
+  rescue StandardError => e
+    puts "❌ Erreur sur la ligne #{row.inspect} → #{e.class}: #{e.message}"
     next
   end
-
-  artist = Artist.find_or_create_by!(name: row[5])
-
-
-  puts "✅ Spotify OK pour #{album_name} : #{image_url}"
-
-  # === Création du vinyle ===
-  vinyl = Vinyl.create!({
-    name: album_name,
-    release_date: row[1],
-    image: image_url,
-    songs: row[3],
-    notes: row[4],
-    price: row[7].to_f.round(2) * 7.5
-  })
-
-  genre = Genre.find_or_create_by!(name: row[6])
-  VinylsGenre.create!(genre: genre, vinyl: vinyl)
-  ArtistsVinyl.create!(artist: artist, vinyl: vinyl)
-  ArtistGenre.find_or_create_by!(artist: artist, genre: genre)
-
-  puts "#{artist.name}: #{vinyl.name} → Importé"
 end
