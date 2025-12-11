@@ -50,7 +50,7 @@
                 <div class="vinyl-card-title"><%= truncate(vinyl.name, length: 25) %></div>
                 <div class="vinyl-card-artist"><%= truncate(vinyl.artists.map(&:name).join(", "), length: 30) %></div>
                 <% if vinyl.price.present? %>
-                  <div class="vinyl-card-price"><%= vinyl.price %>€</div>
+                  <div class="vinyl-card-price"><%= vinyl.price.present? ? number_to_currency(vinyl.price, unit: "€", format: "%n %u") : "N/A" %></div>
                 <% end %>
               </div>
             <% end %>

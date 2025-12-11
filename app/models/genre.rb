@@ -8,8 +8,9 @@ class Genre < ApplicationRecord
   def self.clean(genres)
     genres.flat_map { |g| JSON.parse(g.name) }.uniq
   end
-  
+
   private
+
 
   def set_embedding
     embedding = RubyLLM.embed("Genre: #{name}")
