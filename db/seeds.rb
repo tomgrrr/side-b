@@ -124,7 +124,7 @@ ARTISTS_IDS.each do |artist_id|
   # Création de l'artiste
   artist_name = data["releases"][0]['artist']
   artist_name = clean_artist_name(artist_name)
-  artist = Artist.create!(name: artist_name)
+  artist = Artist.find_or_create_by!(name: artist_name)
   puts "✅ Artiste créé: #{artist_name}\n\n"
 
   albums_count = 0
@@ -160,7 +160,7 @@ ARTISTS_IDS.each do |artist_id|
     end
 
     # Création du vinyle
-    vinyl = Vinyl.create!({
+    vinyl = Vinyl.find_or_create_by!({
       name: album_name,
       release_date: release["year"],
       image: image_url,
@@ -172,19 +172,19 @@ ARTISTS_IDS.each do |artist_id|
     if data_master["genres"]
       data_master["genres"].each do |genre_name|
         genre = Genre.find_or_create_by!(name: genre_name)
-        VinylsGenre.create!(genre: genre, vinyl: vinyl)
+        VinylsGenre.find_or_create_by!(genre: genre, vinyl: vinyl)
       end
     end
 
     # Association artiste-vinyle
-    ArtistsVinyl.create!(artist: artist, vinyl: vinyl)
+    ArtistsVinyl.find_or_create_by!(artist: artist, vinyl: vinyl)
 
     albums_count += 1
     puts "   ✅ Vinyle créé: #{vinyl.name}"
     puts ""
 
     # Petit délai pour être poli avec l'API
-    sleep(180)
+    sleep(120)
   end
 
   puts "✅ #{albums_count} albums importés pour #{artist_name}\n\n"
