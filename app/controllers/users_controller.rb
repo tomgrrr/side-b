@@ -18,6 +18,7 @@ class UsersController < ApplicationController
 
   def wishlist
     @wishlists = Match.where(category: "wishlist")
+    @match = Match.new()
   end
 
 end

@@ -87,7 +87,7 @@
           <div class="title"><%= collection.vinyl.name %></div>
           <div class="artist"><%= collection.vinyl.artists.map(&:name).join(", ") %></div>
           <div class="meta">
-            <span class="price"><%= collection.vinyl.price %> €</span>
+            <span class="price"><%= collection.vinyl.price.present? ? number_to_currency(collection.vinyl.price, unit: "€", format: "%n %u") : "N/A" %></span>
             <span class="year"><%= collection.vinyl.release_date %></span>
           </div>
         </div>
