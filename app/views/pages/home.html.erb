@@ -1,9 +1,10 @@
 <%# Side bar %>
 <%= render "shared/banner", featured_vinyls: @featured_vinyls %>
 
-<div class="section-header">
-  <h3 class="section-title">Your Recommendations</h3>
+<div class="recommendations-section">
+  <div class="section-header">
+    <h3 class="section-title">Your <span>Recommendations</span></h3>
+  </div>
+
+  <%= render 'shared/vinyl_card', vinyls: @vinyls %>
 </div>
-
-
-<%= render 'shared/vinyl_card', vinyls: @vinyls %>

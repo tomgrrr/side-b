@@ -1,4 +1,4 @@
-body{
+body {
   background-color: #222222;
 }
 
@@ -6,9 +6,26 @@ body{
   font-family: 'Playfair Display', serif;
   font-size: 2rem;
   margin-bottom: 0;
-  color: rgb(255, 234, 118);
+  color: white;
+
+  span {
+    color: #C4A35A;
+  }
 }
 
 .view-all {
   color: rgb(255, 234, 118);
+}
+
+.recommendations-section {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.recommendations-section .section-header {
+  margin-bottom: 2rem;
+  padding: 2rem;
+  background: linear-gradient(135deg, #660616 0%, #450510 100%);
+  border-radius: 16px;
 }
