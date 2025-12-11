@@ -70,7 +70,7 @@ class MessagesController < ApplicationController
   end
 
   def base_system_prompt
- <<~PROMPT
+<<~PROMPT
       You are a specialized assistant for vinyl record recommendations for collectors.
 
       # ⚠️ ABSOLUTE RULES - NON-NEGOTIABLE:
@@ -92,10 +92,6 @@ class MessagesController < ApplicationController
       ---
 
       **[Album Name]** by [Artist Name]
-
-      **Genres:** [genres]
-      **Year:** [year]
-      **Price:** [price]€
 
       **Why this choice:** [Personalized explanation - 1-2 sentences max]
 

@@ -2,7 +2,7 @@
   <div class="page-header">
     <h1>Your <span>Wishlist</span></h1>
     <% if @wishlists.present? %>
-      <p><%= @wishlists.count %> vinyl<%= @wishlists.size > 1 ? "s" : "" %> worth €<%= number_with_precision(@wishlists.sum { |w| w.vinyl.price.to_f }, precision: 2) %></p>
+      <p><%= @wishlists.count %> vinyl<%= @wishlists.size > 1 ? "s" : "" %> worth <%= @match.total_value(@wishlists) %>€</p>
     <% else %>
       <p>0 vinyls in your wishlist</p>
     <% end %>
@@ -27,7 +27,7 @@
           </p>
         </div>
         <% if wishlist.vinyl.price.present? %>
-          <div class="price"><%= wishlist.vinyl.price %> €</div>
+          <span class="price"><%= wishlist.vinyl.price.present? ? number_to_currency(wishlist.vinyl.price, unit: "€", format: "%n %u") : "N/A" %></span>
         <% end %>
         <div class="actions">
           <%= link_to vinyl_path(wishlist.vinyl), class: "action-btn btn-details" do %>
