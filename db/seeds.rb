@@ -39,8 +39,6 @@ puts "✅ Base nettoyée\n\n"
 #   name.gsub(/\s*\(\d+\)\s*$/, '').strip
 # end
 
-#["1463", "3268", "3393458", "132084", "261878", "10995", "235133", "176766", "6197", "40029", "7987", "19731", "137880", "38661", "1778977", "2742944", "321128", "289775", "138556", "3243777", "29735", "92476", "4859364", "66852", "2165577", "125246", "7566127", "3244227", "22854", "1277429", "164263", "282489", "5226023", "2171152", "3310737", "2165577", "792536", "2184482", "5590213", "145288", "106450", "2725", "15228", "251517", "82730", "10584", "31617", "20991", "45", "45467", "205", "1489", "151223", "1289", "81013"]
-
 # # Fonction : Obtenir le token Spotify
 # def get_spotify_token
 #   uri = URI(SPOTIFY_AUTH)
@@ -318,6 +316,9 @@ token = get_spotify_token
 
 CSV.foreach(filepath) do |row|
 
+  artist_name = row[5]
+  album_name  = row[0]
+
   image_url = search_spotify_album(token, artist_name, album_name)
 
   if image_url.nil?
@@ -326,9 +327,6 @@ CSV.foreach(filepath) do |row|
   end
 
   artist = Artist.find_or_create_by!(name: row[5])
-
-  artist_name = artist.name
-  album_name  = row[0]
 
 
   puts "✅ Spotify OK pour #{album_name} : #{image_url}"
