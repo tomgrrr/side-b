@@ -18,7 +18,7 @@ SPOTIFY_CLIENT_ID = ENV["SPOTIFY_CLIENT_ID"]
 SPOTIFY_CLIENT_SECRET = ENV["SPOTIFY_CLIENT_SECRET"]
 
 # Liste des artistes Discogs
-ARTISTS_IDS = ["3393458", "132084", "261878", "10995", "235133", "176766", "6197", "40029", "7987", "19731", "137880", "38661", "1778977", "2742944", "321128", "289775", "138556", "3243777", "29735", "92476", "4859364", "66852", "2165577", "125246", "7566127", "3244227", "22854", "1277429", "164263", "282489", "5226023", "2171152", "3310737", "2165577", "792536", "2184482", "5590213", "145288", "106450", "2725", "15228", "251517", "82730", "10584", "31617", "20991", "45", "45467", "205", "1489", "151223", "1289", "81013"] # Travis Scott
+ARTISTS_IDS = ["132084", "261878", "10995", "235133", "176766", "6197", "40029", "7987", "19731", "137880", "38661", "1778977", "2742944", "321128", "289775", "138556", "3243777", "29735", "92476", "4859364", "66852", "2165577", "125246", "7566127", "3244227", "22854", "1277429", "164263", "282489", "5226023", "2171152", "3310737", "2165577", "792536", "2184482", "5590213", "145288", "106450", "2725", "15228", "251517", "82730", "10584", "31617", "20991", "45", "45467", "205", "1489", "151223", "1289", "81013"] # Travis Scott
 MAX_ALBUMS_PER_ARTIST = 60
 
 def clean_artist_name(name)
@@ -114,12 +114,24 @@ end
 
 # Import des vinyles
 ARTISTS_IDS.each do |artist_id|
+
   puts "=" * 80
   puts "🎤 Import de l'artiste Discogs ID: #{artist_id}"
   puts "=" * 80
 
   url = "#{DISCOGS_BASE}/artists/#{artist_id}/releases?type=master&per_page=100&key=#{KEY}&secret=#{SECRET}"
-  data = JSON.parse(URI.parse(url).read)
+
+  begin
+    data = JSON.parse(URI.parse(url).read)
+    rescue OpenURI::HTTPError => e
+      if e.message.include?("502")
+        puts "⚠ Discogs renvoie 502, je réessaie dans 60 secondes..."
+        sleep(60)
+        retry
+      else
+        raise e
+      end
+  end
 
   # Création de l'artiste
   artist_name = data["releases"][0]['artist']
@@ -130,6 +142,8 @@ ARTISTS_IDS.each do |artist_id|
   albums_count = 0
 
   data["releases"].each do |release|
+    sleep(15)
+    albums_count += 1
     break if albums_count >= MAX_ALBUMS_PER_ARTIST
 
     next unless release["type"] == "master"
@@ -139,7 +153,18 @@ ARTISTS_IDS.each do |artist_id|
 
     # Récupère les détails du master depuis Discogs
     url_master = release["resource_url"]
-    data_master = JSON.parse(URI.parse(url_master).read)
+
+    begin
+      data_master = JSON.parse(URI.parse(url_master).read)
+      rescue OpenURI::HTTPError => e
+        if e.message.include?("502")
+          puts "⚠ Discogs renvoie 502 sur master, attente 60s..."
+          sleep(60)
+          retry
+        else
+          raise e
+        end
+    end
 
     # Extraction des tracks
     tracks = []
@@ -179,17 +204,15 @@ ARTISTS_IDS.each do |artist_id|
     # Association artiste-vinyle
     ArtistsVinyl.find_or_create_by!(artist: artist, vinyl: vinyl)
 
-    albums_count += 1
     puts "   ✅ Vinyle créé: #{vinyl.name}"
     puts ""
 
     # Petit délai pour être poli avec l'API
-    sleep(120)
   end
 
   puts "✅ #{albums_count} albums importés pour #{artist_name}\n\n"
 
-  sleep(180)
+  sleep(120)
 end
 
 puts "=" * 80
