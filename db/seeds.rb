@@ -18,7 +18,7 @@ SPOTIFY_CLIENT_ID = ENV["SPOTIFY_CLIENT_ID"]
 SPOTIFY_CLIENT_SECRET = ENV["SPOTIFY_CLIENT_SECRET"]
 
 # Liste des artistes Discogs
-ARTISTS_IDS = ["66852", "125246", "22854", "1277429", "164263", "282489", "5226023", "2171152", "3310737", "2165577", "5590213", "251517", "82730", "10584", "31617", "20991", "45", "45467", "205", "1489", "151223", "1289", "81013"] # Travis Scott
+ARTISTS_IDS = ["2171152", "3310737", "2165577", "5590213", "251517", "82730", "10584", "31617", "20991", "45", "45467", "205", "1489", "151223", "1289", "81013"] # Travis Scott
 MAX_ALBUMS_PER_ARTIST = 60
 
 def clean_artist_name(name)
@@ -142,7 +142,7 @@ ARTISTS_IDS.each do |artist_id|
   albums_count = 0
 
   data["releases"].each do |release|
-    sleep(15)
+    sleep(10)
     albums_count += 1
     break if albums_count >= MAX_ALBUMS_PER_ARTIST
 
@@ -212,7 +212,7 @@ ARTISTS_IDS.each do |artist_id|
 
   puts "✅ #{albums_count} albums importés pour #{artist_name}\n\n"
 
-  sleep(120)
+  sleep(100)
 end
 
 puts "=" * 80
